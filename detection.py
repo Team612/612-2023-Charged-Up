@@ -13,6 +13,14 @@ at_detector = Detector(
     decode_sharpening=0.25,
     debug=0
 )
+
+def align(tags):
+    taglist = []
+    for tag in tags:
+        taglist.append(tag.center)
+        image.center
+        print("(" + image.center[0] - tag.cenfer[0] + ", " + image.center[1] - tag.center[1] + ")")
+        
 def draw_tags(
     image,
     tags
@@ -68,11 +76,16 @@ while(True):
 
     #drawing
     debug_image = draw_tags(debug_image,tags)
+    
 
-    #key processing (ESC: end)
+    #key processing (ESC: end) (P: get Results)
     key = cv2.waitKey(1)
+    key2 = cv2.waitKey(1)
     if key == 27: #ESC
         break
+    elif key == 80: #P
+        print("yeeyee")
+    
     
     #screen projection
     cv2.imshow('AprilTag', debug_image)
