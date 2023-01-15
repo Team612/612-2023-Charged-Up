@@ -35,6 +35,8 @@ def draw_tags(
             # Center
             cv2.circle(image, (center[0], center[1]), 5, (0, 0, 255), 2)
 
+            #
+
             # Each side
             cv2.line(image, (corner_01[0], corner_01[1]),
                     (corner_02[0], corner_02[1]), (255, 0, 0), 2)
@@ -61,9 +63,9 @@ while(True):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     tags = at_detector.detect(
         image,
-        estimate_tag_pose=False, #change to True later
-        camera_params=None,
-        tag_size=None,
+        estimate_tag_pose=True, #change to True later
+        camera_params=[1.44494971e+03, 1.42806165e+03, 6.83776675e+02, 5.65092942e+02],
+        tag_size=0.1524,
     )
 
     #drawing
