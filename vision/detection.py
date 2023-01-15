@@ -61,9 +61,9 @@ while(True):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     tags = at_detector.detect(
         image,
-        estimate_tag_pose=True, #change to True later
-        camera_params=[10, 10, 10, 10],
-        tag_size=0.1524,
+        estimate_tag_pose=False, #change to True later
+        camera_params=None,
+        tag_size=None,
     )
 
     #drawing
