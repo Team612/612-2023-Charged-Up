@@ -5,7 +5,7 @@ import os
 # termination criteria
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
-save_location = '/Users/abhinayakarthana/612-2023-Charged-Up/chessboards' #change save location by copying path in your workspace
+save_location = '/Users/FILL_IN_USER_OR_REST_OF_PATH/612-2023-Charged-Up/chessboards' #change save location by copying path in your workspace
 vid = cv2.VideoCapture(0)
 iterate = 0
 while(True):
