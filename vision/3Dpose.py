@@ -5,8 +5,7 @@ import glob
 
 #TODO make this work
 with np.load('B.npz') as X:
-    mtx, dist, _, _ = [X[i] for i in ('camera_matrix','distortion','rotation_vectors','location_vectors')]
-print(mtx)
+    mtx, dist, rprime, tprime = [X[i] for i in ('camera_matrix','distortion','rotation_vectors','location_vectors')]
 def draw(img, corners, imgpts):
     corner = tuple(corners[0].ravel())
     img = cv2.line(img, corner, tuple(imgpts[0].ravel()), (255,0,0), 5)

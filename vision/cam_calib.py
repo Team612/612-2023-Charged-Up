@@ -33,17 +33,11 @@ ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, gray.sha
 rvecs = np.array(rvecs)
 tvecs = np.array(tvecs)
 print(imagesfound)
-img = cv.imread('chessboards/nine.jpeg')
-h, w = img.shape[:2]
-newcameramtx, roi=cv.getOptimalNewCameraMatrix(mtx,dist,(w,h),1,(w,h))
-cammtx = np.array(newcameramtx)
-# undistort
-dst = cv.undistort(img, mtx, dist, None, newcameramtx)
-# crop the image
-x,y,w,h = roi
-dst = np.array(dst[y:y+h, x:x+w])
 
-np.savez("B", camera_matrix=cammtx, distortion=dst, rotation_vectors=rvecs, location_vectors=tvecs)
+mtx = np.array(mtx)
+dist = np.array(dist)
+
+np.savez("B", camera_matrix=mtx, distortion=dist, rotation_vectors=rvecs, location_vectors=tvecs)
 
 #cv.imwrite('calibresult.png',dst)
 #mean_error = 0
