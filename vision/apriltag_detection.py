@@ -4,7 +4,10 @@ import numpy as np
 from pupil_apriltags import Detector
 
 vid = cv2.VideoCapture(0)
+with np.load('B.npz') as X:
+    mtx, dist, rvecs, tvecs = [X[i] for i in ('camera_matrix','distortion','rotation_vectors','location_vectors')]
 
+print(mtx)
 at_detector = Detector(
     families="tag16h5", 
     nthreads=1,
@@ -64,7 +67,7 @@ while(True):
     tags = at_detector.detect(
         image,
         estimate_tag_pose=True, #change to True later
-        camera_params=[1.44494971e+03, 1.42806165e+03, 6.83776675e+02, 5.65092942e+02],
+        camera_params=[mtx[0,0], mtx[1,1], mtx[0,2], mtx[1,2]],
         tag_size=0.1524,
     )
 
