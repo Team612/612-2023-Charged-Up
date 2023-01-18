@@ -2,12 +2,35 @@ import cv2
 import numpy as np
 import glob
 # Load previously saved data
-
-#TODO make this work
 with np.load('B.npz') as X:
-    mtx, dist, rprime, tprime = [X[i] for i in ('camera_matrix','distortion','rotation_vectors','location_vectors')]
+    mtx, dist, rvecs, tvecs = [X[i] for i in ('camera_matrix','distortion','rotation_vectors','location_vectors')]
+
+def draw_test(img, corners, pts1):
+
+    corner = tuple(corners[0].ravel())
+    cornerx = int(corner[0])
+    cornery = int(corner[1])
+    pts1x = tuple(pts1[0].ravel())
+    pts1x0 = int(pts1x[0])
+    pts1x1 = int(pts1x[1])
+    pts1y = tuple(pts1[1].ravel())
+    pts1y0 = int(pts1y[0])
+    pts1y1 = int(pts1y[1])
+    pts1z = tuple(pts1[2].ravel())
+    pts1z0 = int(pts1z[0])
+    pts1z1 = int(pts1z[1])
+    
+    cv2.line(img, (cornerx,cornery), (pts1x0,pts1x1), (255,0,0), 5)
+    cv2.line(img, (cornerx,cornery), (pts1y0,pts1y1), (0,255,0), 5)
+    cv2.line(img, (cornerx,cornery), (pts1z0,pts1z1), (0,0,255), 5)
+    return img
+
 def draw(img, corners, imgpts):
     corner = tuple(corners[0].ravel())
+    print(imgpts)
+    print (tuple(imgpts[0].ravel()))
+    print (tuple(imgpts[1].ravel()))
+    print (tuple(imgpts[2].ravel()))
     img = cv2.line(img, corner, tuple(imgpts[0].ravel()), (255,0,0), 5)
     img = cv2.line(img, corner, tuple(imgpts[1].ravel()), (0,255,0), 5)
     img = cv2.line(img, corner, tuple(imgpts[2].ravel()), (0,0,255), 5)
@@ -22,17 +45,13 @@ for fname in glob.glob('chessboards/*.jpeg'):
     img = cv2.imread(fname)
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     ret, corners = cv2.findChessboardCorners(gray, (7,6),None)
-
     if ret == True:
         corners2 = cv2.cornerSubPix(gray,corners,(11,11),(-1,-1),criteria)
-
         # Find the rotation and translation vectors.
-        # throws an error here
-        rvecs, tvecs, inliers = cv2.solvePnPRansac(objp, corners2, mtx, dist)
-        
+        retval, rvecs, tvecs, inliers = cv2.solvePnPRansac(objp, corners2, mtx, dist)
         # project 3D points to image plane
         imgpts, jac = cv2.projectPoints(axis, rvecs, tvecs, mtx, dist)
-        img = draw(img,corners2,imgpts)
+        img = draw_test(img,corners2,imgpts)
         cv2.imshow('img',img)
         k = cv2.waitKey(0) & 0xff
         if k == 's':
