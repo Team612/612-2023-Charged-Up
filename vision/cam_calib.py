@@ -37,6 +37,8 @@ print(imagesfound)
 mtx = np.array(mtx)
 dist = np.array(dist)
 
+print(mtx)
+
 np.savez("B", camera_matrix=mtx, distortion=dist, rotation_vectors=rvecs, location_vectors=tvecs)
 
 #cv.imwrite('calibresult.png',dst)
