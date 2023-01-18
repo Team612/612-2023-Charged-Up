@@ -8,6 +8,10 @@ import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 
+/*
+ * NOTE: I DON'T LIKE THIS CLASS AND I DON'T LIKE HOW ITS STRUCTURED BUT I WILL LEAVE THE FILE NEVERTHELESS
+ */
+
 public final class Autos {
   /** Example static factory for an autonomous command. */
   public static CommandBase exampleAuto(ExampleSubsystem subsystem) {
