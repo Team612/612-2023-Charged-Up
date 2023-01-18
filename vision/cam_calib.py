@@ -40,12 +40,3 @@ dist = np.array(dist)
 print(mtx)
 
 np.savez("B", camera_matrix=mtx, distortion=dist, rotation_vectors=rvecs, location_vectors=tvecs)
-
-#cv.imwrite('calibresult.png',dst)
-#mean_error = 0
-#tot_error = 0
-#for i in range(len(objpoints)):
-    #imgpoints2, _ = cv.projectPoints(objpoints[i], rvecs[i], tvecs[i], mtx, dist)
-    #error = cv.norm(imgpoints[i],imgpoints2, cv.NORM_L2)/len(imgpoints2)
-    #tot_error += error
-#print("total error: ", tot_error/len(objpoints))

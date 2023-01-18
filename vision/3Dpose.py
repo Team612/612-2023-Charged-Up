@@ -1,39 +1,20 @@
 import cv2
 import numpy as np
 import glob
-# Load previously saved data
 with np.load('B.npz') as X:
     mtx, dist, rvecs, tvecs = [X[i] for i in ('camera_matrix','distortion','rotation_vectors','location_vectors')]
 
-def draw_test(img, corners, pts1):
+def draw(img, corners, pts1):
+    corner = (int(corners[0].ravel()[0]),int(corners[0].ravel()[1]))
+  
+    pts1x = (int(pts1[0].ravel()[0]), int(pts1[0].ravel()[1]))
+    pts1y = (int(pts1[1].ravel()[0]), int(pts1[1].ravel()[1]))
+    pts1z = (int(pts1[2].ravel()[0]), int(pts1[2].ravel()[1]))
 
-    corner = tuple(corners[0].ravel())
-    cornerx = int(corner[0])
-    cornery = int(corner[1])
-    pts1x = tuple(pts1[0].ravel())
-    pts1x0 = int(pts1x[0])
-    pts1x1 = int(pts1x[1])
-    pts1y = tuple(pts1[1].ravel())
-    pts1y0 = int(pts1y[0])
-    pts1y1 = int(pts1y[1])
-    pts1z = tuple(pts1[2].ravel())
-    pts1z0 = int(pts1z[0])
-    pts1z1 = int(pts1z[1])
-    
-    cv2.line(img, (cornerx,cornery), (pts1x0,pts1x1), (255,0,0), 5)
-    cv2.line(img, (cornerx,cornery), (pts1y0,pts1y1), (0,255,0), 5)
-    cv2.line(img, (cornerx,cornery), (pts1z0,pts1z1), (0,0,255), 5)
-    return img
 
-def draw(img, corners, imgpts):
-    corner = tuple(corners[0].ravel())
-    print(imgpts)
-    print (tuple(imgpts[0].ravel()))
-    print (tuple(imgpts[1].ravel()))
-    print (tuple(imgpts[2].ravel()))
-    img = cv2.line(img, corner, tuple(imgpts[0].ravel()), (255,0,0), 5)
-    img = cv2.line(img, corner, tuple(imgpts[1].ravel()), (0,255,0), 5)
-    img = cv2.line(img, corner, tuple(imgpts[2].ravel()), (0,0,255), 5)
+    cv2.line(img, corner, pts1x, (255,0,0), 5)
+    cv2.line(img, corner, pts1y, (0,255,0), 5)
+    cv2.line(img, corner, pts1z, (0,0,255), 5)
     return img
 
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -51,9 +32,7 @@ for fname in glob.glob('chessboards/*.jpeg'):
         retval, rvecs, tvecs, inliers = cv2.solvePnPRansac(objp, corners2, mtx, dist)
         # project 3D points to image plane
         imgpts, jac = cv2.projectPoints(axis, rvecs, tvecs, mtx, dist)
-        img = draw_test(img,corners2,imgpts)
+        img = draw(img,corners2,imgpts)
         cv2.imshow('img',img)
         k = cv2.waitKey(0) & 0xff
-        if k == 's':
-            cv2.imwrite(fname[:6]+'.png', img)
 cv2.destroyAllWindows()
