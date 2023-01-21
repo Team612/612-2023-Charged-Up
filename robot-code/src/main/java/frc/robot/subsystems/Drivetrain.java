@@ -52,7 +52,7 @@ public class Drivetrain extends SubsystemBase {
     spark_fr = new CANSparkMax(Constants.DrivetrainConstants.SPARK_FR, MotorType.kBrushless);
     spark_bl = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BL, MotorType.kBrushless);
     spark_br = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BR, MotorType.kBrushless);
-    navx = new AHRS(I2C.Port.kOnboard); //TO BE CHANGED WE DON'T KNOW THIS YET
+    navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
 
     //most likely the case
 
