@@ -53,7 +53,8 @@ public class Drivetrain extends SubsystemBase {
     spark_bl = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BL, MotorType.kBrushless);
     spark_br = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BR, MotorType.kBrushless);
     navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
-
+    m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(),getMecanumDriveWheelPositions());
+    
     //most likely the case
 
     spark_fr.setInverted(true);
@@ -77,6 +78,9 @@ public class Drivetrain extends SubsystemBase {
     spark_fl.getEncoder().setVelocityConversionFactor(vel);
     spark_br.getEncoder().setVelocityConversionFactor(vel);
     spark_bl.getEncoder().setVelocityConversionFactor(vel);
+
+    drivetrain = new MecanumDrive(spark_fl, spark_bl, spark_fr, spark_br);
+
   }
 
   public double getFLEncoderVelocity(){
@@ -111,18 +115,6 @@ public class Drivetrain extends SubsystemBase {
     spark_bl.set(bl);
     spark_fr.set(fr);
     spark_br.set(br);
-  }
-
-
-
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-
-    //Updating the Odometry
-    m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
-    m_field.setRobotPose(m_odometry.getPoseMeters());  
   }
 
   public MecanumDriveWheelPositions getMecanumDriveWheelPositions(){
@@ -206,5 +198,15 @@ public class Drivetrain extends SubsystemBase {
   public boolean isCalibrating(){
     return navx.isCalibrating();
   }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+
+    //Updating the Odometry
+    m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
+    m_field.setRobotPose(m_odometry.getPoseMeters());  
+  }
+
 
 }
