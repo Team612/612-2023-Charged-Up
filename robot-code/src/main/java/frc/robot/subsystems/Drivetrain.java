@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
@@ -52,6 +51,8 @@ public class Drivetrain extends SubsystemBase {
     spark_fr = new CANSparkMax(Constants.DrivetrainConstants.SPARK_FR, MotorType.kBrushless);
     spark_bl = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BL, MotorType.kBrushless);
     spark_br = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BR, MotorType.kBrushless);
+    
+    navx.calibrate();
     navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
     m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(),getMecanumDriveWheelPositions());
     
@@ -108,6 +109,17 @@ public class Drivetrain extends SubsystemBase {
     if(Math.abs(y) < DEADZONE) y = 0;
     if(Math.abs(zRot) < DEADZONE) zRot = 0;
     drivetrain.driveCartesian(y, x, zRot);
+  }
+
+  public void FieldOrientedDrive(double y, double x, double zRot){
+    double robotHeadingX = getNavxAngle().getCos();
+    double robotHeadingY = getNavxAngle().getSin();
+
+    if(Math.abs(x) < DEADZONE) x = 0;
+    if(Math.abs(y) < DEADZONE) y = 0;
+    if(Math.abs(zRot) < DEADZONE) zRot = 0;
+    drivetrain.driveCartesian(y * robotHeadingY, x * robotHeadingX, zRot);
+
   }
 
   public void driveMecanum(double fl, double bl, double fr, double br){
