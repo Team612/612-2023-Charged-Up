@@ -26,7 +26,7 @@ public class DefaultDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
+    m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(0),-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(4));
     // m_drivetrain.driveMecanum(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
   }
 
