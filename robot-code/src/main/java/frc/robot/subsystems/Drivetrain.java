@@ -161,6 +161,10 @@ public class Drivetrain extends SubsystemBase {
     return new double[]{spark_fl.getBusVoltage(), spark_fr.getBusVoltage(), spark_bl.getBusVoltage(), spark_br.getBusVoltage()};
   }
 
+  public double[] getWheelAmperage(){
+    return new double[]{spark_fl.getOutputCurrent(), spark_fr.getOutputCurrent(), spark_bl.getOutputCurrent(), spark_br.getOutputCurrent()};
+  }
+
   //getYaw = Returns the current yaw value (in degrees, from -180 to 180) 
   //reported by the sensor. Yaw is a measure of rotation around the Z Axis 
   //(which is perpendicular to the earth).
@@ -207,6 +211,4 @@ public class Drivetrain extends SubsystemBase {
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
     m_field.setRobotPose(m_odometry.getPoseMeters());  
   }
-
-
 }
