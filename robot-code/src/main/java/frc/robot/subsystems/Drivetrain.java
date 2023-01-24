@@ -53,8 +53,8 @@ public class Drivetrain extends SubsystemBase {
     spark_br = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BR, MotorType.kBrushless);
     
     navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
-    navx.reset();
-    navx.calibrate();
+    // navx.reset();
+    // navx.calibrate();
     zeroYaw();
 
 
@@ -114,11 +114,11 @@ public class Drivetrain extends SubsystemBase {
     drivetrain.driveCartesian(y, x, zRot);
   }
 
-  public void FieldOrientedDrive(double y, double x, double zRotation){
+  public void FieldOrientedDrive(double x, double y, double zRotation){
     if(Math.abs(x) < DEADZONE) x = 0;
     if(Math.abs(y) < DEADZONE) y = 0;
     if(Math.abs(zRotation) < DEADZONE) zRotation = 0;
-    drivetrain.driveCartesian(y, x, zRotation, getNavxYawAngle().unaryMinus());
+    drivetrain.driveCartesian(x, y, zRotation, getNavxYawAngle().unaryMinus());
 
   }
 
