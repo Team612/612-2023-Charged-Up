@@ -52,8 +52,12 @@ public class Drivetrain extends SubsystemBase {
     spark_bl = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BL, MotorType.kBrushless);
     spark_br = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BR, MotorType.kBrushless);
     
-    navx.calibrate();
     navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
+    // navx.reset();
+    // navx.calibrate();
+    zeroYaw();
+
+
     m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(),getMecanumDriveWheelPositions());
     
     //most likely the case
@@ -64,7 +68,6 @@ public class Drivetrain extends SubsystemBase {
     spark_fl.setInverted(false);
     spark_bl.setInverted(false);
 
-    
     spark_fl.setIdleMode(IdleMode.kBrake);
     spark_fr.setIdleMode(IdleMode.kBrake);
     spark_bl.setIdleMode(IdleMode.kBrake);
@@ -111,14 +114,11 @@ public class Drivetrain extends SubsystemBase {
     drivetrain.driveCartesian(y, x, zRot);
   }
 
-  public void FieldOrientedDrive(double y, double x, double zRot){
-    double robotHeadingX = getNavxAngle().getCos();
-    double robotHeadingY = getNavxAngle().getSin();
-
+  public void FieldOrientedDrive(double x, double y, double zRotation){
     if(Math.abs(x) < DEADZONE) x = 0;
     if(Math.abs(y) < DEADZONE) y = 0;
-    if(Math.abs(zRot) < DEADZONE) zRot = 0;
-    drivetrain.driveCartesian(y * robotHeadingY, x * robotHeadingX, zRot);
+    if(Math.abs(zRotation) < DEADZONE) zRotation = 0;
+    drivetrain.driveCartesian(x, y, zRotation, getNavxYawAngle().unaryMinus());
 
   }
 
@@ -189,6 +189,10 @@ public class Drivetrain extends SubsystemBase {
   //Returns the total accumulated yaw angle (Z Axis, in degrees) reported by the sensor.
   public Rotation2d getNavxAngle(){
     return Rotation2d.fromDegrees(-navx.getAngle());
+  }
+
+  public Rotation2d getNavxYawAngle(){
+    return Rotation2d.fromDegrees(-navx.getYaw());
   }
 
   public double getYaw(){
