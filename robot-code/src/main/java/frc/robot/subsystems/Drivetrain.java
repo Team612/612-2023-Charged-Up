@@ -33,8 +33,11 @@ public class Drivetrain extends SubsystemBase {
   static Drivetrain instance = null;
   
   private final double DEADZONE = 0.1;
+  public int offbalancepositive = Constants.DrivetrainConstants.offbalancepositive;
+  public int offbalancenegative  = Constants.DrivetrainConstants.offbalancenegative;
 
-
+  
+  
   private MecanumDrive drivetrain;
   public double vel = Constants.DrivetrainConstants.kEncoderDistancePerPulse / 60; //velocity is in rpm so we need to get it into rps
  
@@ -190,6 +193,7 @@ public class Drivetrain extends SubsystemBase {
   public Rotation2d getNavxAngle(){
     return Rotation2d.fromDegrees(-navx.getAngle());
   }
+  
 
   public Rotation2d getNavxYawAngle(){
     return Rotation2d.fromDegrees(-navx.getYaw());
@@ -197,6 +201,10 @@ public class Drivetrain extends SubsystemBase {
 
   public double getYaw(){
     return navx.getYaw();
+  }
+
+  public double getPitch(){
+  return navx.getPitch();
   }
 
   public double linearAccelX(){
@@ -219,10 +227,21 @@ public class Drivetrain extends SubsystemBase {
     return navx.isCalibrating();
   }
 
+  public void autobalance(){
+    //Autonomous balancing
+    if (getPitch() > offbalancepositive) {
+      FieldOrientedDrive(0.1, 0, 0);
+    } else if (getPitch() < offbalancenegative) {
+      FieldOrientedDrive(-0.1, 0, 0);
+    }
+
+    
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    //Calls on the autobalance.
     //Updating the Odometry
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
     m_field.setRobotPose(m_odometry.getPoseMeters());  
