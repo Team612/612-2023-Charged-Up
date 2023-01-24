@@ -15,8 +15,12 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
+import frc.robot.commands.Intake.GrabberClose;
+import frc.robot.commands.Intake.GrabberOpen;
+import frc.robot.controls.ControlMap;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,6 +37,7 @@ public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
+  private Intake m_intake = new Intake();
 
  // Trajectories
   private final FollowTrajectory m_follower = new FollowTrajectory();
@@ -44,6 +49,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -67,7 +73,8 @@ public class RobotContainer {
     // // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
+    m_driverController.x().whileTrue(new GrabberOpen(m_intake));
+    m_driverController.b().whileTrue(new GrabberClose(m_intake));
   }
 
   private void configureDefaultCommands(){
