@@ -93,4 +93,8 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  //bore encoer constants
+  public static int boreEncoderIntake = 1;
+  public static int boreEncoderPivot = 0; 
 }

@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.TelescopeDetract;
+import frc.robot.commands.TelescopeExtend;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 
@@ -31,7 +31,6 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = Drivetrain.getInstance();
 
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
 
  // Trajectories
@@ -39,7 +38,10 @@ public class RobotContainer {
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-
+  private final Arm m_arm = new Arm();
+  private final double m_speed = 1;
+  private final TelescopeDetract m_telescopeDetract = new TelescopeDetract(m_arm, m_speed);
+  private final TelescopeExtend m_telescopeExtend = new TelescopeExtend(m_arm, m_speed);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -67,7 +69,8 @@ public class RobotContainer {
     // // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
+    m_driverController.a().whileTrue(m_telescopeExtend);
+    m_driverController.b().whileTrue(m_telescopeDetract);
   }
 
   private void configureDefaultCommands(){
