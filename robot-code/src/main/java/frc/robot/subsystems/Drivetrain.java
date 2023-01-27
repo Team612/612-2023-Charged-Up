@@ -225,6 +225,7 @@ public class Drivetrain extends SubsystemBase {
 
     //Updating the Odometry
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
+    System.out.println(getNavxAngle());
     m_field.setRobotPose(m_odometry.getPoseMeters());  
   }
 }
