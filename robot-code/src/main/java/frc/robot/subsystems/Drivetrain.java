@@ -34,7 +34,7 @@ public class Drivetrain extends SubsystemBase {
   
   private final double DEADZONE = 0.1;
   public int offbalancepositive = Constants.DrivetrainConstants.offbalancepositive;
-  public int offbalancenegative  = Constants.DrivetrainConstants.offbalancenegative;
+
 
   
   
@@ -122,7 +122,6 @@ public class Drivetrain extends SubsystemBase {
     if(Math.abs(y) < DEADZONE) y = 0;
     if(Math.abs(zRotation) < DEADZONE) zRotation = 0;
     drivetrain.driveCartesian(y, x, zRotation, getNavxYawAngle().unaryMinus());
-
   }
 
   public void driveMecanum(double fl, double bl, double fr, double br){
@@ -169,7 +168,6 @@ public class Drivetrain extends SubsystemBase {
       spark_fr.getEncoder().getVelocity(),
       spark_bl.getEncoder().getVelocity(),
       spark_br.getEncoder().getVelocity());
-
   }
 
   public double[] getWheelVoltages(){
@@ -226,24 +224,29 @@ public class Drivetrain extends SubsystemBase {
   public boolean isCalibrating(){
     return navx.isCalibrating();
   }
-
-  public void autobalance(){
-    //Autonomous balancing
-    if (getPitch() > offbalancepositive) {
-      FieldOrientedDrive(0.1, 0, 0);
-    } else if (getPitch() < offbalancenegative) {
-      FieldOrientedDrive(-0.1, 0, 0);
+  //autobalance methods
+  public void driveup() {
+    if (getPitch() < offbalancepositive) {
+      driveMecanum(0.1, 0.1, 0.1, 0.1);
     }
-
-    
+  }
+  public void centering(){
+    if (getPitch() > 1) {
+      driveMecanum(0.1, 0.1, 0.1, 0.1);
+    }
+  }
+  public void turnBalance() {
+    driveMecanum(0.5, 0.5, -0.5, -0.5);
   }
   
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     //Calls on the autobalance.
     //Updating the Odometry
+    
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
-    m_field.setRobotPose(m_odometry.getPoseMeters());  
+    m_field.setRobotPose(m_odometry.getPoseMeters());
   }
 }
