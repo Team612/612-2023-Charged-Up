@@ -14,6 +14,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
+import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.commands.Intake.GrabberClose;
 import frc.robot.commands.Intake.GrabberOpen;
@@ -37,6 +38,7 @@ public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
+
   private Intake m_intake = new Intake();
 
  // Trajectories
@@ -73,8 +75,10 @@ public class RobotContainer {
     // // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // m_driverController.y().whileTrue()
     m_driverController.x().whileTrue(new GrabberOpen(m_intake));
     m_driverController.b().whileTrue(new GrabberClose(m_intake));
+    m_driverController.y().whileTrue(new SetForward(m_drivetrain));
   }
 
   private void configureDefaultCommands(){

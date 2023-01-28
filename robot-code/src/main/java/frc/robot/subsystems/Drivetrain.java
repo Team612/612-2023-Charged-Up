@@ -42,6 +42,8 @@ public class Drivetrain extends SubsystemBase {
   MecanumDriveOdometry m_odometry;
   private Field2d m_field;
 
+  private Rotation2d navxAngleOffset;
+
  
   public Drivetrain() {
     m_field = new Field2d();
@@ -57,6 +59,7 @@ public class Drivetrain extends SubsystemBase {
     // navx.calibrate();
     zeroYaw();
 
+    navxAngleOffset = new Rotation2d();
 
     m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(),getMecanumDriveWheelPositions());
     
@@ -118,8 +121,12 @@ public class Drivetrain extends SubsystemBase {
     if(Math.abs(x) < DEADZONE) x = 0;
     if(Math.abs(y) < DEADZONE) y = 0;
     if(Math.abs(zRotation) < DEADZONE) zRotation = 0;
-    drivetrain.driveCartesian(x, y, zRotation, getNavxYawAngle().unaryMinus());
+    drivetrain.driveCartesian(x, y, zRotation, getNavxYawAngle().unaryMinus().minus(navxAngleOffset.unaryMinus()));
 
+  }
+
+  public void setNavxAngleOffset(Rotation2d angle){
+    navxAngleOffset = angle;
   }
 
   public void driveMecanum(double fl, double bl, double fr, double br){

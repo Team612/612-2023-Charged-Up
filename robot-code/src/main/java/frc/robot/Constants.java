@@ -27,26 +27,26 @@ public final class Constants {
      public final static int SPARK_BR = 3;
  
      //wheel diameter
-     public static final double kWheelDiameterMeters = 0; 
+     public static final double kWheelDiameterMeters = 0.1524; 
      
      //Distance between centers of right and left wheels on robot
-     public static final double kTrackWidth = 0; 
+     public static final double kTrackWidth = 0.5969; 
  
      //Distance between centers of front and back wheels on robot
-     public static final double kWheelBase = 0; 
+     public static final double kWheelBase = 0.676275; 
  
  
-     public static final double kEncoderCPR = 0; 
-     public static final double kGearReduction = 0;
+     public static final double kEncoderCPR = 1; 
+     public static final double kGearReduction = 16;
      
      //Finding Distance per pulse
      public static final double kEncoderDistancePerPulse =
          ((kWheelDiameterMeters * Math.PI)) / (kGearReduction);
   
      //Feedforward gains for system dynamics 
-     public static final double kS = 0; 
-     public static final double kV = 0;  
-     public static final double kA = 0;
+     public static final double kS = 0.1217; 
+     public static final double kV = 4.1827;  
+     public static final double kA = 0.46749;
      
      //Angular gains
      public static final double kV_Angular = 1; // do not touch
@@ -55,16 +55,16 @@ public final class Constants {
      //position controllers
  
      //have to tune manually
-     public static final double kPXController = 0;
-     public static final double kPYController = 0;
-     public static final double kPThetaController = 0; 
+     public static final double kPXController = .85;
+     public static final double kPYController = .5;
+     public static final double kPThetaController = .5; 
  
      
      //Velocity controllers
-     public static final double kPFrontLeftVel = 0; 
-     public static final double kPRearLeftVel = 0;
-     public static final double kPFrontRightVel = 0;
-     public static final double kPRearRightVel = 0;
+     public static final double kPFrontLeftVel = 0.12069; 
+     public static final double kPRearLeftVel = 0.12069;
+     public static final double kPFrontRightVel = 0.12069;
+     public static final double kPRearRightVel = 0.12069;
  
      //Converting chassis velocity into individual wheel velocities
      public static final MecanumDriveKinematics kDriveKinematics =
