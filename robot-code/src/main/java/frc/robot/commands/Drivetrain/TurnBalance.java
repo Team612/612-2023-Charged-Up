@@ -5,15 +5,14 @@
 package frc.robot.commands.Drivetrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class DriveUp extends CommandBase {
-  /** Creates a new DriveUp. */
+public class TurnBalance extends CommandBase {
   private final Drivetrain m_drivetrain;
-  public DriveUp(Drivetrain drivetrain) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  /** Creates a new TurnBalance. */
+  public TurnBalance(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
 
@@ -26,7 +25,7 @@ public class DriveUp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.driveMecanum(0.1, 0.1, 0.1, 0.1);
+    m_drivetrain.driveMecanum(0.1, 0.1, -0.1, -0.1);
   }
 
   // Called once the command ends or is interrupted.
@@ -38,6 +37,6 @@ public class DriveUp extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_drivetrain.getPitch() >= Constants.DrivetrainConstants.offbalancepositive;
+    return m_drivetrain.getYaw() >= 90;
   }
 }

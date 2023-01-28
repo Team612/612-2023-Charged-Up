@@ -225,11 +225,8 @@ public class Drivetrain extends SubsystemBase {
     return navx.isCalibrating();
   }
   //autobalance methods
-  public void driveup() {
-    if (getPitch() < offbalancepositive) {
-      driveMecanum(0.1, 0.1, 0.1, 0.1);
-    }
-  }
+
+ 
   public void centering(){
     if (getPitch() > 1) {
       driveMecanum(0.1, 0.1, 0.1, 0.1);
@@ -238,6 +235,10 @@ public class Drivetrain extends SubsystemBase {
   public void turnBalance() {
     driveMecanum(0.5, 0.5, -0.5, -0.5);
   }
+
+  public static void printNavxPitch(){
+    System.out.println(navx.getPitch());
+  }
   
 
   @Override
@@ -245,7 +246,6 @@ public class Drivetrain extends SubsystemBase {
     // This method will be called once per scheduler run
     //Calls on the autobalance.
     //Updating the Odometry
-    
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
     m_field.setRobotPose(m_odometry.getPoseMeters());
   }

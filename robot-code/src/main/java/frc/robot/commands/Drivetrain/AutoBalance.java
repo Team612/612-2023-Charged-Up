@@ -11,6 +11,9 @@ import frc.robot.subsystems.Drivetrain;
 public class AutoBalance extends CommandBase {
   /** Creates a new AutoBalanceBETTER. */
   private final Drivetrain m_drivetrain;
+  private double speed = 0.1;
+  private boolean prevSign = true;
+  private boolean sign = true;
   public AutoBalance(Drivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
@@ -20,24 +23,37 @@ public class AutoBalance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.driveup();
+    m_drivetrain.driveMecanum(0, 0, 0, 0);
   }
-
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.centering();
+    if (m_drivetrain.getPitch() >= Constants.DrivetrainConstants.offbalancepositivehalf) {
+      m_drivetrain.driveMecanum(speed, speed, speed, speed);
+      sign = true;
+    } else if (m_drivetrain.getPitch() <= Constants.DrivetrainConstants.offbalancepositivehalfneg) {
+      m_drivetrain.driveMecanum(-speed, -speed, -speed, -speed);
+      sign = false;
+    } else {
+      m_drivetrain.driveMecanum(0, 0, 0, 0);
+    }
+    if (prevSign != sign) {
+      speed *= 0.9;
+      prevSign = sign;
+    } 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.turnBalance();
+    m_drivetrain.driveMecanum(0, 0, 0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_drivetrain.getPitch() < Constants.DrivetrainConstants.offbalancepositive;
+    //return m_drivetrain.getPitch() < Constants.DrivetrainConstants.offbalancepositivehalf;
+    return false;
   }
 }
