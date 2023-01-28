@@ -8,17 +8,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.commands.Intake.GrabberClose;
 import frc.robot.commands.Intake.GrabberOpen;
-import frc.robot.controls.ControlMap;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
@@ -67,15 +63,9 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-    /*THIS IS REALLY NICE @abhi and @abhinav very coolio */
-    // // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    // m_driverController.y().whileTrue()
     m_driverController.x().whileTrue(new GrabberOpen(m_intake));
     m_driverController.b().whileTrue(new GrabberClose(m_intake));
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));

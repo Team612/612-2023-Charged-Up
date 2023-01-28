@@ -57,11 +57,11 @@ public class Drivetrain extends SubsystemBase {
     navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
     // navx.reset();
     // navx.calibrate();
-    zeroYaw();
+    // zeroYaw();
 
     navxAngleOffset = new Rotation2d();
 
-    m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(),getMecanumDriveWheelPositions());
+    m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(), getMecanumDriveWheelPositions());
     
     //most likely the case
 
@@ -232,7 +232,13 @@ public class Drivetrain extends SubsystemBase {
 
     //Updating the Odometry
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
-    System.out.println(getNavxAngle());
+    // System.out.println(getNavxAngle());
+    System.out.println("X: " + navx.getWorldLinearAccelX() + " Y: " + navx.getWorldLinearAccelY() + " Z: " + navx.getWorldLinearAccelZ());
     m_field.setRobotPose(m_odometry.getPoseMeters());  
   }
+  //-0.36782837, -0.85580444, 0 IMU
+  // 2.55, 	0.10 APRIL TAG
+  // 0.84, 0.01 APRIL TAG
+
+  //.79 ACTUAL APRIL TAG
 }

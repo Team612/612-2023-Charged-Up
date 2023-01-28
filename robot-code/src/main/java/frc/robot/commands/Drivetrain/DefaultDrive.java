@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.Drivetrain;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.controls.ControlMap;
@@ -30,8 +29,8 @@ public class DefaultDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
-    // m_drivetrain.driveMecanum(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
+    // m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
+    m_drivetrain.driveMecanum(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
   }
 
   // Called once the command ends or is interrupted.
