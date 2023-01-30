@@ -15,6 +15,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
+import frc.robot.commands.Drivetrain.RollOff;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -56,6 +57,7 @@ public class RobotContainer {
   private void configureShuffleBoardBindings(){
     m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
     m_chooser.addOption("TestTrajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.testTrajectory));
+    m_chooser.addOption("RollOff", new RollOff(m_drivetrain));
     SmartDashboard.putData(m_chooser);
   }
 

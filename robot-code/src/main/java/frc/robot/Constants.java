@@ -52,8 +52,8 @@ public final class Constants {
      public static final double kA_Angular = 1; // do not touch
      //Thresholds
      public static final int offbalancepositive = 15;
-     public static final int offbalancepositivehalf = 7;
-     public static final int offbalancepositivehalfneg = -7;
+     public static final int offbalancepositivehalf = 5; //might need to change later
+     public static final int offbalancepositivehalfneg = -5;
      //position controllers
  
      //have to tune manually

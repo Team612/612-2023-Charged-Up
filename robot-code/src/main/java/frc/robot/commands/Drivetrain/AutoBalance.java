@@ -12,8 +12,8 @@ public class AutoBalance extends CommandBase {
   /** Creates a new AutoBalanceBETTER. */
   private final Drivetrain m_drivetrain;
   private double speed = 0.1;
-  private boolean prevSign = true;
-  private boolean sign = true;
+  //private boolean prevSign = true;
+  //private boolean sign = true;
   public AutoBalance(Drivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
@@ -31,17 +31,24 @@ public class AutoBalance extends CommandBase {
   public void execute() {
     if (m_drivetrain.getPitch() >= Constants.DrivetrainConstants.offbalancepositivehalf) {
       m_drivetrain.driveMecanum(speed, speed, speed, speed);
-      sign = true;
+      //sign = true;
     } else if (m_drivetrain.getPitch() <= Constants.DrivetrainConstants.offbalancepositivehalfneg) {
-      m_drivetrain.driveMecanum(-speed, -speed, -speed, -speed);
-      sign = false;
+      m_drivetrain.driveMecanum(speed, speed, speed, speed);
+      //sign = false;
     } else {
       m_drivetrain.driveMecanum(0, 0, 0, 0);
     }
+    speed = m_drivetrain.getPitch() / 125;
+    System.out.println(m_drivetrain.getPitch());
+
+    //System.out.println(m_drivetrain.getPitch());
+    //System.out.println("works");
+    /*
     if (prevSign != sign) {
       speed *= 0.9;
       prevSign = sign;
     } 
+    */
   }
 
   // Called once the command ends or is interrupted.
