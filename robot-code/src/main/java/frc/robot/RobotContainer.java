@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Quaternion;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,6 +24,7 @@ import frc.robot.commands.Intake.GrabberOpen;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,7 +37,8 @@ public class RobotContainer {
   
   //subsystem declarations 
   private final Drivetrain m_drivetrain = Drivetrain.getInstance();
-
+  public final PhotonCamera camera = new PhotonCamera(Constants.cameraName);
+  public final Vision m_Vision = new Vision(camera);
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
@@ -56,8 +64,21 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
+
+  public void runCommands(){
+    // PhotonPipelineResult result = camera.getLatestResult();
+    // if(result.hasTargets()){
+    //   System.out.println(result.getBestTarget().getFiducialId());
+    // }
+    // else{
+    //   System.out.println("********************************No targets*****************************************");
+    // }
+    //System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()));
+  }
+
   private void configureShuffleBoardBindings(){
     m_chooser.addOption("TestTrajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.testTrajectory));
+    // m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(camera, m_Vision, new Pose3d(8, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
     SmartDashboard.putData(m_chooser);
   }
 

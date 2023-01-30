@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    m_robotContainer.runCommands();
     CommandScheduler.getInstance().run();
   }
 
@@ -81,7 +82,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    // System.out.println(RobotContainer.m_Vision.return_camera_pose_tag(RobotContainer.camera.getLatestResult().getBestTarget().getFiducialId(), RobotContainer.camera.getLatestResult()));
+  }
 
   @Override
   public void testInit() {

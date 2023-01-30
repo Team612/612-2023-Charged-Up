@@ -233,9 +233,10 @@ public class Drivetrain extends SubsystemBase {
     //Updating the Odometry
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
     // System.out.println(getNavxAngle());
-    System.out.println("X: " + navx.getWorldLinearAccelX() + " Y: " + navx.getWorldLinearAccelY() + " Z: " + navx.getWorldLinearAccelZ());
+    // System.out.println("X: " + navx.getWorldLinearAccelX() + " Y: " + navx.getWorldLinearAccelY() + " Z: " + navx.getWorldLinearAccelZ());
     m_field.setRobotPose(m_odometry.getPoseMeters());  
   }
+  
   //-0.36782837, -0.85580444, 0 IMU
   // 2.55, 	0.10 APRIL TAG
   // 0.84, 0.01 APRIL TAG

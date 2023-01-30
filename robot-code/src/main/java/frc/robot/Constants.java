@@ -98,4 +98,6 @@ public final class Constants {
 public static final PneumaticsModuleType solenoidType = PneumaticsModuleType.CTREPCM;
 public static int[] firstSolenoid = {5, 4};
 public static int PCM_2 = 7;
+
+public static String cameraName = "AprilTagCamera";
 }
