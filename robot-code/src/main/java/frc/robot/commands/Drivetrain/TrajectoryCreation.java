@@ -27,21 +27,21 @@ public class TrajectoryCreation {
         new Pose2d(0,0, new Rotation2d(0)), 
         config); 
     
-    // public Trajectory return_Trajectory(PhotonCamera camera, Vision m_vision, Pose3d finalPose){
-    //     if (camera.getLatestResult().hasTargets()){
+    public Trajectory return_Trajectory(PhotonCamera camera, Vision m_vision, Pose3d finalPose){
+        if (camera.getLatestResult().hasTargets()){
            
-    //         Pose3d initialPose = m_vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult());
+            Pose3d initialPose = m_vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult());
             
-    //         return TrajectoryGenerator.generateTrajectory(
-    //             new Pose2d(initialPose.getX(), initialPose.getY(), new Rotation2d(initialPose.getZ())), 
-    //             List.of(new Translation2d(finalPose.getX()/2, finalPose.getY()/2)),
-    //             new Pose2d(finalPose.getX(), finalPose.getY(), new Rotation2d(finalPose.getZ())),
-    //             config
-    //         );
-    //     }
-    //     else{ 
-    //         System.out.println("doesn't work, Arjun sucks");
-    //         return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(-0.5,0)),new Pose2d(-1,0, new Rotation2d(0)), config);
-    //     }
-    // }
+            return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(initialPose.getX(), initialPose.getY(), new Rotation2d(initialPose.getZ())), 
+                List.of(new Translation2d( initialPose.getX() + ((finalPose.getX() - initialPose.getX())/2), initialPose.getY() + (finalPose.getY() - initialPose.getY())/2)),
+                new Pose2d(finalPose.getX(), finalPose.getY(), new Rotation2d(finalPose.getZ())),
+                config
+            );
+        }
+        else{ 
+            System.out.println("doesn't work, Arjun sucks");
+            return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(-0.5,0)),new Pose2d(-1,0, new Rotation2d(0)), config);
+        }
+    }
 }
