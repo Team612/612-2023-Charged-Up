@@ -94,10 +94,5 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-
-public static final PneumaticsModuleType solenoidType = PneumaticsModuleType.CTREPCM;
-public static int[] firstSolenoid = {5, 4};
-public static int PCM_2 = 7;
-
-public static String cameraName = "Microsoft_LifeCam_HD-3000";
+  public static String cameraName = "Microsoft_LifeCam_HD-3000";
 }

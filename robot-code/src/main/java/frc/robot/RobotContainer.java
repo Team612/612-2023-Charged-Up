@@ -3,12 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import javax.naming.spi.DirStateFactory.Result;
-
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -21,11 +17,8 @@ import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
-import frc.robot.commands.Intake.GrabberClose;
-import frc.robot.commands.Intake.GrabberOpen;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -45,9 +38,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
 
-  private Intake m_intake = new Intake();
-
- // Trajectories
+  // Trajectories
   private final FollowTrajectory m_follower = new FollowTrajectory();
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -90,8 +81,6 @@ public class RobotContainer {
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    m_driverController.x().whileTrue(new GrabberOpen(m_intake));
-    m_driverController.b().whileTrue(new GrabberClose(m_intake));
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
   }
 
