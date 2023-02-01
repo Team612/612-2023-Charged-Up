@@ -1,10 +1,15 @@
 import cv2
 import copy
 import numpy as np
+import math
 from pupil_apriltags import Detector
 
-vid = cv2.VideoCapture(0)
 
+vid = cv2.VideoCapture(0)
+with np.load('B.npz') as X:
+    mtx, dist, rvecs, tvecs = [X[i] for i in ('camera_matrix','distortion','rotation_vectors','location_vectors')]
+
+print(mtx)
 at_detector = Detector(
     families="tag16h5", 
     nthreads=1,
@@ -35,6 +40,8 @@ def draw_tags(
             # Center
             cv2.circle(image, (center[0], center[1]), 5, (0, 0, 255), 2)
 
+            #
+
             # Each side
             cv2.line(image, (corner_01[0], corner_01[1]),
                     (corner_02[0], corner_02[1]), (255, 0, 0), 2)
@@ -46,7 +53,15 @@ def draw_tags(
                     (corner_01[0], corner_01[1]), (0, 255, 0), 2)
             cv2.putText(image, str(tag_id), (center[0] - 10, center[1] - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
-
+            
+            if(tag_id==1):
+                x = tag.pose_t[0][0] 
+                y = tag.pose_t[1][0]
+                w = tag.pose_t[2][0]
+                
+                cv2.putText(image, "x:" + str( round(x/w,2)) + " y:" + str(round(y/w,2)) + " z:" + str(round(w,2)),(10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2,cv2.LINE_AA)
+                cv2.putText(image, str(round(tag.pose_R[0][0],4)) + " " + str(round(tag.pose_R[1][0],4)) + " " + str(round(tag.pose_R[2][0],4)),(10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2,cv2.LINE_AA)
+                
     return image
 
 while(True):
@@ -61,10 +76,14 @@ while(True):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     tags = at_detector.detect(
         image,
-        estimate_tag_pose=False, #change to True later
-        camera_params=None,
-        tag_size=None,
+        estimate_tag_pose=True, 
+        camera_params=[mtx[0,0], mtx[1,1], mtx[0,2], mtx[1,2]],
+        tag_size=0.1524,
     )
+
+    # for tag in tags:
+    #     print(tag.pose_t)
+    
 
     #drawing
     debug_image = draw_tags(debug_image,tags)
