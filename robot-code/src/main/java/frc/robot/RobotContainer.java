@@ -18,7 +18,6 @@ import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -35,7 +34,6 @@ public class RobotContainer {
   public final PhotonCamera camera = new PhotonCamera(Constants.cameraName);
   public final Vision m_Vision = new Vision(camera);
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
 
   // Trajectories
