@@ -4,11 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -94,5 +95,27 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-  public static String cameraName = "Microsoft_LifeCam_HD-3000";
+
+  public static class VisionConstants{
+    public static String cameraName = "Microsoft_LifeCam_HD-3000";
+
+    //constraints
+    public static final TrapezoidProfile.Constraints ThetaControllerConstraints = 
+        new TrapezoidProfile.Constraints(Math.PI, Math.PI);
+    public static final TrapezoidProfile.Constraints PControllerConstraints =
+        new TrapezoidProfile.Constraints(Math.PI, Math.PI);
+    
+    //controllers
+    public static final ProfiledPIDController rotationController = 
+      new ProfiledPIDController(.5, 0, 0, ThetaControllerConstraints);
+    public static final ProfiledPIDController forwardController = 
+      new ProfiledPIDController(.5, 0, 0, PControllerConstraints);
+
+    //other camera constants
+    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(30);
+    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(5);
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(12);
+    public static final double GOAL_RANGE_METERS = Units.feetToMeters(1);
+    
+  }
 }

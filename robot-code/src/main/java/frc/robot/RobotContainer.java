@@ -16,6 +16,7 @@ import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
+import frc.robot.commands.Drivetrain.followTag;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
 
@@ -30,7 +31,7 @@ public class RobotContainer {
   
   //subsystem declarations 
   private final Drivetrain m_drivetrain = Drivetrain.getInstance();
-  public final PhotonCamera camera = new PhotonCamera(Constants.cameraName);
+  public final PhotonCamera camera = new PhotonCamera(Constants.VisionConstants.cameraName);
   public final Vision m_Vision = new Vision(camera);
 
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
@@ -75,6 +76,7 @@ public class RobotContainer {
   private void configureShuffleBoardBindings(){
     m_chooser.addOption("Align Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(camera, m_Vision)));
     m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(camera, m_Vision, new Pose3d(14.2, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
+    m_chooser.addOption("Align", new followTag(m_drivetrain, camera));
     SmartDashboard.putData(m_chooser);
   }
 
