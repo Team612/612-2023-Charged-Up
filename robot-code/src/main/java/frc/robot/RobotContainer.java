@@ -56,14 +56,15 @@ public class RobotContainer {
   }
 
   public void runCommands(){
-    PhotonPipelineResult result = camera.getLatestResult();
-    if(result.hasTargets()){
-      // System.out.println(result.getBestTarget().getFiducialId());
-      System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()));
-    }
-    else{
-      System.out.println("********************************No targets*****************************************");
-    }
+    // PhotonPipelineResult result = camera.getLatestResult();
+    // if(result.hasTargets()){
+    //   // System.out.println(result.getBestTarget().getFiducialId());
+    //   System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()));
+    // }
+    // else{
+    //   System.out.println("********************************No targets*****************************************");
+    // }
+    System.out.println(Drivetrain.NavxAngle());
 
   }
 

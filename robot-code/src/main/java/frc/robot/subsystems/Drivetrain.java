@@ -198,6 +198,10 @@ public class Drivetrain extends SubsystemBase {
     return Rotation2d.fromDegrees(-navx.getAngle());
   }
 
+  public static Rotation2d NavxAngle(){
+    return Rotation2d.fromDegrees(-navx.getAngle());
+  }
+
   public Rotation2d getNavxYawAngle(){
     return Rotation2d.fromDegrees(-navx.getYaw());
   }
