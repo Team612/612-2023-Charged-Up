@@ -59,20 +59,24 @@ public class RobotContainer {
 
 
   public void runCommands(){
-    PhotonPipelineResult result = camera.getLatestResult();
-    if(result.hasTargets()){
-      // System.out.println(result.getBestTarget().getFiducialId());
-      System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()));
-    }
-    else{
-      System.out.println("********************************No targets*****************************************");
-    }
+    System.out.println( m_drivetrain.getNavxAngle());
+    // PhotonPipelineResult result = camera.getLatestResult();
+    // if(result.hasTargets()){
+    //   // System.out.println(result.getBestTarget().getFiducialId());
+    //   System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()));
+    // }
+    // else{
+    //   // System.out.println("");
+    // }
 
   }
 
   private void configureShuffleBoardBindings(){
     m_chooser.addOption("TestTrajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.testTrajectory));
     m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(camera, m_Vision, new Pose3d(14.2, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
+    m_chooser.addOption("meter Forward X", m_follower.generateTrajectory(m_drivetrain, m_traj.meterForward));
+    m_chooser.addOption("meter Forward Y", m_follower.generateTrajectory(m_drivetrain, m_traj.meterForwardY));
+
     SmartDashboard.putData(m_chooser);
   }
 

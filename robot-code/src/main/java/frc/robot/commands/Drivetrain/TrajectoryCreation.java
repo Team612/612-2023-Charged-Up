@@ -27,6 +27,18 @@ public class TrajectoryCreation {
         new Pose2d(0,0, new Rotation2d(0)), 
         config); 
     
+    public Trajectory meterForward = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(0.5, 0)),
+        new Pose2d(1,0, new Rotation2d(0)),
+        config);
+
+    public Trajectory meterForwardY = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(0, 0.5)),
+        new Pose2d(0,1, new Rotation2d(0)),
+        config);
+    
     public Trajectory return_Trajectory(PhotonCamera camera, Vision m_vision, Pose3d finalPose){
         if (camera.getLatestResult().hasTargets()){
            

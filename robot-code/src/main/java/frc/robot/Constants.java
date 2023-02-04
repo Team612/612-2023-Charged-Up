@@ -44,9 +44,14 @@ public final class Constants {
          ((kWheelDiameterMeters * Math.PI)) / (kGearReduction);
   
      //Feedforward gains for system dynamics 
-     public static final double kS = 0.1217; 
-     public static final double kV = 4.1827;  
-     public static final double kA = 0.46749;
+    //  public static final double kS = 0.1217; 
+    //  public static final double kV = 4.1827;  
+    //  public static final double kA = 0.46749;
+
+     
+     public static final double kS = 0.11858; 
+     public static final double kV = 4.2016;  
+     public static final double kA = 0.32842;
      
      //Angular gains
      public static final double kV_Angular = 1; // do not touch
@@ -55,16 +60,27 @@ public final class Constants {
      //position controllers
  
      //have to tune manually
-     public static final double kPXController = .015;
-     public static final double kPYController = .5;
+    //  public static final double kPXController = .015;
+    //  public static final double kPYController = .5;
+    //  public static final double kPThetaController = .5; 
+     
+     public static final double kPXController = .0165;
+     public static final double kPYController = .15;
      public static final double kPThetaController = .5; 
  
      
      //Velocity controllers
-     public static final double kPFrontLeftVel = 0.12069; 
-     public static final double kPRearLeftVel = 0.12069;
-     public static final double kPFrontRightVel = 0.12069;
-     public static final double kPRearRightVel = 0.12069;
+    //  public static final double kPFrontLeftVel = 0.12069; 
+    //  public static final double kPRearLeftVel = 0.12069;
+    //  public static final double kPFrontRightVel = 0.12069;
+    //  public static final double kPRearRightVel = 0.12069;
+     
+     public static final double kPFrontLeftVel = 4.6504; 
+     public static final double kPRearLeftVel = 4.6504;
+     public static final double kPFrontRightVel = 4.6504;
+     public static final double kPRearRightVel = 4.6504;
+
+     
  
      //Converting chassis velocity into individual wheel velocities
      public static final MecanumDriveKinematics kDriveKinematics =
