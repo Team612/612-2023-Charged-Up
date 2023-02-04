@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants  ;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
@@ -59,14 +60,16 @@ public class TrajectoryCreation {
             //     null, 
             //     new Pose2d(0, 0, new Rotation2d(0)), 
             //     config);
-            Double yaw = bestTarget.getYaw();
+            Double yaw = -bestTarget.getYaw();
+
             Rotation2d initialRotation2d = Drivetrain.NavxAngle();
-            Rotation2d midpoint = initialRotation2d.minus(new Rotation2d(yaw)).div(2.0);
-            Rotation2d finalpoint = initialRotation2d.minus(new Rotation2d(yaw));
+            Rotation2d midpoint = initialRotation2d.minus(new Rotation2d(Units.degreesToRadians(yaw))).div(2.0);
+            Rotation2d finalpoint = initialRotation2d.minus(new Rotation2d(Units.degreesToRadians(yaw)));
+            
             return TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(0,0, initialRotation2d),
-                new Pose2d(0.5,0, midpoint),
-                new Pose2d(1,0, finalpoint)), 
+                List.of(new Pose2d(0,0, new Rotation2d(0)),
+                new Pose2d(0.5,0, new Rotation2d(Units.degreesToRadians(45))),
+                new Pose2d(1,0, new Rotation2d(Units.degreesToRadians(90)))), 
                 config);
         }
         else{

@@ -4,7 +4,6 @@
 
 package frc.robot;
 import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -64,6 +63,11 @@ public class RobotContainer {
     // else{
     //   System.out.println("********************************No targets*****************************************");
     // }
+    // System.out.println(Drivetrain.NavxAngle());
+    if(camera.getLatestResult().hasTargets()){
+      // System.out.println(-camera.getLatestResult().getBestTarget().getYaw());
+      // System.out.println(Drivetrain.NavxAngle());
+    }
     System.out.println(Drivetrain.NavxAngle());
 
   }
