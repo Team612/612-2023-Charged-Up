@@ -50,8 +50,8 @@ public final class Constants {
      public static final double kA = 0.32842;
      
      //Angular gains
-     public static final double kV_Angular = 1; // do not touch
-     public static final double kA_Angular = 1; // do not touch
+     public static final double kV_Angular = 4.218; // do not touch
+     public static final double kA_Angular = 0.15213; // do not touch
  
      //position controllers
  
