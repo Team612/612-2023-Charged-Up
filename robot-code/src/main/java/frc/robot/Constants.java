@@ -107,9 +107,9 @@ public final class Constants {
     
     //controllers
     public static final ProfiledPIDController rotationController = 
-      new ProfiledPIDController(.5, 0, 0, ThetaControllerConstraints);
+      new ProfiledPIDController(.1, 0, 0, ThetaControllerConstraints);
     public static final ProfiledPIDController forwardController = 
-      new ProfiledPIDController(.5, 0, 0, PControllerConstraints);
+      new ProfiledPIDController(.1, 0, 0, PControllerConstraints);
 
     //other camera constants
     public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(30);
