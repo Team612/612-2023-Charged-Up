@@ -69,7 +69,7 @@ public class RobotContainer {
       // System.out.println(-camera.getLatestResult().getBestTarget().getYaw());
       // System.out.println(Drivetrain.NavxAngle());
     }
-    System.out.println(Drivetrain.NavxAngle());
+    // System.out.println(Drivetrain.NavxAngle());
 
   }
 

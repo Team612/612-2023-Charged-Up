@@ -107,15 +107,15 @@ public final class Constants {
     
     //controllers
     public static final ProfiledPIDController rotationController = 
-      new ProfiledPIDController(.1, 0, 0, ThetaControllerConstraints);
+      new ProfiledPIDController(.01, 0, 0, ThetaControllerConstraints);
     public static final ProfiledPIDController forwardController = 
       new ProfiledPIDController(.1, 0, 0, PControllerConstraints);
 
     //other camera constants
-    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(30);
-    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(5);
+    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(13.5);
+    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(14.25);
     public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(12);
-    public static final double GOAL_RANGE_METERS = Units.feetToMeters(1);
+    public static final double GOAL_RANGE_METERS = 1;
     
   }
 }

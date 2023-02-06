@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Drivetrain;
 
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.photonvision.PhotonCamera;
@@ -38,12 +39,6 @@ public class followTag extends CommandBase {
     if(result.hasTargets()){
       PhotonTrackedTarget bestTarget = result.getBestTarget();
       rotationSpeed = -Constants.VisionConstants.rotationController.calculate(bestTarget.getYaw(), 0);
-      double range = PhotonUtils.calculateDistanceToTargetMeters(Constants.VisionConstants.CAMERA_HEIGHT_METERS, 
-                                                                Constants.VisionConstants.TARGET_HEIGHT_METERS,
-                                                                Constants.VisionConstants.CAMERA_PITCH_RADIANS,
-                                                                Units.degreesToRadians(bestTarget.getPitch()));
-      forwardSpeed = -Constants.VisionConstants.forwardController.calculate(range, Constants.VisionConstants.GOAL_RANGE_METERS);
-      
     }
     else{
       forwardSpeed = 0;
@@ -60,6 +55,6 @@ public class followTag extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !(cam.getLatestResult().hasTargets());
+    return false;
   }
 }
