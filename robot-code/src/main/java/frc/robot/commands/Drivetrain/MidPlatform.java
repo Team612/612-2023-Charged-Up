@@ -4,38 +4,31 @@
 
 package frc.robot.commands.Drivetrain;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class AutoBalance extends CommandBase {
-  /** Creates a new AutoBalanceBETTER. */
+public class MidPlatform extends CommandBase {
+  /** Creates a new MidPlatform. */
   private final Drivetrain m_drivetrain;
-  private double speed = 0.3;
-  public int offbalancepositivehalf = 7; //might need to change later
-  public AutoBalance(Drivetrain drivetrain) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private double initialPos;
+  public MidPlatform(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     addRequirements(drivetrain);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    initialPos = m_drivetrain.getEncoderPosition();
     m_drivetrain.driveMecanum(0, 0, 0, 0);
   }
-  
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_drivetrain.getPitch() >= offbalancepositivehalf) {
-      m_drivetrain.driveMecanum(speed, speed, speed, speed);
-    } else if (m_drivetrain.getPitch() <= -offbalancepositivehalf) {
-      m_drivetrain.driveMecanum(speed, speed, speed, speed);
-    } else {
-      m_drivetrain.driveMecanum(0, 0, 0, 0);
-    }
-    speed = m_drivetrain.getPitch() / 150;
+    m_drivetrain.driveMecanum(0.5, 0.5, 0.5, 0.5);
   }
 
   // Called once the command ends or is interrupted.
@@ -47,6 +40,6 @@ public class AutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_drivetrain.getEncoderPosition() - initialPos >= 1.25;
   }
 }
