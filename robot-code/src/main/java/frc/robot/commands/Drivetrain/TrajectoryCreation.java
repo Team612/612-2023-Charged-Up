@@ -15,11 +15,10 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants  ;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
 
-/** Add your docs here. */
 public class TrajectoryCreation {
 
     public TrajectoryConfig config = new TrajectoryConfig(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq)
@@ -50,6 +49,13 @@ public class TrajectoryCreation {
             return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(-0.5,0)),new Pose2d(-1,0, new Rotation2d(0)), config);
         }
     }
+
+    public Trajectory tuneAngle = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(.5,0)),
+        new Pose2d(1,0, new Rotation2d(Units.degreesToRadians(90))), 
+        config
+    );
 
     public Trajectory return_alignTrajectory(PhotonCamera camera, Vision m_vision){
         PhotonPipelineResult result = camera.getLatestResult();

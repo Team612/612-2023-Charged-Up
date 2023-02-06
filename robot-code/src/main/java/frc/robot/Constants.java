@@ -58,7 +58,7 @@ public final class Constants {
      //have to tune manually
      public static final double kPXController = .0165;
      public static final double kPYController = .15;
-     public static final double kPThetaController = .5; 
+     public static final double kPThetaController = 4.5; 
  
      
      //Velocity controllers
