@@ -10,13 +10,13 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
 
 public class TrajectoryCreation {
@@ -57,26 +57,20 @@ public class TrajectoryCreation {
         config
     );
 
-    public Trajectory return_alignTrajectory(PhotonCamera camera, Vision m_vision){
+    public Trajectory return_alignTrajectory(PhotonCamera camera, Vision m_vision, Translation2d finalPose){
         PhotonPipelineResult result = camera.getLatestResult();
         if(result.hasTargets()){
             PhotonTrackedTarget bestTarget = result.getBestTarget();
-            // return TrajectoryGenerator.generateTrajectory(
-            //     new Pose2d(0, 0, new Rotation2d(bestTarget.getYaw())), 
-            //     null, 
-            //     new Pose2d(0, 0, new Rotation2d(0)), 
-            //     config);
             Double yaw = -bestTarget.getYaw();
-
-            Rotation2d initialRotation2d = Drivetrain.NavxAngle();
-            Rotation2d midpoint = initialRotation2d.minus(new Rotation2d(Units.degreesToRadians(yaw))).div(2.0);
-            Rotation2d finalpoint = initialRotation2d.minus(new Rotation2d(Units.degreesToRadians(yaw)));
-            
+            Transform3d transform3d = bestTarget.getBestCameraToTarget();
+            double x = transform3d.getX();
+            double y = transform3d.getY();
             return TrajectoryGenerator.generateTrajectory(
-                List.of(new Pose2d(0,0, new Rotation2d(0)),
-                new Pose2d(0.5,0, new Rotation2d(Units.degreesToRadians(45))),
-                new Pose2d(1,0, new Rotation2d(Units.degreesToRadians(90)))), 
-                config);
+                new Pose2d(0,0, new Rotation2d(0)),
+                List.of(new Translation2d((x - finalPose.getX())/2,(y - finalPose.getY()) / 2)),
+                new Pose2d(x - finalPose.getX(),y - finalPose.getY(), new Rotation2d(Units.degreesToRadians(yaw))),
+                config
+            );
         }
         else{
             System.out.println("doesn't work, Arjun sucks");

@@ -4,9 +4,12 @@
 
 package frc.robot;
 import org.photonvision.PhotonCamera;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -74,7 +77,7 @@ public class RobotContainer {
   }
 
   private void configureShuffleBoardBindings(){
-    m_chooser.addOption("Align Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(camera, m_Vision)));
+    m_chooser.addOption("Align Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(camera, m_Vision, new Translation2d(1.65,0))));
     m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(camera, m_Vision, new Pose3d(14.2, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
     m_chooser.addOption("Align", new followTag(m_drivetrain, camera));
     m_chooser.addOption("Tune Angles", m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle));
