@@ -56,7 +56,7 @@ public class Drivetrain extends SubsystemBase {
     
     navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
     // navx.reset();
-    // navx.calibrate();
+    navx.calibrate();
     // zeroYaw();
 
     navxAngleOffset = new Rotation2d();

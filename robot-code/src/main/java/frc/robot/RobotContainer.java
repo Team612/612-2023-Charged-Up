@@ -4,11 +4,14 @@
 
 package frc.robot;
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -62,22 +65,26 @@ public class RobotContainer {
     // PhotonPipelineResult result = camera.getLatestResult();
     // if(result.hasTargets()){
     //   // System.out.println(result.getBestTarget().getFiducialId());
-    //   System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()));
+    //   // System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()).getY());
+    //   PhotonTrackedTarget bestTarget = result.getBestTarget();
+     
+    //   Transform3d transform3d = bestTarget.getBestCameraToTarget();
+    //   System.out.println(transform3d.getY());    
     // }
     // else{
     //   System.out.println("********************************No targets*****************************************");
     // }
     // System.out.println(Drivetrain.NavxAngle());
-    if(camera.getLatestResult().hasTargets()){
-      // System.out.println(-camera.getLatestResult().getBestTarget().getYaw());
-      // System.out.println(Drivetrain.NavxAngle());
-    }
+    // if(camera.getLatestResult().hasTargets()){
+    //   // System.out.println(-camera.getLatestResult().getBestTarget().getYaw());
+    //   // System.out.println(Drivetrain.NavxAngle());
+    // }
     // System.out.println(Drivetrain.NavxAngle());
 
   }
 
   private void configureShuffleBoardBindings(){
-    m_chooser.addOption("Align Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(camera, m_Vision, new Translation2d(1.65,0))));
+    m_chooser.addOption("Align Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(camera, new Translation2d(1.65,0))));
     m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(camera, m_Vision, new Pose3d(14.2, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
     m_chooser.addOption("Align", new followTag(m_drivetrain, camera));
     m_chooser.addOption("Tune Angles", m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle));
