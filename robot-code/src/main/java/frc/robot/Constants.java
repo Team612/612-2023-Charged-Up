@@ -51,7 +51,7 @@ public final class Constants {
      //Angular gains
      public static final double kV_Angular = 1; // do not touch
      public static final double kA_Angular = 1; // do not touch
-    //Thresholds
+    //thresholds
     public static final int offbalancepositive = 15;
     public static final int offbalancepositivehalf = 5; //might need to change later
     public static final int offbalancepositivehalfneg = -5;

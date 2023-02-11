@@ -19,6 +19,7 @@ public class DockingSequence extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DriveUp(m_drivetrain),
+      new MidPlatform(m_drivetrain),
       new AutoBalance(m_drivetrain)
     );
   }

@@ -206,7 +206,6 @@ public class Drivetrain extends SubsystemBase {
   public double getYaw(){
     return navx.getYaw();
   }
-
   public double getPitch(){
     return navx.getPitch();
     }
@@ -240,6 +239,11 @@ public class Drivetrain extends SubsystemBase {
   public void turnBalance() {
     driveMecanum(0.5, 0.5, -0.5, -0.5);
   }
+
+  public double getEncoderPosition() {
+    return spark_bl.getEncoder().getPosition();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
