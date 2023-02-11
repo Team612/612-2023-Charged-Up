@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
+import frc.robot.commands.Drivetrain.MovePID;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.commands.Drivetrain.followTag;
@@ -91,6 +92,9 @@ public class RobotContainer {
     m_chooser.addOption("straif left debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StraifLeft));
     m_chooser.addOption("forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.forwardTrajectory));
     m_chooser.addOption("backwards debug", m_follower.generateTrajectory(m_drivetrain, m_traj.backwardTrajectory));
+
+    m_chooser.addOption("PID debug", new MovePID(m_drivetrain, 1, 0, 0));
+
 
 
     SmartDashboard.putData(m_chooser);
