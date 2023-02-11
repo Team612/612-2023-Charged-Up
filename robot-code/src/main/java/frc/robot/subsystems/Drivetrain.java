@@ -33,6 +33,7 @@ public class Drivetrain extends SubsystemBase {
   static Drivetrain instance = null;
   
   private final double DEADZONE = 0.1;
+  public int offbalancepositive = Constants.DrivetrainConstants.offbalancepositive;
 
 
   private MecanumDrive drivetrain;
@@ -205,6 +206,9 @@ public class Drivetrain extends SubsystemBase {
   public double getYaw(){
     return navx.getYaw();
   }
+  public double getPitch(){
+    return navx.getPitch();
+    }
 
   public double linearAccelX(){
     return navx.getWorldLinearAccelX();
@@ -224,6 +228,20 @@ public class Drivetrain extends SubsystemBase {
 
   public boolean isCalibrating(){
     return navx.isCalibrating();
+  }
+
+  //autobalance methods
+  public void centering(){
+    if (getPitch() > 1) {
+      driveMecanum(0.1, 0.1, 0.1, 0.1);
+    }
+  }
+  public void turnBalance() {
+    driveMecanum(0.5, 0.5, -0.5, -0.5);
+  }
+
+  public double getEncoderPosition() {
+    return spark_bl.getEncoder().getPosition();
   }
 
   @Override
