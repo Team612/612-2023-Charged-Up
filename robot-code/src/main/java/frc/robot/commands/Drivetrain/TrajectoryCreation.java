@@ -4,22 +4,30 @@ package frc.robot.commands.Drivetrain;
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import frc.robot.Constants  ;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.SynchronousInterrupt;
+import frc.robot.Constants;
 import frc.robot.subsystems.Vision;
 
-/** Add your docs here. */
 public class TrajectoryCreation {
 
     public TrajectoryConfig config = new TrajectoryConfig(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq)
         .setKinematics(Constants.DrivetrainConstants.kDriveKinematics);
+
+    public TrajectoryConfig config_backwards = new TrajectoryConfig(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq)
+        .setKinematics(Constants.DrivetrainConstants.kDriveKinematics).setReversed(true);
+    
 
     public Trajectory testTrajectory = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
@@ -29,13 +37,15 @@ public class TrajectoryCreation {
     
     public Trajectory return_Trajectory(PhotonCamera camera, Vision m_vision, Pose3d finalPose){
         if (camera.getLatestResult().hasTargets()){
-           
-            Pose3d initialPose = m_vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult());
+            PhotonPipelineResult result = camera.getLatestResult();
+            PhotonTrackedTarget bestTarget = result.getBestTarget();
+            Pose3d initialPose3d = m_vision.return_camera_pose_tag(bestTarget.getFiducialId(), result);
+            Pose2d initialPose = initialPose3d.toPose2d();
             
             return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(initialPose.getX(), initialPose.getY(), new Rotation2d(initialPose.getZ())), 
+                new Pose2d(initialPose.getX(), initialPose.getY(), new Rotation2d(bestTarget.getYaw())), 
                 List.of(new Translation2d( initialPose.getX() + ((finalPose.getX() - initialPose.getX())/2), initialPose.getY() + (finalPose.getY() - initialPose.getY())/2)),
-                new Pose2d(finalPose.getX(), finalPose.getY(), new Rotation2d(finalPose.getZ())),
+                new Pose2d(finalPose.getX(), finalPose.getY(), new Rotation2d(0)),
                 config
             );
         }
@@ -44,4 +54,64 @@ public class TrajectoryCreation {
             return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(-0.5,0)),new Pose2d(-1,0, new Rotation2d(0)), config);
         }
     }
+
+    public Trajectory StraifLeft = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(0,0.5)),
+        new Pose2d(0,1, new Rotation2d(Units.degreesToRadians(0))),
+        config
+    );
+
+    public Trajectory forwardTrajectory = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(0.5,0)),
+        new Pose2d(1,0, new Rotation2d(0)),
+        config
+    );
+
+    public Trajectory backwardTrajectory = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(-0.5,0)),
+        new Pose2d(-1,0, new Rotation2d(0)),
+        config_backwards
+    );
+
+    public Trajectory tuneAngle = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(.5,0)),
+        new Pose2d(1,0, new Rotation2d(Units.degreesToRadians(120))), 
+        config
+    );
+
+    public Trajectory return_alignTrajectory(PhotonCamera camera, Translation2d finalPose){
+        PhotonPipelineResult result = camera.getLatestResult();
+        if(result.hasTargets()){
+            PhotonTrackedTarget bestTarget = result.getBestTarget();
+            Double yaw = -bestTarget.getYaw();
+            
+            Transform3d transform3d = bestTarget.getBestCameraToTarget();
+            double x = transform3d.getX();
+            double y = transform3d.getY();
+            System.out.println("*****" + y + "******");
+            return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0,0, new Rotation2d(0)),
+                List.of(new Translation2d(0,.56 / 2)),
+                new Pose2d(0,.56, new Rotation2d(0)),
+                config
+            );
+            /*
+             return TrajectoryGenerator.generateTrajectory(
+                new Pose2d(0,0, new Rotation2d(0)),
+                List.of(new Translation2d((x - finalPose.getX())/2,(y - finalPose.getY()) / 2)),
+                new Pose2d(x - finalPose.getX(),y - finalPose.getY(), new Rotation2d(Units.degreesToRadians(yaw))),
+                config
+            );
+             */
+        }
+        else{
+            System.out.println("doesn't work, Arjun sucks");
+            return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(-0.5,0)),new Pose2d(-1,0, new Rotation2d(0)), config);
+        }
+    }
+
 }

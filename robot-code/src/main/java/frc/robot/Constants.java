@@ -4,11 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -44,27 +45,39 @@ public final class Constants {
          ((kWheelDiameterMeters * Math.PI)) / (kGearReduction);
   
      //Feedforward gains for system dynamics 
-     public static final double kS = 0.11858; 
-     public static final double kV = 4.2016;  
-     public static final double kA = 0.32842;
-     
+    //  public static final double kS = 0.11858; 
+    //  public static final double kV = 4.2016;  
+    //  public static final double kA = 0.32842;
+    
+
+     public static final double kS = 0.096645; 
+     public static final double kV = 4.1049;  
+     public static final double kA = 1.1677;
+
      //Angular gains
-     public static final double kV_Angular = 1; // do not touch
-     public static final double kA_Angular = 1; // do not touch
+     public static final double kV_Angular = 4.218; // do not touch
+     public static final double kA_Angular = 0.15213; // do not touch
  
      //position controllers
  
      //have to tune manually
-     public static final double kPXController = .0165;
-     public static final double kPYController = .15;
-     public static final double kPThetaController = .5; 
+    //  public static final double kPXController = .03; // ~ 1cm error
+    public static final double kPXController = .035; // ~ 1cm error
+
+     public static final double kPYController = .6;
+     public static final double kPThetaController = 4.5; 
  
      
-     //Velocity controllers
-     public static final double kPFrontLeftVel = 4.6504; 
-     public static final double kPRearLeftVel = 4.6504;
-     public static final double kPFrontRightVel = 4.6504;
-     public static final double kPRearRightVel = 4.6504;
+    //  //Velocity controllers
+    //  public static final double kPFrontLeftVel = 4.6504; 
+    //  public static final double kPRearLeftVel = 4.6504;
+    //  public static final double kPFrontRightVel = 4.6504;
+    //  public static final double kPRearRightVel = 4.6504;
+    public static final double kPFrontLeftVel = 0.74928; 
+     public static final double kPRearLeftVel = 0.74928;
+     public static final double kPFrontRightVel = 0.74928;
+     public static final double kPRearRightVel = 0.74928;
+
  
      //Converting chassis velocity into individual wheel velocities
      public static final MecanumDriveKinematics kDriveKinematics =
@@ -94,5 +107,31 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-  public static String cameraName = "Microsoft_LifeCam_HD-3000";
+
+  public static class VisionConstants{
+    public static String cameraName = "Microsoft_LifeCam_HD-3000";
+
+    //constraints
+    public static final TrapezoidProfile.Constraints ThetaControllerConstraints = 
+        new TrapezoidProfile.Constraints(Math.PI, Math.PI);
+    public static final TrapezoidProfile.Constraints PControllerConstraints =
+        new TrapezoidProfile.Constraints(Math.PI, Math.PI);
+    public static final TrapezoidProfile.Constraints StrafeControllerConstaints = 
+        new TrapezoidProfile.Constraints(Math.PI, Math.PI);
+    
+    //controllers
+    public static final ProfiledPIDController rotationController = 
+      new ProfiledPIDController(.01, 0, 0, ThetaControllerConstraints);
+    public static final ProfiledPIDController forwardController = 
+      new ProfiledPIDController(.1, 0, 0, PControllerConstraints);
+    public static final ProfiledPIDController strafeController = 
+      new ProfiledPIDController(.1, 0, 0, StrafeControllerConstaints);
+
+    //other camera constants
+    public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(13.5);
+    public static final double TARGET_HEIGHT_METERS = Units.inchesToMeters(14.25);
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(12);
+    public static final double GOAL_RANGE_METERS = 1;
+    
+  }
 }

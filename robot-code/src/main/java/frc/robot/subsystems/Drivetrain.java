@@ -56,7 +56,7 @@ public class Drivetrain extends SubsystemBase {
     
     navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
     // navx.reset();
-    // navx.calibrate();
+    navx.calibrate();
     // zeroYaw();
 
     navxAngleOffset = new Rotation2d();
@@ -195,6 +195,10 @@ public class Drivetrain extends SubsystemBase {
 
   //Returns the total accumulated yaw angle (Z Axis, in degrees) reported by the sensor.
   public Rotation2d getNavxAngle(){
+    return Rotation2d.fromDegrees(-navx.getAngle());
+  }
+
+  public static Rotation2d NavxAngle(){
     return Rotation2d.fromDegrees(-navx.getAngle());
   }
 

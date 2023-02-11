@@ -5,9 +5,14 @@
 package frc.robot;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,8 +22,8 @@ import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
+import frc.robot.commands.Drivetrain.followTag;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -32,10 +37,9 @@ public class RobotContainer {
   
   //subsystem declarations 
   private final Drivetrain m_drivetrain = Drivetrain.getInstance();
-  public final PhotonCamera camera = new PhotonCamera(Constants.cameraName);
+  public final PhotonCamera camera = new PhotonCamera(Constants.VisionConstants.cameraName);
   public final Vision m_Vision = new Vision(camera);
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
 
   // Trajectories
@@ -57,22 +61,38 @@ public class RobotContainer {
     configureDefaultCommands();
   }
 
-
   public void runCommands(){
-    PhotonPipelineResult result = camera.getLatestResult();
-    if(result.hasTargets()){
-      // System.out.println(result.getBestTarget().getFiducialId());
-      System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()));
-    }
-    else{
-      System.out.println("********************************No targets*****************************************");
-    }
+    // PhotonPipelineResult result = camera.getLatestResult();
+    // if(result.hasTargets()){
+    //   // System.out.println(result.getBestTarget().getFiducialId());
+    //   // System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()).getY());
+    //   PhotonTrackedTarget bestTarget = result.getBestTarget();
+     
+    //   Transform3d transform3d = bestTarget.getBestCameraToTarget();
+    //   System.out.println(transform3d.getY());    
+    // }
+    // else{
+    //   System.out.println("********************************No targets*****************************************");
+    // }
+    // System.out.println(Drivetrain.NavxAngle());
+    // if(camera.getLatestResult().hasTargets()){
+    //   // System.out.println(-camera.getLatestResult().getBestTarget().getYaw());
+    //   // System.out.println(Drivetrain.NavxAngle());
+    // }
+    // System.out.println(Drivetrain.NavxAngle());
 
   }
 
   private void configureShuffleBoardBindings(){
-    m_chooser.addOption("TestTrajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.testTrajectory));
+    m_chooser.addOption("Align Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(camera, new Translation2d(1.65,0))));
     m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(camera, m_Vision, new Pose3d(14.2, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
+    m_chooser.addOption("Align", new followTag(m_drivetrain, camera));
+    m_chooser.addOption("Tune Angles", m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle));
+    m_chooser.addOption("straif left debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StraifLeft));
+    m_chooser.addOption("forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.forwardTrajectory));
+    m_chooser.addOption("backwards debug", m_follower.generateTrajectory(m_drivetrain, m_traj.backwardTrajectory));
+
+
     SmartDashboard.putData(m_chooser);
   }
 
