@@ -8,9 +8,9 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.PhotonUtils;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
@@ -20,6 +20,7 @@ public class followTag extends CommandBase {
   private final PhotonCamera cam;
   private double forwardSpeed = 0;
   private double rotationSpeed = 0;
+  private double strafeSpeed = 0;
   /** Creates a new followTag. */
   public followTag(Drivetrain d, PhotonCamera c) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,14 +39,24 @@ public class followTag extends CommandBase {
     PhotonPipelineResult result = cam.getLatestResult();
     if(result.hasTargets()){
       PhotonTrackedTarget bestTarget = result.getBestTarget();
+      Transform3d transform3d = bestTarget.getBestCameraToTarget();
       rotationSpeed = -Constants.VisionConstants.rotationController.calculate(bestTarget.getYaw(), 0);
+      double range = PhotonUtils.calculateDistanceToTargetMeters(Constants.VisionConstants.CAMERA_HEIGHT_METERS, 
+                    Constants.VisionConstants.TARGET_HEIGHT_METERS,
+                    Constants.VisionConstants.CAMERA_PITCH_RADIANS,
+                    Units.degreesToRadians(bestTarget.getPitch())); 
+      double range2 = transform3d.getX();
+      double strafe = transform3d.getY();
+      forwardSpeed = -Constants.VisionConstants.forwardController.calculate(range, Constants.VisionConstants.GOAL_RANGE_METERS);
+      strafeSpeed = -Constants.VisionConstants.strafeController.calculate(strafe, 0);
     }
     else{
       forwardSpeed = 0;
       rotationSpeed = 0;
+      strafeSpeed = 0;
     }
 
-    m_Drivetrain.driveMecanum(forwardSpeed, 0, rotationSpeed);
+    m_Drivetrain.driveMecanum(forwardSpeed, strafeSpeed, rotationSpeed);
   }
 
   // Called once the command ends or is interrupted.
