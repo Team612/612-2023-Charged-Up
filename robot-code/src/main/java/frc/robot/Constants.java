@@ -115,17 +115,17 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints ThetaControllerConstraints = 
         new TrapezoidProfile.Constraints(Math.PI, Math.PI);
     public static final TrapezoidProfile.Constraints PControllerConstraints =
-        new TrapezoidProfile.Constraints(Math.PI, Math.PI);
+        new TrapezoidProfile.Constraints(1.5,1.5);
     public static final TrapezoidProfile.Constraints StrafeControllerConstaints = 
-        new TrapezoidProfile.Constraints(Math.PI, Math.PI);
+        new TrapezoidProfile.Constraints(1.5, 1.5);
     
     //controllers
     public static final ProfiledPIDController rotationController = 
       new ProfiledPIDController(.01, 0, 0, ThetaControllerConstraints);
     public static final ProfiledPIDController forwardController = 
-      new ProfiledPIDController(.1, 0, 0, PControllerConstraints);
+      new ProfiledPIDController(.08, 0, 0, PControllerConstraints);
     public static final ProfiledPIDController strafeController = 
-      new ProfiledPIDController(.1, 0, 0, StrafeControllerConstaints);
+      new ProfiledPIDController(.3, 0, 0, StrafeControllerConstaints);
 
     //other camera constants
     public static final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(13.5);
