@@ -36,14 +36,14 @@ public class Drivetrain extends SubsystemBase {
   public int offbalancepositive = Constants.DrivetrainConstants.offbalancepositive;
 
 
-  
-  
   private MecanumDrive drivetrain;
   public double vel = Constants.DrivetrainConstants.kEncoderDistancePerPulse / 60; //velocity is in rpm so we need to get it into rps
  
   private static AHRS navx;
   MecanumDriveOdometry m_odometry;
   private Field2d m_field;
+
+  private Rotation2d navxAngleOffset;
 
  
   public Drivetrain() {
@@ -56,12 +56,13 @@ public class Drivetrain extends SubsystemBase {
     spark_br = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BR, MotorType.kBrushless);
     
     navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
-    navx.reset();
-    navx.calibrate();
-    zeroYaw();
+    // navx.reset();
+    // navx.calibrate();
+    // zeroYaw();
 
+    navxAngleOffset = new Rotation2d();
 
-    m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(),getMecanumDriveWheelPositions());
+    m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(), getMecanumDriveWheelPositions());
     
     //most likely the case
 
@@ -117,11 +118,16 @@ public class Drivetrain extends SubsystemBase {
     drivetrain.driveCartesian(y, x, zRot);
   }
 
-  public void FieldOrientedDrive(double y, double x, double zRotation){
+  public void FieldOrientedDrive(double x, double y, double zRotation){
     if(Math.abs(x) < DEADZONE) x = 0;
     if(Math.abs(y) < DEADZONE) y = 0;
     if(Math.abs(zRotation) < DEADZONE) zRotation = 0;
-    drivetrain.driveCartesian(y, x, zRotation, getNavxYawAngle().unaryMinus());
+    drivetrain.driveCartesian(x, y, zRotation, getNavxYawAngle().unaryMinus().minus(navxAngleOffset.unaryMinus()));
+
+  }
+
+  public void setNavxAngleOffset(Rotation2d angle){
+    navxAngleOffset = angle;
   }
 
   public void driveMecanum(double fl, double bl, double fr, double br){
@@ -168,6 +174,7 @@ public class Drivetrain extends SubsystemBase {
       spark_fr.getEncoder().getVelocity(),
       spark_bl.getEncoder().getVelocity(),
       spark_br.getEncoder().getVelocity());
+
   }
 
   public double[] getWheelVoltages(){
@@ -191,7 +198,6 @@ public class Drivetrain extends SubsystemBase {
   public Rotation2d getNavxAngle(){
     return Rotation2d.fromDegrees(-navx.getAngle());
   }
-  
 
   public Rotation2d getNavxYawAngle(){
     return Rotation2d.fromDegrees(-navx.getYaw());
@@ -202,8 +208,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getPitch(){
-  return navx.getPitch();
-  }
+    return navx.getPitch();
+    }
 
   public double linearAccelX(){
     return navx.getWorldLinearAccelX();
@@ -224,9 +230,8 @@ public class Drivetrain extends SubsystemBase {
   public boolean isCalibrating(){
     return navx.isCalibrating();
   }
-  //autobalance methods
 
- 
+  //autobalance methods
   public void centering(){
     if (getPitch() > 1) {
       driveMecanum(0.1, 0.1, 0.1, 0.1);
@@ -235,18 +240,20 @@ public class Drivetrain extends SubsystemBase {
   public void turnBalance() {
     driveMecanum(0.5, 0.5, -0.5, -0.5);
   }
-
-  public static void printNavxPitch(){
-    System.out.println(navx.getPitch());
-  }
-  
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //Calls on the autobalance.
+
     //Updating the Odometry
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
-    m_field.setRobotPose(m_odometry.getPoseMeters());
+    // System.out.println(getNavxAngle());
+    // System.out.println("X: " + navx.getWorldLinearAccelX() + " Y: " + navx.getWorldLinearAccelY() + " Z: " + navx.getWorldLinearAccelZ());
+    m_field.setRobotPose(m_odometry.getPoseMeters());  
   }
+  
+  //-0.36782837, -0.85580444, 0 IMU
+  // 2.55, 	0.10 APRIL TAG
+  // 0.84, 0.01 APRIL TAG
+
+  //.79 ACTUAL APRIL TAG
 }
