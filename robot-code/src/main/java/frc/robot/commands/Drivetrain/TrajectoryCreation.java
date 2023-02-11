@@ -18,10 +18,11 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SynchronousInterrupt;
 import frc.robot.Constants;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
 
 public class TrajectoryCreation {
-
+    
     public TrajectoryConfig config = new TrajectoryConfig(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq)
         .setKinematics(Constants.DrivetrainConstants.kDriveKinematics);
 
@@ -62,12 +63,25 @@ public class TrajectoryCreation {
         config
     );
 
-    public Trajectory forwardTrajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(0.5,0)),
-        new Pose2d(1,0, new Rotation2d(0)),
-        config
-    );
+    public Trajectory StraifRight(Drivetrain m_Drivetrain){
+    
+        return TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)),
+            List.of(new Translation2d(0,-0.5)),
+            new Pose2d(0,-1, new Rotation2d(Units.degreesToRadians(0))),
+            config_backwards
+        ).relativeTo(m_Drivetrain.getPose());
+    }
+
+
+
+    public Trajectory forwardTrajectory (Drivetrain m_Drivetrain){
+        return TrajectoryGenerator.generateTrajectory(m_Drivetrain.getPose(),
+            List.of(new Translation2d(m_Drivetrain.getPose().getX() + 0.5,m_Drivetrain.getPose().getY())),
+            new Pose2d(m_Drivetrain.getPose().getX() + 1,m_Drivetrain.getPose().getY(), new Rotation2d(Units.degreesToRadians(0))),
+            config
+        );
+    }
 
     public Trajectory backwardTrajectory = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
@@ -93,20 +107,20 @@ public class TrajectoryCreation {
             double x = transform3d.getX();
             double y = transform3d.getY();
             System.out.println("*****" + y + "******");
+            // return TrajectoryGenerator.generateTrajectory(
+            //     new Pose2d(0,0, new Rotation2d(0)),
+            //     List.of(new Translation2d(0,.56 / 2)),
+            //     new Pose2d(0,.56, new Rotation2d(0)),
+            //     config
+            // );
+            
             return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0,0, new Rotation2d(0)),
-                List.of(new Translation2d(0,.56 / 2)),
-                new Pose2d(0,.56, new Rotation2d(0)),
-                config
-            );
-            /*
-             return TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0,0, new Rotation2d(0)),
                 List.of(new Translation2d((x - finalPose.getX())/2,(y - finalPose.getY()) / 2)),
                 new Pose2d(x - finalPose.getX(),y - finalPose.getY(), new Rotation2d(Units.degreesToRadians(yaw))),
                 config
             );
-             */
+             
         }
         else{
             System.out.println("doesn't work, Arjun sucks");

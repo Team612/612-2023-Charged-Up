@@ -41,15 +41,16 @@ public class followTag extends CommandBase {
       PhotonTrackedTarget bestTarget = result.getBestTarget();
       Transform3d transform3d = bestTarget.getBestCameraToTarget();
         rotationSpeed = -Constants.VisionConstants.rotationController.calculate(bestTarget.getYaw(), 0);
-      //double range = PhotonUtils.calculateDistanceToTargetMeters(Constants.VisionConstants.CAMERA_HEIGHT_METERS, 
-       //             Constants.VisionConstants.TARGET_HEIGHT_METERS,
-        //            Constants.VisionConstants.CAMERA_PITCH_RADIANS,
-         //           Units.degreesToRadians(bestTarget.getPitch())); 
+      double range = PhotonUtils.calculateDistanceToTargetMeters(Constants.VisionConstants.CAMERA_HEIGHT_METERS, 
+                   Constants.VisionConstants.TARGET_HEIGHT_METERS,
+                   Constants.VisionConstants.CAMERA_PITCH_RADIANS,
+                   Units.degreesToRadians(bestTarget.getPitch())); 
       double range2 = transform3d.getX();
-      System.out.println(range2);
-      //double strafe = transform3d.getY();
-      forwardSpeed = -Constants.VisionConstants.forwardController.calculate(Units.metersToFeet(range2), Units.metersToFeet(Constants.VisionConstants.GOAL_RANGE_METERS));
-      //strafeSpeed = -Constants.VisionConstants.strafeController.calculate(Units.metersToFeet(strafe), 0);
+      double strafe = transform3d.getY();
+      // System.out.println(strafe);
+
+      forwardSpeed = -Constants.VisionConstants.forwardController.calculate(range2, Constants.VisionConstants.GOAL_RANGE_METERS);
+      strafeSpeed = Constants.VisionConstants.strafeController.calculate(Units.metersToFeet(strafe), 0);
     }
     else{
       forwardSpeed = 0;

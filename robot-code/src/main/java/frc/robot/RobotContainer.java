@@ -4,14 +4,9 @@
 
 package frc.robot;
 import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -90,7 +85,9 @@ public class RobotContainer {
     m_chooser.addOption("Align", new followTag(m_drivetrain, camera));
     m_chooser.addOption("Tune Angles", m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle));
     m_chooser.addOption("straif left debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StraifLeft));
-    m_chooser.addOption("forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.forwardTrajectory));
+    m_chooser.addOption("straif right debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StraifRight(m_drivetrain)));
+
+    m_chooser.addOption("forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.forwardTrajectory(m_drivetrain)));
     m_chooser.addOption("backwards debug", m_follower.generateTrajectory(m_drivetrain, m_traj.backwardTrajectory));
 
     m_chooser.addOption("PID debug", new MovePID(m_drivetrain, 1, 0, 0));

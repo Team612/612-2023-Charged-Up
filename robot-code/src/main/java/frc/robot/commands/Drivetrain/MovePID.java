@@ -15,7 +15,7 @@ public class MovePID extends CommandBase {
   public static final TrapezoidProfile.Constraints kPositionControllerConstraints = new TrapezoidProfile.Constraints(1,3);
 
   // PID controllers with velocity and acceleration constraints
-  ProfiledPIDController m_controller_x = new ProfiledPIDController(1, 0, 0.6, kPositionControllerConstraints);
+  ProfiledPIDController m_controller_x = new ProfiledPIDController(0.3, 0, 0, kPositionControllerConstraints);
   ProfiledPIDController m_controller_y = new ProfiledPIDController(1, 0, 0.6, kPositionControllerConstraints);
   ProfiledPIDController m_controller_angle = new ProfiledPIDController(1, 0, 0.6, kThetaControllerConstraints);
   
@@ -55,6 +55,9 @@ public class MovePID extends CommandBase {
     m_controller_y.setGoal(setPointY);
     m_controller_angle.setGoal(setPointAngle);
     
+    System.out.println("RESET ODOMETRY");
+    m_drivetrain.resetOdometry();
+
     initX = m_drivetrain.getPose().getX();
     initY = m_drivetrain.getPose().getY();
     initAngle = m_drivetrain.getPose().getRotation().getDegrees();
@@ -70,7 +73,9 @@ public class MovePID extends CommandBase {
     double pidOutput_angle = m_controller_angle.calculate(m_drivetrain.getPose().getRotation().getDegrees(), setPointAngle);
 
     //feeding outputs in
-    m_drivetrain.driveMecanum(pidOutput_X, pidOutput_Y, pidOutput_angle);
+    // System.out.println(m_drivetrain.getPose().getX());
+    m_drivetrain.driveMecanum(pidOutput_X, 0, 0);
+    
 
   }
 
@@ -79,6 +84,8 @@ public class MovePID extends CommandBase {
   public void end(boolean interrupted) {
     //stopping the robot
     m_drivetrain.driveMecanum(0, 0, 0, 0);    
+    m_drivetrain.resetOdometry();
+
   }
 
   // Returns true when the command should end.
@@ -86,7 +93,7 @@ public class MovePID extends CommandBase {
   public boolean isFinished() {
     boolean x_thresh = m_drivetrain.getPose().getX() - initX >= setpointX - posThreshold && m_drivetrain.getPose().getX() - initX <= setpointX + posThreshold;
     boolean y_thresh = m_drivetrain.getPose().getY() - initY >= setpointX - posThreshold && m_drivetrain.getPose().getY() - initY <= setpointX + posThreshold;
-    boolean angle_thresh = m_drivetrain.getPose().getRotation().getDegrees() - initAngle >= setPointAngle - angleThreshold && m_drivetrain.getPose().getRotation().getDegrees() - initX <= setPointAngle + angleThreshold;    
+    boolean angle_thresh = m_drivetrain.getPose().getRotation().getDegrees() - initAngle >= setPointAngle - angleThreshold && m_drivetrain.getPose().getRotation().getDegrees() - initAngle <= setPointAngle + angleThreshold;    
     return x_thresh && y_thresh && angle_thresh;
   }
 }

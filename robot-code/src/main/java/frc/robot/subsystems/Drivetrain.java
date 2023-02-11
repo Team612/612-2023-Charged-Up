@@ -62,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
     navxAngleOffset = new Rotation2d();
 
     m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(), getMecanumDriveWheelPositions());
-    
+  
     //most likely the case
 
     spark_fr.setInverted(true);
