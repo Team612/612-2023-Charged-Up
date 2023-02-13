@@ -18,6 +18,9 @@ import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.MovePID;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
+import frc.robot.commands.Drivetrain.XAlignWithTag;
+import frc.robot.commands.Drivetrain.YAlignWithTag;
+import frc.robot.commands.Drivetrain.ZAlignWithTag;
 import frc.robot.commands.Drivetrain.followTag;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
@@ -91,6 +94,10 @@ public class RobotContainer {
     m_chooser.addOption("backwards debug", m_follower.generateTrajectory(m_drivetrain, m_traj.backwardTrajectory));
 
     m_chooser.addOption("PID debug", new MovePID(m_drivetrain, 1, 0, 0));
+
+    m_chooser.addOption("Align X", new XAlignWithTag(m_drivetrain, camera));
+    m_chooser.addOption("Align Z", new YAlignWithTag(m_drivetrain, camera));
+    m_chooser.addOption("Align Z", new ZAlignWithTag(m_drivetrain, camera));
 
 
 
