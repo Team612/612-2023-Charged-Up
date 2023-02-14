@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.DefaultDrive;
@@ -19,12 +20,15 @@ import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.GrabberSolenoid;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.RollOff;
+import frc.robot.commands.GrabberSolenoidClose;
+import frc.robot.commands.GrabberSolenoidOpen;
 
 
 /**
@@ -48,6 +52,11 @@ public class RobotContainer {
   private final FollowTrajectory m_follower = new FollowTrajectory();
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private final GrabberSolenoid s_solenoid = new GrabberSolenoid();
+  private final SequentialCommandGroup solenoidopenclose = new SequentialCommandGroup(
+    new GrabberSolenoidClose(s_solenoid)
+    .andThen(new GrabberSolenoidOpen(s_solenoid))
+  );
 
 
 

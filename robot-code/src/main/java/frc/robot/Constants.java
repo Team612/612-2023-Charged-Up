@@ -19,6 +19,10 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+       //pwm
+  public static final int PCM_2 = 0;
+  public static final int[] SOLENOID_GRABBER = {0,0};
+  
   public static class DrivetrainConstants{
      //Spark constants
      public final static int SPARK_FL = 2;
@@ -63,7 +67,7 @@ public final class Constants {
      public static final double kPYController = .15;
      public static final double kPThetaController = .5; 
  
-     
+
      //Velocity controllers
      public static final double kPFrontLeftVel = 4.6504; 
      public static final double kPRearLeftVel = 4.6504;
