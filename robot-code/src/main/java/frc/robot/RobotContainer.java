@@ -89,13 +89,17 @@ public class RobotContainer {
 
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
-
+    //Button-Bindings
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
+    m_driverController.a().whileTrue(new DockingSequence(m_drivetrain));
   }
 
   private void configureDefaultCommands(){
     m_drivetrain.setDefaultCommand(m_defaultdrive);
   }
+
+  
+  
 
   
   public Command getAutonomousCommand() {
