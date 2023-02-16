@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
-import frc.robot.commands.Drivetrain.MovePID;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.commands.Drivetrain.followTag;
@@ -28,6 +27,7 @@ import frc.robot.subsystems.Vision;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
@@ -43,8 +43,6 @@ public class RobotContainer {
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -56,6 +54,7 @@ public class RobotContainer {
     configureShuffleBoardBindings();
     configureDefaultCommands();
   }
+
 
   public void runCommands(){
     // PhotonPipelineResult result = camera.getLatestResult();
@@ -80,17 +79,15 @@ public class RobotContainer {
   }
 
   private void configureShuffleBoardBindings(){
-    m_chooser.addOption("Align Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(camera, new Translation2d(1.65,0))));
+    m_chooser.addOption("align trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(camera, new Translation2d(1.6,0))));
     m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(camera, m_Vision, new Pose3d(14.2, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
     m_chooser.addOption("Align", new followTag(m_drivetrain, camera));
     m_chooser.addOption("Tune Angles", m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle));
-    m_chooser.addOption("straif left debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StraifLeft));
-    m_chooser.addOption("straif right debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StraifRight(m_drivetrain)));
+    m_chooser.addOption("Strafe Right debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeRightMeter()));
+    m_chooser.addOption("Strafe Left debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeLeftMeter()));
+    m_chooser.addOption("Forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter()));
+    m_chooser.addOption("Backward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.BackwardMeter()));
 
-    m_chooser.addOption("forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.forwardTrajectory(m_drivetrain)));
-    m_chooser.addOption("backwards debug", m_follower.generateTrajectory(m_drivetrain, m_traj.backwardTrajectory));
-
-    m_chooser.addOption("PID debug", new MovePID(m_drivetrain, 1, 0, 0));
 
 
 
@@ -98,9 +95,6 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-
-    // new Trigger(m_exampleSubsystem::exampleCondition)
-    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
   }

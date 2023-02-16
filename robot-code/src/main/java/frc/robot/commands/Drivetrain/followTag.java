@@ -57,7 +57,7 @@ public class followTag extends CommandBase {
       rotationSpeed = 0;
       strafeSpeed = 0;
     }
-    m_Drivetrain.driveMecanum(forwardSpeed, strafeSpeed, rotationSpeed);
+    m_Drivetrain.RobotOrientedDrive(forwardSpeed, strafeSpeed, rotationSpeed);
   }
 
   // Called once the command ends or is interrupted.

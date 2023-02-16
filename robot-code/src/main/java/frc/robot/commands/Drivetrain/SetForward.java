@@ -19,7 +19,7 @@ public class SetForward extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.setNavxAngleOffset(m_drivetrain.getNavxYawAngle());
+    m_drivetrain.setNavxAngleOffset(m_drivetrain.getNavxAngle());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

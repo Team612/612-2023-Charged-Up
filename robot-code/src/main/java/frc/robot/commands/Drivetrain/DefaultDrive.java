@@ -12,7 +12,6 @@ public class DefaultDrive extends CommandBase {
   /** Creates a new DefaultDrive. */
   
   Drivetrain m_drivetrain;
-  private Rotation2d initAngle;
   public DefaultDrive(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     addRequirements(drivetrain);
@@ -22,7 +21,6 @@ public class DefaultDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initAngle = m_drivetrain.getNavxYawAngle();
     m_drivetrain.driveMecanum(0, 0, 0, 0);
   }
 
@@ -30,7 +28,7 @@ public class DefaultDrive extends CommandBase {
   @Override
   public void execute() {
     m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
-    // m_drivetrain.driveMecanum(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
+    //m_drivetrain.RobotOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
   }
 
   // Called once the command ends or is interrupted.

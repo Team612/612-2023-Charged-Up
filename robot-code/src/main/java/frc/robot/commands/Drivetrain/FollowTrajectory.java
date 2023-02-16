@@ -42,11 +42,12 @@ public class FollowTrajectory {
 
             //setting up sequence of commands
             //resetting the drivetrain odometry
-            return new InstantCommand(() -> drivetrain.resetOdometry())
+            return new InstantCommand(() -> drivetrain.resetOdometry(m_traj.getInitialPose()), drivetrain)
               //run the actual MecanumControllor
               .andThen(mecanumControllerCommand)
               //Make sure that the robot stops
-              .andThen(new InstantCommand (() -> drivetrain.mecanumVolts(new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
+              .andThen(new InstantCommand (() -> drivetrain.mecanumVolts(
+                new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
       }
 
 }

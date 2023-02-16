@@ -8,7 +8,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
@@ -23,8 +22,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
-  /** Creates a new Drivetrain. */
-  
   private final CANSparkMax spark_fl;
   private final CANSparkMax spark_fr;
   private final CANSparkMax spark_bl;
@@ -34,7 +31,6 @@ public class Drivetrain extends SubsystemBase {
   
   private final double DEADZONE = 0.1;
 
-
   private MecanumDrive drivetrain;
   public double vel = Constants.DrivetrainConstants.kEncoderDistancePerPulse / 60; //velocity is in rpm so we need to get it into rps
  
@@ -42,23 +38,18 @@ public class Drivetrain extends SubsystemBase {
   MecanumDriveOdometry m_odometry;
   private Field2d m_field;
 
-  private Rotation2d navxAngleOffset;
-
+  private Rotation2d navxAngleOffset;  
  
   public Drivetrain() {
     m_field = new Field2d();
     SmartDashboard.putData("Field", m_field);
     spark_fl = new CANSparkMax(Constants.DrivetrainConstants.SPARK_FL, MotorType.kBrushless);
-  
+
     spark_fr = new CANSparkMax(Constants.DrivetrainConstants.SPARK_FR, MotorType.kBrushless);
     spark_bl = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BL, MotorType.kBrushless);
     spark_br = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BR, MotorType.kBrushless);
     
     navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
-    // navx.reset();
-    navx.calibrate();
-    // zeroYaw();
-
     navxAngleOffset = new Rotation2d();
 
     m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(), getMecanumDriveWheelPositions());
@@ -76,7 +67,6 @@ public class Drivetrain extends SubsystemBase {
     spark_bl.setIdleMode(IdleMode.kBrake);
     spark_br.setIdleMode(IdleMode.kBrake);
 
-    resetEncoders();
     spark_fr.getEncoder().setPositionConversionFactor(Constants.DrivetrainConstants.kEncoderDistancePerPulse);
     spark_fl.getEncoder().setPositionConversionFactor(Constants.DrivetrainConstants.kEncoderDistancePerPulse);
     spark_br.getEncoder().setPositionConversionFactor(Constants.DrivetrainConstants.kEncoderDistancePerPulse);
@@ -87,8 +77,25 @@ public class Drivetrain extends SubsystemBase {
     spark_bl.getEncoder().setVelocityConversionFactor(vel);
 
     drivetrain = new MecanumDrive(spark_fl, spark_bl, spark_fr, spark_br);
+    
+    resetOdometry(new Pose2d(4,0,navx.getRotation2d()));
+    resetEncoders();
+    navx.reset();
+    navx.calibrate();
+
 
   }
+
+  //singleton structure so to make an instance you call Drivetrain.getInstance()
+  
+  public static Drivetrain getInstance(){
+    if(instance == null){
+      instance = new Drivetrain();
+    }
+    return instance;
+  }
+
+  //getters for encoder velocity
 
   public double getFLEncoderVelocity(){
     return spark_fl.getEncoder().getVelocity();
@@ -103,32 +110,27 @@ public class Drivetrain extends SubsystemBase {
     return spark_br.getEncoder().getVelocity();
   }
 
-  public static Drivetrain getInstance(){
-    if(instance == null){
-      instance = new Drivetrain();
-    }
-    return instance;
-  }
+  //Robot oriented drive
 
-  public void driveMecanum(double y, double x, double zRot){
+  public void RobotOrientedDrive(double y, double x, double zRot){
     if(Math.abs(x) < DEADZONE) x = 0;
     if(Math.abs(y) < DEADZONE) y = 0;
     if(Math.abs(zRot) < DEADZONE) zRot = 0;
     drivetrain.driveCartesian(y, x, zRot);
   }
 
+  //Field Oriented Drive
+
   public void FieldOrientedDrive(double x, double y, double zRotation){
     if(Math.abs(x) < DEADZONE) x = 0;
     if(Math.abs(y) < DEADZONE) y = 0;
     if(Math.abs(zRotation) < DEADZONE) zRotation = 0;
-    drivetrain.driveCartesian(x, y, zRotation, getNavxYawAngle().unaryMinus().minus(navxAngleOffset.unaryMinus()));
+    drivetrain.driveCartesian(x, y, zRotation, getNavxAngle().unaryMinus().minus(navxAngleOffset.unaryMinus()));
 
   }
-
-  public void setNavxAngleOffset(Rotation2d angle){
-    navxAngleOffset = angle;
-  }
-
+  
+  //For setting individual speeds to each motor
+  
   public void driveMecanum(double fl, double bl, double fr, double br){
     spark_fl.set(fl);
     spark_bl.set(bl);
@@ -136,6 +138,16 @@ public class Drivetrain extends SubsystemBase {
     spark_br.set(br);
   }
 
+  //For setting individual volts to each motor
+
+  public void mecanumVolts(MecanumDriveMotorVoltages volts){
+    spark_fl.setVoltage(volts.frontLeftVoltage);
+    spark_fr.setVoltage(volts.frontRightVoltage);
+    spark_bl.setVoltage(volts.rearLeftVoltage);
+    spark_br.setVoltage(volts.rearRightVoltage);
+  }
+
+  //Getting the MecanumDriveWheelPositions 
   public MecanumDriveWheelPositions getMecanumDriveWheelPositions(){
     return new MecanumDriveWheelPositions(
         spark_fl.getEncoder().getPosition(), 
@@ -145,20 +157,20 @@ public class Drivetrain extends SubsystemBase {
       );
   }
 
-  public Pose2d getPose(){
+  //Getting the pose from the odometry
+
+  public Pose2d getPose(){ 
     return m_odometry.getPoseMeters();
   }
 
-  public void resetOdometry(){
-    m_odometry.resetPosition(getNavxAngle(), getMecanumDriveWheelPositions(), getPose());
-  }
+  //resetting the odometry
 
-  public void mecanumVolts(MecanumDriveMotorVoltages volts){
-    spark_fl.setVoltage(volts.frontLeftVoltage);
-    spark_fr.setVoltage(volts.frontRightVoltage);
-    spark_bl.setVoltage(volts.rearLeftVoltage);
-    spark_br.setVoltage(volts.rearRightVoltage);
+  public void resetOdometry(Pose2d pose){
+    m_odometry.resetPosition(navx.getRotation2d(), getMecanumDriveWheelPositions(), pose);
+    // m_odometry.resetPosition(getNavxAngle(), getMecanumDriveWheelPositions(), getPose());
   }
+  
+  //resetting the encoders  
 
   public void resetEncoders(){
     spark_fl.getEncoder().setPosition(0);
@@ -166,6 +178,8 @@ public class Drivetrain extends SubsystemBase {
     spark_fr.getEncoder().setPosition(0);
     spark_br.getEncoder().setPosition(0);
   }
+
+  //getting the current wheelspeeds
 
   public MecanumDriveWheelSpeeds getCurrentWheelSpeeds(){
     return new MecanumDriveWheelSpeeds(
@@ -176,6 +190,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  //getting wheel voltages and amps
   public double[] getWheelVoltages(){
     return new double[]{spark_fl.getBusVoltage(), spark_fr.getBusVoltage(), spark_bl.getBusVoltage(), spark_br.getBusVoltage()};
   }
@@ -184,31 +199,17 @@ public class Drivetrain extends SubsystemBase {
     return new double[]{spark_fl.getOutputCurrent(), spark_fr.getOutputCurrent(), spark_bl.getOutputCurrent(), spark_br.getOutputCurrent()};
   }
 
-  //getYaw = Returns the current yaw value (in degrees, from -180 to 180) 
-  //reported by the sensor. Yaw is a measure of rotation around the Z Axis 
-  //(which is perpendicular to the earth).
-
-  public static void zeroYaw(){
-    navx.zeroYaw();
-    System.out.println("******************reset yaw*********************");
-  }
 
   //Returns the total accumulated yaw angle (Z Axis, in degrees) reported by the sensor.
   public Rotation2d getNavxAngle(){
     return Rotation2d.fromDegrees(-navx.getAngle());
   }
 
-  public static Rotation2d NavxAngle(){
-    return Rotation2d.fromDegrees(-navx.getAngle());
+   // setter for setting the navxAngleOffset
+   public void setNavxAngleOffset(Rotation2d angle){
+    navxAngleOffset = angle;
   }
 
-  public Rotation2d getNavxYawAngle(){
-    return Rotation2d.fromDegrees(-navx.getYaw());
-  }
-
-  public double getYaw(){
-    return navx.getYaw();
-  }
 
   public double linearAccelX(){
     return navx.getWorldLinearAccelX();
@@ -236,14 +237,7 @@ public class Drivetrain extends SubsystemBase {
 
     //Updating the Odometry
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
-    // System.out.println(getNavxAngle());
-    // System.out.println("X: " + navx.getWorldLinearAccelX() + " Y: " + navx.getWorldLinearAccelY() + " Z: " + navx.getWorldLinearAccelZ());
-    m_field.setRobotPose(m_odometry.getPoseMeters());  
+    // m_field.setRobotPose(m_odometry.getPoseMeters());
   }
   
-  //-0.36782837, -0.85580444, 0 IMU
-  // 2.55, 	0.10 APRIL TAG
-  // 0.84, 0.01 APRIL TAG
-
-  //.79 ACTUAL APRIL TAG
 }
