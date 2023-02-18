@@ -20,7 +20,7 @@ public class FollowTrajectory {
          MecanumControllerCommand mecanumControllerCommand =
           new MecanumControllerCommand(
             m_traj,
-            drivetrain::getPose,
+            drivetrain::getVisionRobotPose,
             Constants.DrivetrainConstants.kFeedforward,
             Constants.DrivetrainConstants.kDriveKinematics,
     

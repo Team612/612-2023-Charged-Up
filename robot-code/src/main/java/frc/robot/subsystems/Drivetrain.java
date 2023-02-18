@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -35,11 +34,17 @@ public class Drivetrain extends SubsystemBase {
   public double vel = Constants.DrivetrainConstants.kEncoderDistancePerPulse / 60; //velocity is in rpm so we need to get it into rps
  
   private static AHRS navx;
-  MecanumDriveOdometry m_odometry;
   private Field2d m_field;
 
   private Rotation2d navxAngleOffset;  
+
  
+  MecanumDriveOdometry m_odometry;
+  
+  private Vision m_visionOdometry;
+  
+  
+
   public Drivetrain() {
     m_field = new Field2d();
     SmartDashboard.putData("Field", m_field);
@@ -53,8 +58,8 @@ public class Drivetrain extends SubsystemBase {
     navxAngleOffset = new Rotation2d();
 
     m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(), getMecanumDriveWheelPositions());
-  
-    //most likely the case
+    m_visionOdometry = Vision.getVisionInstance();
+    resetVisionOdometry();
 
     spark_fr.setInverted(true);
     spark_br.setInverted(true);
@@ -158,16 +163,25 @@ public class Drivetrain extends SubsystemBase {
   }
 
   //Getting the pose from the odometry
-
   public Pose2d getPose(){ 
     return m_odometry.getPoseMeters();
   }
 
-  //resetting the odometry
+  
 
+  //resetting the odometry
   public void resetOdometry(Pose2d pose){
     m_odometry.resetPosition(navx.getRotation2d(), getMecanumDriveWheelPositions(), pose);
     // m_odometry.resetPosition(getNavxAngle(), getMecanumDriveWheelPositions(), getPose());
+  }
+
+
+  public Pose2d getVisionRobotPose(){
+    return m_visionOdometry.getRobotPose();
+  }
+
+  public void resetVisionOdometry(){
+    m_visionOdometry.resetRobotPose();
   }
   
   //resetting the encoders  
@@ -237,6 +251,7 @@ public class Drivetrain extends SubsystemBase {
 
     //Updating the Odometry
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
+    // m_odometry.update(vision_odometry.getRobotPose().getRotation(), vision_odometry.getRobotPose());
     // m_field.setRobotPose(m_odometry.getPoseMeters());
   }
   

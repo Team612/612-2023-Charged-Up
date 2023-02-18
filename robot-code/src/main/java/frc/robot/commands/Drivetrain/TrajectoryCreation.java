@@ -75,8 +75,8 @@ public class TrajectoryCreation {
     public Trajectory ForwardMeter(){
         return TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(new Translation2d(.5,0)),
-            new Pose2d(1,0, new Rotation2d(Units.degreesToRadians(0))),
+            List.of(new Translation2d(1.5,0)),
+            new Pose2d(3,0, new Rotation2d(Units.degreesToRadians(0))),
             config
         );
     }
@@ -89,9 +89,6 @@ public class TrajectoryCreation {
             config_backwards
         );
     }
-
-
-
 
     public Trajectory tuneAngle = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),

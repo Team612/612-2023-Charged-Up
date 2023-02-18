@@ -33,8 +33,9 @@ public class RobotContainer {
   
   //subsystem declarations 
   private final Drivetrain m_drivetrain = Drivetrain.getInstance();
-  public final PhotonCamera camera = new PhotonCamera(Constants.VisionConstants.cameraName);
-  public final Vision m_Vision = new Vision(camera);
+  
+  public final Vision m_Vision = Vision.getVisionInstance();
+  //public final Vision m_Vision = new Vision(camera);
 
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
 
@@ -79,9 +80,9 @@ public class RobotContainer {
   }
 
   private void configureShuffleBoardBindings(){
-    m_chooser.addOption("align trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(camera, new Translation2d(1.6,0))));
-    m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(camera, m_Vision, new Pose3d(14.2, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
-    m_chooser.addOption("Align", new followTag(m_drivetrain, camera));
+    m_chooser.addOption("align trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(m_Vision.getCamera(), new Translation2d(1.6,0))));
+    m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(m_Vision.getCamera(), m_Vision, new Pose3d(14.2, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
+    m_chooser.addOption("Align", new followTag(m_drivetrain, m_Vision.getCamera()));
     m_chooser.addOption("Tune Angles", m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle));
     m_chooser.addOption("Strafe Right debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeRightMeter()));
     m_chooser.addOption("Strafe Left debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeLeftMeter()));
