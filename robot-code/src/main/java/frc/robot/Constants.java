@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 /**
@@ -19,13 +20,30 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final int Talonport1 = 0;
+  public static final int Talonport2 = 1;
+
+  // bore encoder values
+  public static final int boreEncoderIntake = 1; // port value?
+  public static final int boreThreshold = 1; // port value?
+  
+  //PCM Ports
+     public static final int PCM_1 = 0;// dont know the ports
+     public static final int PCM_2 = 1;
+  
+  
+    // Solenoid port arrays (forward, reverse)
+  public static final int[] SOLENOID_GRABBER = {2,3};
+
   public static class DrivetrainConstants{
      //Spark constants
      public final static int SPARK_FL = 2;
      public final static int SPARK_FR = 1;
      public final static int SPARK_BL = 4;
      public final static int SPARK_BR = 3;
- 
+    
+     
+     
      //wheel diameter
      public static final double kWheelDiameterMeters = 0.1524; 
      

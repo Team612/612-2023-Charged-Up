@@ -11,18 +11,24 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.Pivot;
+import frc.robot.commands.TelescopeDetract;
+import frc.robot.commands.TelescopeExtend;
 import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.RollOff;
 
@@ -43,13 +49,27 @@ public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
+  private final Arm m_arm = new Arm();
 
   // Trajectories
   private final FollowTrajectory m_follower = new FollowTrajectory();
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  // Sequential Command Group
+  private final SequentialCommandGroup pivotDetractExtend = new SequentialCommandGroup(
+    new Pivot(m_arm)
+    .andThen(new TelescopeDetract(m_arm, 1))
+    .andThen(new TelescopeExtend(m_arm, 1)));
 
+  // Parallel Command Groups
+  private final ParallelCommandGroup pivotExtend = new ParallelCommandGroup(
+    new Pivot(m_arm)
+    .alongWith(new TelescopeExtend(m_arm, 1)));
+
+  private final ParallelCommandGroup pivotDetract = new ParallelCommandGroup(
+    new Pivot(m_arm)
+    .alongWith(new TelescopeDetract(m_arm, 1)));
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
