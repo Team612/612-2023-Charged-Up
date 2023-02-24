@@ -17,10 +17,11 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
 
 public class TrajectoryCreation {
-    
+
     public TrajectoryConfig config = new TrajectoryConfig(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq)
         .setKinematics(Constants.DrivetrainConstants.kDriveKinematics);
 
@@ -72,11 +73,11 @@ public class TrajectoryCreation {
         );
     }
 
-    public Trajectory ForwardMeter(){
+    public Trajectory ForwardMeter(Drivetrain m_Drivetrain){
         return TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(new Translation2d(1.5,0)),
-            new Pose2d(3,0, new Rotation2d(Units.degreesToRadians(0))),
+            new Pose2d(12.13, 3.10, new Rotation2d(0)),
+            List.of(new Translation2d(12.70,3.10)),
+            new Pose2d(13.13, 3.10, new Rotation2d()),
             config
         );
     }

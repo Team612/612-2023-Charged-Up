@@ -3,16 +3,28 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -37,29 +49,33 @@ public class Drivetrain extends SubsystemBase {
   private Field2d m_field;
 
   private Rotation2d navxAngleOffset;  
-
  
   MecanumDriveOdometry m_odometry;
-  
-  private Vision m_visionOdometry;
-  
-  
+
+  MecanumDrivePoseEstimator m_DrivePoseEstimator;
+
+  PhotonPoseEstimator m_PhotonPoseEstimator;
+
+  private Vision m_vision;
+ 
 
   public Drivetrain() {
+
+    m_vision = Vision.getVisionInstance();
     m_field = new Field2d();
+
+
     SmartDashboard.putData("Field", m_field);
     spark_fl = new CANSparkMax(Constants.DrivetrainConstants.SPARK_FL, MotorType.kBrushless);
-
     spark_fr = new CANSparkMax(Constants.DrivetrainConstants.SPARK_FR, MotorType.kBrushless);
     spark_bl = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BL, MotorType.kBrushless);
     spark_br = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BR, MotorType.kBrushless);
     
-    navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
+    navx = new AHRS(I2C.Port.kMXP); 
     navxAngleOffset = new Rotation2d();
 
     m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(), getMecanumDriveWheelPositions());
-    m_visionOdometry = Vision.getVisionInstance();
-    resetVisionOdometry();
+    m_PhotonPoseEstimator = m_vision.getVisionPose();
 
     spark_fr.setInverted(true);
     spark_br.setInverted(true);
@@ -82,8 +98,9 @@ public class Drivetrain extends SubsystemBase {
     spark_bl.getEncoder().setVelocityConversionFactor(vel);
 
     drivetrain = new MecanumDrive(spark_fl, spark_bl, spark_fr, spark_br);
-    
-    resetOdometry(new Pose2d(4,0,navx.getRotation2d()));
+    m_DrivePoseEstimator = new MecanumDrivePoseEstimator(Constants.DrivetrainConstants.kDriveKinematics, getNavxAngle(), getMecanumDriveWheelPositions(), getPose());
+    resetOdometry();
+    resetFusedOdometry();
     resetEncoders();
     navx.reset();
     navx.calibrate();
@@ -170,20 +187,18 @@ public class Drivetrain extends SubsystemBase {
   
 
   //resetting the odometry
-  public void resetOdometry(Pose2d pose){
-    m_odometry.resetPosition(navx.getRotation2d(), getMecanumDriveWheelPositions(), pose);
-    // m_odometry.resetPosition(getNavxAngle(), getMecanumDriveWheelPositions(), getPose());
+  public void resetOdometry(){
+    m_odometry.resetPosition(getNavxAngle(), getMecanumDriveWheelPositions(), m_vision.getTagPose());
   }
 
-
-  public Pose2d getVisionRobotPose(){
-    return m_visionOdometry.getRobotPose();
+  public Pose2d fusedPose(){
+    return m_DrivePoseEstimator.getEstimatedPosition();
   }
 
-  public void resetVisionOdometry(){
-    m_visionOdometry.resetRobotPose();
+  public void resetFusedOdometry(){
+    m_DrivePoseEstimator.resetPosition(getNavxAngle(), getMecanumDriveWheelPositions(), getPose());
   }
-  
+
   //resetting the encoders  
 
   public void resetEncoders(){
@@ -245,14 +260,25 @@ public class Drivetrain extends SubsystemBase {
     return navx.isCalibrating();
   }
 
+ 
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-
     //Updating the Odometry
     m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
-    // m_odometry.update(vision_odometry.getRobotPose().getRotation(), vision_odometry.getRobotPose());
-    // m_field.setRobotPose(m_odometry.getPoseMeters());
+    
+    m_DrivePoseEstimator.update(getNavxAngle(), getMecanumDriveWheelPositions());
+    Optional<EstimatedRobotPose> result = m_vision.return_photon_pose(m_DrivePoseEstimator.getEstimatedPosition());
+
+    if (result.isPresent()){
+      EstimatedRobotPose pose = result.get();
+      m_DrivePoseEstimator.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
+    }
+
+    m_field.setRobotPose(m_DrivePoseEstimator.getEstimatedPosition());  
+
+    // System.out.println(m_DrivePoseEstimator.getEstimatedPosition());
+    System.out.println();
   }
   
 }

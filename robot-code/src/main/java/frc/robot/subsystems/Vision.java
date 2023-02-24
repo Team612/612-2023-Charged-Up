@@ -31,7 +31,7 @@ import frc.robot.Constants;
 public class Vision extends SubsystemBase {
   private static AprilTagFieldLayout aprilTagFieldLayout;
   private static Transform3d robotToCam;
-  private static PhotonPoseEstimator m_PoseEstimator;
+  public PhotonPoseEstimator m_PoseEstimator;
 
   static Vision visionInstance = null;
 
@@ -104,6 +104,7 @@ public class Vision extends SubsystemBase {
 
     robotInTagPose = new Pose2d();
     this.camera = camera;
+    resetRobotPose();
 
     aprilTagFieldLayout = new AprilTagFieldLayout(atList, 16.4592, 8.2296);
     robotToCam = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d());
@@ -166,9 +167,13 @@ public class Vision extends SubsystemBase {
     return m_PoseEstimator.update();
   }
 
+  public PhotonPoseEstimator getVisionPose(){
+    return m_PoseEstimator;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+    // System.out.println(getRobotPose());
   }
 }

@@ -86,7 +86,7 @@ public class RobotContainer {
     m_chooser.addOption("Tune Angles", m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle));
     m_chooser.addOption("Strafe Right debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeRightMeter()));
     m_chooser.addOption("Strafe Left debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeLeftMeter()));
-    m_chooser.addOption("Forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter()));
+    m_chooser.addOption("Forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter(m_drivetrain)));
     m_chooser.addOption("Backward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.BackwardMeter()));
 
 

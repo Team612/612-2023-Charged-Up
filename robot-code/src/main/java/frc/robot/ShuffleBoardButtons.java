@@ -19,20 +19,17 @@ public class ShuffleBoardButtons {
     GenericEntry AprilTagX;
     GenericEntry AprilTagY;
 
-    
-    GenericEntry TransformedRobotAngle;
-    GenericEntry TransformedRobotX;
-    GenericEntry TransformedRobotY;
-
     public void initButtons(){
         m_smartdashboard = Shuffleboard.getTab("SmartDashboard");
         NavxAngle = m_smartdashboard.add("navx angle", 0.0).getEntry();
         EncoderPosX = m_smartdashboard.add("Encoder X Position", 0).getEntry();
         EncoderPosY = m_smartdashboard.add("Encoder Y Position", 0).getEntry();
+       
+       
+        AprilTagAngle = m_smartdashboard.add("TagPose Angle", 0.0).getEntry();
+        AprilTagX = m_smartdashboard.add("TagPose X", 0).getEntry();
+        AprilTagY = m_smartdashboard.add("TagPose Y", 0).getEntry();
 
-        TransformedRobotAngle = m_smartdashboard.add("Transformed Tag to Robot Angle", 0.0).getEntry();
-        TransformedRobotX = m_smartdashboard.add("Transformed Tag to Robot X Position", 0).getEntry();
-        TransformedRobotY = m_smartdashboard.add("Transformed Tag to Robot Y Position", 0).getEntry();
     }
 
     public void updateButtons(){
@@ -45,16 +42,11 @@ public class ShuffleBoardButtons {
 
         NavxAngle.setDouble(drivey.getRotation().getDegrees());
         EncoderPosX.setDouble(drivey.getX());
-        EncoderPosY.setDouble(drivey.getY());           
-
+        EncoderPosY.setDouble(drivey.getY());    
+        
         AprilTagX.setDouble(tagPose.getX());
         AprilTagY.setDouble(tagPose.getY());
         AprilTagAngle.setDouble(tagPose.getRotation().getDegrees());    
-
-        TransformedRobotAngle.setDouble(tagToRobotPose.getRotation().getDegrees());
-        TransformedRobotX.setDouble(tagToRobotPose.getX());
-        TransformedRobotY.setDouble(tagToRobotPose.getY());
-
         
     }
     
