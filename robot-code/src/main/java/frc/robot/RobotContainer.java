@@ -8,9 +8,11 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.DefaultDrive;
@@ -52,8 +54,8 @@ public class RobotContainer {
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandJoystick m_driverController =
+      new CommandJoystick(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -73,7 +75,7 @@ public class RobotContainer {
     else{
       System.out.println("********************************No targets*****************************************");
     }
-
+    m_drivetrain.driveMecanum(m_driverController.getY(), m_driverController.getX(), m_driverController.getZ());
   }
 
   private void configureShuffleBoardBindings(){
@@ -90,7 +92,6 @@ public class RobotContainer {
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    m_driverController.y().whileTrue(new SetForward(m_drivetrain));
   }
 
   private void configureDefaultCommands(){
