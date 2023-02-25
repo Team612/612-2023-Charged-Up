@@ -265,17 +265,24 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     //Updating the Odometry
-    m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
+    // m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
     
-    m_DrivePoseEstimator.update(getNavxAngle(), getMecanumDriveWheelPositions());
+    // m_DrivePoseEstimator.update(getNavxAngle(), getMecanumDriveWheelPositions());
+    // Optional<EstimatedRobotPose> result = m_vision.return_photon_pose(m_DrivePoseEstimator.getEstimatedPosition());
+
+    // if (result.isPresent()){
+    //   EstimatedRobotPose pose = result.get();
+    //   m_DrivePoseEstimator.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
+    // }
+
+    // m_field.setRobotPose(m_DrivePoseEstimator.getEstimatedPosition()); 
     Optional<EstimatedRobotPose> result = m_vision.return_photon_pose(m_DrivePoseEstimator.getEstimatedPosition());
 
     if (result.isPresent()){
       EstimatedRobotPose pose = result.get();
-      m_DrivePoseEstimator.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
+      m_field.setRobotPose(pose.estimatedPose.toPose2d());
+      // m_DrivePoseEstimator.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
     }
-
-    m_field.setRobotPose(m_DrivePoseEstimator.getEstimatedPosition());  
 
     // System.out.println(m_DrivePoseEstimator.getEstimatedPosition());
     System.out.println();

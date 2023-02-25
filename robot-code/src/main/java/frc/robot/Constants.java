@@ -31,10 +31,10 @@ public final class Constants {
      public static final double kWheelDiameterMeters = 0.1524; 
      
      //Distance between centers of right and left wheels on robot
-     public static final double kTrackWidth = 0.5969; 
+     public static final double kTrackWidth = 0.5969; // for phoenix 0.668655
  
      //Distance between centers of front and back wheels on robot
-     public static final double kWheelBase = 0.676275; 
+     public static final double kWheelBase = 0.676275; // for phoenix .5334
  
  
      public static final double kEncoderCPR = 1; 
