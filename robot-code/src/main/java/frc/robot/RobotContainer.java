@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.DefaultDrive;
+import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
@@ -89,15 +90,15 @@ public class RobotContainer {
     m_chooser.addOption("Forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter(m_drivetrain)));
     m_chooser.addOption("Backward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.BackwardMeter()));
 
-
-
-
     SmartDashboard.putData(m_chooser);
   }
 
   private void configureButtonBindings() {
 
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
+    m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
+    
+    
   }
 
   private void configureDefaultCommands(){
