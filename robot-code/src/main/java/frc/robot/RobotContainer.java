@@ -110,6 +110,8 @@ public class RobotContainer {
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
+    m_driverController.x().whileTrue(new TelescopeExtend(m_arm, 0));
+    m_driverController.y().whileTrue(new TelescopeDetract(m_arm, 0));
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
   }
 
