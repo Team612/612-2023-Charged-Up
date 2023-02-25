@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -124,5 +125,6 @@ public final class Constants {
     public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(12);
     public static final double GOAL_RANGE_METERS = 1;
     
+    public static final Transform3d CAMERA_TO_Robot = new Transform3d();
   }
 }

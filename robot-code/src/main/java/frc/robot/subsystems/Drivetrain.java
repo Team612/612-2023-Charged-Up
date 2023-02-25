@@ -18,7 +18,9 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
@@ -41,6 +43,7 @@ public class Drivetrain extends SubsystemBase {
   static Drivetrain instance = null;
   
   private final double DEADZONE = 0.1;
+  private double previousPipelineTime = 0;
 
   private MecanumDrive drivetrain;
   public double vel = Constants.DrivetrainConstants.kEncoderDistancePerPulse / 60; //velocity is in rpm so we need to get it into rps
@@ -267,7 +270,7 @@ public class Drivetrain extends SubsystemBase {
     //Updating the Odometry
     // m_odometry.update(getNavxAngle(), getMecanumDriveWheelPositions());
     
-    // m_DrivePoseEstimator.update(getNavxAngle(), getMecanumDriveWheelPositions());
+    m_DrivePoseEstimator.update(getNavxAngle(), getMecanumDriveWheelPositions());
     // Optional<EstimatedRobotPose> result = m_vision.return_photon_pose(m_DrivePoseEstimator.getEstimatedPosition());
 
     // if (result.isPresent()){
@@ -276,13 +279,31 @@ public class Drivetrain extends SubsystemBase {
     // }
 
     // m_field.setRobotPose(m_DrivePoseEstimator.getEstimatedPosition()); 
-    Optional<EstimatedRobotPose> result = m_vision.return_photon_pose(m_DrivePoseEstimator.getEstimatedPosition());
+    // Optional<EstimatedRobotPose> result = m_vision.return_photon_pose(m_DrivePoseEstimator.getEstimatedPosition());
 
-    if (result.isPresent()){
-      EstimatedRobotPose pose = result.get();
-      m_field.setRobotPose(pose.estimatedPose.toPose2d());
-      // m_DrivePoseEstimator.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
-    }
+    // if (result.isPresent()){
+    //   EstimatedRobotPose pose = result.get();
+    //   m_field.setRobotPose(pose.estimatedPose.toPose2d());
+    //   // m_DrivePoseEstimator.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
+    // }
+      var pipelineResult = m_vision.getCamera().getLatestResult();
+      var resultTimestamp = pipelineResult.getTimestampSeconds();
+      if(resultTimestamp != previousPipelineTime && pipelineResult.hasTargets()){
+        var target = pipelineResult.getBestTarget();
+        var fiducialID = target.getFiducialId();
+        if (target.getPoseAmbiguity() <= .2){
+          var targetPose = m_vision.return_tag_pose(fiducialID);
+          Transform3d camToTarget = target.getBestCameraToTarget();
+          Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
+
+          var visionMeasurement = camPose.transformBy(Constants.VisionConstants.CAMERA_TO_Robot);
+
+          m_DrivePoseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultTimestamp);
+        }
+      }
+
+      m_field.setRobotPose(m_DrivePoseEstimator.getEstimatedPosition());
+
 
     // System.out.println(m_DrivePoseEstimator.getEstimatedPosition());
     System.out.println();
