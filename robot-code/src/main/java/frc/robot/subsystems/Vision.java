@@ -58,7 +58,7 @@ public class Vision extends SubsystemBase {
     final AprilTag tag2 = new AprilTag(2, new Pose3d(translation2, rotation2));
 
     // tag 3
-    final Translation3d translation3 = new Translation3d(15.513558, 3.738626, 0.462788);
+    final Translation3d translation3 = new Translation3d(15.513558, 4.424426, 0.462788);
     final Quaternion q3 = new Quaternion(0, 0, 0, 1);
     final Rotation3d rotation3 = new Rotation3d(q3);
     final AprilTag tag3 = new AprilTag(3, new Pose3d(translation3, rotation3));
@@ -76,7 +76,7 @@ public class Vision extends SubsystemBase {
     final AprilTag tag5 = new AprilTag(5, new Pose3d(translation5, rotation5));
 
     // tag 6
-    final Translation3d translation6 = new Translation3d(1.02743, 3.738626, 0.462788);
+    final Translation3d translation6 = new Translation3d(1.02743, 4.424426, 0.462788);
     final Quaternion q6 = new Quaternion(1, 0, 0, 0);
     final Rotation3d rotation6 = new Rotation3d(q6);
     final AprilTag tag6 = new AprilTag(6, new Pose3d(translation6, rotation6));
