@@ -20,7 +20,7 @@ public class FollowTrajectory {
          MecanumControllerCommand mecanumControllerCommand =
           new MecanumControllerCommand(
             m_traj,
-            drivetrain::fusedPose,
+            drivetrain::getPose,
             Constants.DrivetrainConstants.kFeedforward,
             Constants.DrivetrainConstants.kDriveKinematics,
     
@@ -42,7 +42,7 @@ public class FollowTrajectory {
 
             //setting up sequence of commands
             //resetting the drivetrain odometry
-            return new InstantCommand(() -> drivetrain.resetFusedOdometry())
+            return new InstantCommand(() -> drivetrain.resetOdometry())
               //run the actual MecanumControllor
               .andThen(mecanumControllerCommand)
               //Make sure that the robot stops

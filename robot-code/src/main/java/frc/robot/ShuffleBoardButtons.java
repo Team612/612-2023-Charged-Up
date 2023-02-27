@@ -7,6 +7,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Vision;
 
 public class ShuffleBoardButtons {
@@ -19,35 +20,43 @@ public class ShuffleBoardButtons {
     GenericEntry AprilTagX;
     GenericEntry AprilTagY;
 
+    
+    GenericEntry PoseEstimatorAngle;
+    GenericEntry PoseEstimatorX;
+    GenericEntry PoseEstimatorY;
+
     public void initButtons(){
         m_smartdashboard = Shuffleboard.getTab("SmartDashboard");
-        NavxAngle = m_smartdashboard.add("navx angle", 0.0).getEntry();
-        EncoderPosX = m_smartdashboard.add("Encoder X Position", 0).getEntry();
-        EncoderPosY = m_smartdashboard.add("Encoder Y Position", 0).getEntry();
-       
+        NavxAngle = m_smartdashboard.add("NavX angle", 0.0).getEntry();
+        EncoderPosX = m_smartdashboard.add("Drivetrain Encoder X Position", 0).getEntry();
+        EncoderPosY = m_smartdashboard.add("Drivetrain Encoder Y Position", 0).getEntry();
        
         AprilTagAngle = m_smartdashboard.add("TagPose Angle", 0.0).getEntry();
         AprilTagX = m_smartdashboard.add("TagPose X", 0).getEntry();
         AprilTagY = m_smartdashboard.add("TagPose Y", 0).getEntry();
 
+        PoseEstimatorAngle = m_smartdashboard.add("PoseEstimator Angle", 0.0).getEntry();
+        PoseEstimatorX = m_smartdashboard.add("PoseEstimator X", 0.0).getEntry();
+        PoseEstimatorY = m_smartdashboard.add("PoseEstimator Y", 0.0).getEntry();
+
     }
 
     public void updateButtons(){
-        Vision vision = Vision.getVisionInstance();
-        Pose2d tagPose = vision.getTagPose();
-        Pose2d tagToRobotPose = vision.getRobotPose();
-
-        Pose2d drivey = Drivetrain.getInstance().getPose();
-
-
-        NavxAngle.setDouble(drivey.getRotation().getDegrees());
-        EncoderPosX.setDouble(drivey.getX());
-        EncoderPosY.setDouble(drivey.getY());    
+        Pose2d vision = Vision.getVisionInstance().getTagPose();
+        Pose2d drivetrain = Drivetrain.getInstance().getPose();
+        Pose2d estimator = PoseEstimator.getPoseEstimatorInstance().getCurrentPose();
         
-        AprilTagX.setDouble(tagPose.getX());
-        AprilTagY.setDouble(tagPose.getY());
-        AprilTagAngle.setDouble(tagPose.getRotation().getDegrees());    
+        NavxAngle.setDouble(drivetrain.getRotation().getDegrees());
+        EncoderPosX.setDouble(drivetrain.getX());
+        EncoderPosY.setDouble(drivetrain.getY());    
+
+        AprilTagX.setDouble(vision.getX());
+        AprilTagY.setDouble(vision.getY());
+        AprilTagAngle.setDouble(vision.getRotation().getDegrees());  
         
+        PoseEstimatorAngle.setDouble(estimator.getRotation().getDegrees());
+        PoseEstimatorX.setDouble(estimator.getX());
+        PoseEstimatorY.setDouble(estimator.getY());
     }
     
 }
