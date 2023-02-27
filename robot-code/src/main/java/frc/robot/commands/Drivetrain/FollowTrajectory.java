@@ -12,15 +12,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.PoseEstimator;
 
 public class FollowTrajectory {
     Drivetrain m_drivetrain;
-    public Command generateTrajectory(Drivetrain drivetrain, Trajectory m_traj){
+    public Command generateTrajectory(Drivetrain drivetrain, Trajectory m_traj, PoseEstimator estimator){
         
          MecanumControllerCommand mecanumControllerCommand =
           new MecanumControllerCommand(
             m_traj,
-            drivetrain::getPose,
+            estimator::getCurrentPose,
             Constants.DrivetrainConstants.kFeedforward,
             Constants.DrivetrainConstants.kDriveKinematics,
     

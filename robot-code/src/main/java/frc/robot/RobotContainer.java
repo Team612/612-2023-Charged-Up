@@ -20,6 +20,7 @@ import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.commands.Drivetrain.followTag;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -38,6 +39,8 @@ public class RobotContainer {
   public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
 
+  public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
+
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
 
   // Trajectories
@@ -53,52 +56,29 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureButtonBindings();
-    configureShuffleBoardBindings();
     configureDefaultCommands();
+    configureShuffleBoardBindings();
   }
 
-
+  
   public void runCommands(){
-    // PhotonPipelineResult result = camera.getLatestResult();
-    // if(result.hasTargets()){
-    //   // System.out.println(result.getBestTarget().getFiducialId());
-    //   // System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()).getY());
-    //   PhotonTrackedTarget bestTarget = result.getBestTarget();
-     
-    //   Transform3d transform3d = bestTarget.getBestCameraToTarget();
-    //   System.out.println(transform3d.getY());    
-    // }
-    // else{
-    //   System.out.println("********************************No targets*****************************************");
-    // }
-    // System.out.println(Drivetrain.NavxAngle());
-    // if(camera.getLatestResult().hasTargets()){
-    //   // System.out.println(-camera.getLatestResult().getBestTarget().getYaw());
-    //   // System.out.println(Drivetrain.NavxAngle());
-    // }
-    // System.out.println(Drivetrain.NavxAngle());
-
   }
 
   private void configureShuffleBoardBindings(){
-    m_chooser.addOption("align trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(m_Vision.getCamera(), new Translation2d(1.6,0))));
-    m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(m_Vision.getCamera(), m_Vision, new Pose3d(14.2, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
+    m_chooser.addOption("align trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(m_Vision.getCamera(), new Translation2d(1.6,0)),estimator));
     m_chooser.addOption("Align", new followTag(m_drivetrain, m_Vision.getCamera()));
-    m_chooser.addOption("Tune Angles", m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle));
-    m_chooser.addOption("Strafe Right debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeRightMeter()));
-    m_chooser.addOption("Strafe Left debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeLeftMeter()));
-    m_chooser.addOption("Forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter(m_drivetrain)));
-    m_chooser.addOption("Backward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.BackwardMeter()));
+    m_chooser.addOption("Tune Angles", m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle,estimator));
+    m_chooser.addOption("Strafe Right debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeRightMeter(),estimator));
+    m_chooser.addOption("Strafe Left debug", m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeLeftMeter(),estimator));
+    m_chooser.addOption("Forward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter(estimator),estimator));
+    m_chooser.addOption("Backward debug", m_follower.generateTrajectory(m_drivetrain, m_traj.BackwardMeter(),estimator));
 
     SmartDashboard.putData(m_chooser);
   }
 
   private void configureButtonBindings() {
-
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
-    
-    
   }
 
   private void configureDefaultCommands(){

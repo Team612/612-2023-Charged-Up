@@ -6,9 +6,7 @@ import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -17,8 +15,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.PoseEstimator;
 
 public class TrajectoryCreation {
 
@@ -35,26 +32,6 @@ public class TrajectoryCreation {
         new Pose2d(0,0, new Rotation2d(0)), 
         config); 
     
-    public Trajectory return_Trajectory(PhotonCamera camera, Vision m_vision, Pose3d finalPose){
-        if (camera.getLatestResult().hasTargets()){
-            PhotonPipelineResult result = camera.getLatestResult();
-            PhotonTrackedTarget bestTarget = result.getBestTarget();
-            Pose3d initialPose3d = m_vision.return_camera_pose_tag(bestTarget.getFiducialId(), result);
-            Pose2d initialPose = initialPose3d.toPose2d();
-            
-            return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(initialPose.getX(), initialPose.getY(), new Rotation2d(bestTarget.getYaw())), 
-                List.of(new Translation2d( initialPose.getX() + ((finalPose.getX() - initialPose.getX())/2), initialPose.getY() + (finalPose.getY() - initialPose.getY())/2)),
-                new Pose2d(finalPose.getX(), finalPose.getY(), new Rotation2d(0)),
-                config
-            );
-        }
-        else{ 
-            System.out.println("doesn't work, Arjun sucks");
-            return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(-0.5,0)),new Pose2d(-1,0, new Rotation2d(0)), config);
-        }
-    }
-
     public Trajectory StrafeRightMeter(){   
         return TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
@@ -73,11 +50,25 @@ public class TrajectoryCreation {
         );
     }
 
-    public Trajectory ForwardMeter(Drivetrain m_Drivetrain){
+    public Trajectory ForwardMeter(PoseEstimator estimation){
+
+        //figure out a way to find an initial position 
+
+        // System.out.println("*************************** PRINT **********************************");
+        // var currentPose = estimation.getCurrentPose();
+        // System.out.println(currentPose);
+
+        double x = 10.79;//10.37; //currentPose.getX();
+        double y = 2.96;//2.02;
+        double degrees = Units.degreesToRadians(-1.6);
+        
+
+        System.out.println("*************************** END PRINT **********************************");
+
         return TrajectoryGenerator.generateTrajectory(
-            new Pose2d(12.13, 3.10, new Rotation2d(0)),
-            List.of(new Translation2d(12.70,3.10)),
-            new Pose2d(13.13, 3.10, new Rotation2d()),
+            new Pose2d(x, y, new Rotation2d(degrees)),
+            List.of(new Translation2d(x + 0.5,y)),
+            new Pose2d(x + 1.0, y, new Rotation2d(degrees)),
             config
         );
     }
