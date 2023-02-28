@@ -6,31 +6,30 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.Pivot;
 
 public class Arm extends SubsystemBase {
-  private CANSparkMax pivot1;
-  private CANSparkMax pivot2;
-  private CANSparkMax telescope;
+  private CANSparkMax pivot;
 
   //private WPI_TalonSRX talon1;
   //private WPI_TalonSRX talon2;
   //private WPI_TalonSRX talon3;
 
-  private double currTelescope = 0.0;
   private double currPivot1 = 0;
   private double currPivot2 = 0;
   DutyCycleEncoder boreEncoderArm;
+  static Arm instance = null;
 
   /** Creates a new Arm. */
   public Arm() {
-    pivot1 = new CANSparkMax(0, MotorType.kBrushless);
-    pivot2 = new CANSparkMax(1, MotorType.kBrushless);
-    telescope = new CANSparkMax(2, MotorType.kBrushless);
+    pivot = new CANSparkMax(6, MotorType.kBrushless);
     boreEncoderArm = new DutyCycleEncoder(Constants.boreEncoderIntake);
+    System.out.println(pivot);
     
     
     //talon1 = new WPI_TalonSRX(0);
@@ -39,25 +38,27 @@ public class Arm extends SubsystemBase {
   }
   
   //rename method
-  public void rotateTelescope(double rotate) {
-    telescope.set(rotate);
-    currTelescope = rotate;
-  }
-  public void rotatePivot1(double rotate) {
-    pivot1.set(rotate);
+ 
+  public void rotatePivot(double rotate) {
+    pivot.set(rotate);
     currPivot1 = rotate;
   }
-  public void rotatePivot2(double rotate) {
-    pivot2.set(rotate);
-    currPivot2 = rotate;
-  }
-  public boolean telescopeCondition() {
-    return currTelescope > 0;
-  }
+ 
   public boolean ifBorePassesLimit() {
     if (boreEncoderArm.getDistance() > 1 || boreEncoderArm.getDistance() < -1)
       return true;
     return false;
+  }
+
+  public double getPivotEncoder() {
+    return pivot.getEncoder().getPosition();
+  }
+
+  public static Arm getInstance(){
+    if (instance == null) {
+      instance = new Arm();
+    }
+    return instance;
   }
 
   /*public void setTalon1(double speed) {

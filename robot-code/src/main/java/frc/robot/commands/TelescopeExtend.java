@@ -6,16 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
-
+import frc.robot.subsystems.Telescope;
 public class TelescopeExtend extends CommandBase {
   /** Creates a new TelescopeExtend. */
-  private Arm m_arm;
+  private Telescope m_scope;
   private final double m_speed;
-  public TelescopeExtend(Arm Arm, double speed) {
+  public TelescopeExtend(Telescope scope, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_arm = Arm;
+    m_scope = scope;
     m_speed = speed;
-    addRequirements(Arm);
+    addRequirements(m_scope);
   }
 
   // Called when the command is initially scheduled.
@@ -25,7 +25,7 @@ public class TelescopeExtend extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.rotateTelescope(m_speed);
+    m_scope.rotateTelescope(m_speed);
   }
 
   // Called once the command ends or is interrupted.
@@ -35,6 +35,6 @@ public class TelescopeExtend extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_arm.ifBorePassesLimit();
+    return false;
   }
 }

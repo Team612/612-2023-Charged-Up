@@ -26,8 +26,8 @@ public class Pivot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.rotatePivot1(ControlMap.gunner.getRawAxis(0) * 0.2);
-    m_arm.rotatePivot2(ControlMap.gunner.getRawAxis(0) * -0.2);
+    m_arm.rotatePivot(ControlMap.gunner.getRawAxis(0) * 0.2);
+  
   }
 
   // Called once the command ends or is interrupted.

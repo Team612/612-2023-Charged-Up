@@ -5,18 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Telescope;
 
 public class TelescopeDetract extends CommandBase {
   /** Creates a new Telescope. */
-  private final Arm m_arm;
+  private final Telescope m_scope;
   private final double m_speed;
  
   /** Creates a new Pivot. */
-  public TelescopeDetract(Arm Arm, double speed) {
-    m_arm = Arm;
+  public TelescopeDetract(Telescope scope, double speed) {
+    m_scope = scope;
     m_speed = speed;
-    addRequirements(Arm);
+    addRequirements(m_scope);
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +28,7 @@ public class TelescopeDetract extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.rotateTelescope(-m_speed);
+    m_scope.rotateTelescope(-m_speed);
   }
 
   // Called once the command ends or is interrupted.
@@ -38,6 +38,6 @@ public class TelescopeDetract extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_arm.ifBorePassesLimit();
+    return false;
   }
 }
