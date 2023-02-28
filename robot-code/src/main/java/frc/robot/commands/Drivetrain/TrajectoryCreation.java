@@ -2,7 +2,6 @@
 package frc.robot.commands.Drivetrain;
 
 import java.util.List;
-
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -32,20 +31,30 @@ public class TrajectoryCreation {
         new Pose2d(0,0, new Rotation2d(0)), 
         config); 
     
-    public Trajectory StrafeRightMeter(){   
+    public Trajectory StrafeRightMeter(PoseEstimator estimation){ 
+        Pose2d estimatedPose = estimation.getCurrentPose();
+        double x = estimatedPose.getX();
+        double y = estimatedPose.getY();
+        double degrees = estimatedPose.getRotation().getRadians();
+        
         return TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(new Translation2d(0,-0.5)),
-            new Pose2d(0,-1-.62, new Rotation2d(Units.degreesToRadians(0))),
+            new Pose2d(x, y, new Rotation2d(degrees)),
+            List.of(new Translation2d(x,y-0.5)),
+            new Pose2d(x,y-1, new Rotation2d(Units.degreesToRadians(degrees))),
             config_backwards
         );
     }
 
-    public Trajectory StrafeLeftMeter(){   
+    public Trajectory StrafeLeftMeter(PoseEstimator estimation){ 
+        Pose2d estimatedPose = estimation.getCurrentPose();
+        double x = estimatedPose.getX();
+        double y = estimatedPose.getY();
+        double degrees = estimatedPose.getRotation().getRadians();
+        
         return TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(new Translation2d(0,0.5)),
-            new Pose2d(0,1+.62, new Rotation2d(Units.degreesToRadians(0))),
+            new Pose2d(x, y, new Rotation2d(degrees)),
+            List.of(new Translation2d(x,y+0.5)),
+            new Pose2d(x,y+1, new Rotation2d(Units.degreesToRadians(degrees))),
             config
         );
     }
@@ -57,10 +66,11 @@ public class TrajectoryCreation {
         // System.out.println("*************************** PRINT **********************************");
         // var currentPose = estimation.getCurrentPose();
         // System.out.println(currentPose);
+        Pose2d estimatedPose = estimation.getCurrentPose();
+        double x = estimatedPose.getX();
+        double y = estimatedPose.getY();
+        double degrees = estimatedPose.getRotation().getRadians();
 
-        double x = 10.79;//10.37; //currentPose.getX();
-        double y = 2.96;//2.02;
-        double degrees = Units.degreesToRadians(-1.6);
         
 
         System.out.println("*************************** END PRINT **********************************");
@@ -73,11 +83,17 @@ public class TrajectoryCreation {
         );
     }
 
-    public Trajectory BackwardMeter(){
+    public Trajectory BackwardMeter(PoseEstimator estimation){
+        Pose2d estimatedPose = estimation.getCurrentPose();
+        double x = estimatedPose.getX();
+        double y = estimatedPose.getY();
+        double degrees = estimatedPose.getRotation().getRadians();
+
         return TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(new Translation2d(-0.5,0)),
-            new Pose2d(-1.1,0, new Rotation2d(Units.degreesToRadians(0))),
+            new Pose2d(x, y, new Rotation2d(degrees)),
+            List.of(new Translation2d(x-2.5,y)),
+            new Pose2d(x-4.75, y, new Rotation2d(degrees
+            )),
             config_backwards
         );
     }

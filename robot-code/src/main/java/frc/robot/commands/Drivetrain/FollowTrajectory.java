@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import frc.robot.Constants;
@@ -17,7 +18,7 @@ import frc.robot.subsystems.PoseEstimator;
 public class FollowTrajectory {
     Drivetrain m_drivetrain;
     public Command generateTrajectory(Drivetrain drivetrain, Trajectory m_traj, PoseEstimator estimator){
-        
+         
          MecanumControllerCommand mecanumControllerCommand =
           new MecanumControllerCommand(
             m_traj,
@@ -43,11 +44,14 @@ public class FollowTrajectory {
 
             //setting up sequence of commands
             //resetting the drivetrain odometry
-            return new InstantCommand(() -> drivetrain.resetOdometry())
-              //run the actual MecanumControllor
-              .andThen(mecanumControllerCommand)
-              //Make sure that the robot stops
-              .andThen(new InstantCommand (() -> drivetrain.mecanumVolts(new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
-      }
 
+            return(new InstantCommand(() -> drivetrain.resetOdometry()).andThen(Commands.print("wef"))
+            //run the actual MecanumControllor
+            .andThen(mecanumControllerCommand)
+            //Make sure that the robot stops
+            .andThen(new InstantCommand (() -> drivetrain.mecanumVolts(new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain)));
+            
+            
+      }
+      
 }
