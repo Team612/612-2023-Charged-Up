@@ -38,7 +38,6 @@ public class Arm extends SubsystemBase {
   }
   
   //rename method
- 
   public void rotatePivot(double rotate) {
     pivot.set(rotate);
     currPivot1 = rotate;

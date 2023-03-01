@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -83,7 +84,10 @@ public final class Constants {
      //angular constraints
      public static final TrapezoidProfile.Constraints kThetaControllerConstraints = 
          new TrapezoidProfile.Constraints(kMaxAngularVelocity, kMaxAngularAcceleration);
- 
+
+      //controllers
+      public static final ProfiledPIDController rotationController = 
+        new ProfiledPIDController(.01, 0, 0, kThetaControllerConstraints);
      //Feedforward 
      public static final SimpleMotorFeedforward kFeedforward =
          new SimpleMotorFeedforward(Constants.DrivetrainConstants.kS, Constants.DrivetrainConstants.kV, Constants.DrivetrainConstants.kA);
