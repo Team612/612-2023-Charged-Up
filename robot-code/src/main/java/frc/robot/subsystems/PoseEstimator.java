@@ -3,10 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
@@ -35,10 +33,10 @@ public class PoseEstimator extends SubsystemBase {
   private double previousPipelineTimestamp = 0;
 
   //Matrix Stds for state estimate
-  private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, 0.1);
+  private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, 0.01);
 
   //Matrix Stds for vision estimates
-  private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.5, 0.5, 0.9);
+  private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
   static PoseEstimator estimator = null;
 
