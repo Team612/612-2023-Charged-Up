@@ -13,8 +13,6 @@ import frc.robot.subsystems.Vision;
 public class ShuffleBoardButtons {
     ShuffleboardTab m_smartdashboard;
     GenericEntry NavxAngle;
-    GenericEntry EncoderPosX;
-    GenericEntry EncoderPosY;
 
     GenericEntry AprilTagAngle;
     GenericEntry AprilTagX;
@@ -28,9 +26,7 @@ public class ShuffleBoardButtons {
     public void initButtons(){
         m_smartdashboard = Shuffleboard.getTab("SmartDashboard");
         NavxAngle = m_smartdashboard.add("NavX angle", 0.0).getEntry();
-        EncoderPosX = m_smartdashboard.add("Drivetrain Encoder X Position", 0).getEntry();
-        EncoderPosY = m_smartdashboard.add("Drivetrain Encoder Y Position", 0).getEntry();
-       
+
         AprilTagAngle = m_smartdashboard.add("TagPose Angle", 0.0).getEntry();
         AprilTagX = m_smartdashboard.add("TagPose X", 0).getEntry();
         AprilTagY = m_smartdashboard.add("TagPose Y", 0).getEntry();
@@ -43,12 +39,10 @@ public class ShuffleBoardButtons {
 
     public void updateButtons(){
         Pose2d vision = Vision.getVisionInstance().getTagPose();
-        Pose2d drivetrain = Drivetrain.getInstance().getPose();
+        Drivetrain drivetrain = Drivetrain.getInstance();
         Pose2d estimator = PoseEstimator.getPoseEstimatorInstance().getCurrentPose();
         
-        NavxAngle.setDouble(drivetrain.getRotation().getDegrees());
-        EncoderPosX.setDouble(drivetrain.getX());
-        EncoderPosY.setDouble(drivetrain.getY());    
+        NavxAngle.setDouble(drivetrain.getNavxAngle().getDegrees()); 
 
         AprilTagX.setDouble(vision.getX());
         AprilTagY.setDouble(vision.getY());

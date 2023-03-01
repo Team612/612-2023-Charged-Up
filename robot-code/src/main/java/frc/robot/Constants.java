@@ -46,9 +46,9 @@ public final class Constants {
          ((kWheelDiameterMeters * Math.PI)) / (kGearReduction);
   
      //Feedforward gains for system dynamics 
-     public static final double kS = 0.11887; 
-     public static final double kV = 4.1902;  
-     public static final double kA = 0.38145;
+     public static final double kS = 0.12141; 
+     public static final double kV = 4.1481;  
+     public static final double kA = 0.58895;
     
 
      //Angular gains
@@ -58,16 +58,16 @@ public final class Constants {
      //position controllers
 
      //have to tune manually
-     public static final double kPXController = 5; // ~ 1cm error
+     public static final double kPXController = 1; // ~ 1cm error
      public static final double kPYController = 1;
      public static final double kPThetaController = 4.5; 
  
      
     //Velocity controllers
-     public static final double kPFrontLeftVel = 4.875; 
-     public static final double kPRearLeftVel = 4.875;
-     public static final double kPFrontRightVel = 4.875;
-     public static final double kPRearRightVel = 4.875;
+     public static final double kPFrontLeftVel = 0.34004; //0.34004 //5.3755
+     public static final double kPRearLeftVel = 0.34004;
+     public static final double kPFrontRightVel = 0.34004;
+     public static final double kPRearRightVel = 0.34004;
 
  
      //Converting chassis velocity into individual wheel velocities
@@ -80,7 +80,7 @@ public final class Constants {
      );
      
      //trajectory constraints
-     public static final int kMaxVelocityMetersPerSecond = 2;
+     public static final int kMaxVelocityMetersPerSecond = 10;
      public static final int maxAccelerationMetersPerSecondSq = 1;
 
      public static final double kMaxAngularVelocity = Math.PI;

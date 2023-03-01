@@ -40,16 +40,11 @@ public class FollowTrajectory {
             new PIDController(Constants.DrivetrainConstants.kPRearRightVel, 0, 0),
             drivetrain::getCurrentWheelSpeeds,
             drivetrain::mecanumVolts,
-            drivetrain);
-
+            estimator);
             //setting up sequence of commands
             //resetting the drivetrain odometry
 
-            return(new InstantCommand(() -> drivetrain.resetOdometry()).andThen(Commands.print("wef"))
-            //run the actual MecanumControllor
-            .andThen(mecanumControllerCommand)
-            //Make sure that the robot stops
-            .andThen(new InstantCommand (() -> drivetrain.mecanumVolts(new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain)));
+            return mecanumControllerCommand.andThen(new InstantCommand (() -> drivetrain.mecanumVolts(new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
             
             
       }

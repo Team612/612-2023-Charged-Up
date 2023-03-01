@@ -73,7 +73,7 @@ public class Drivetrain extends SubsystemBase {
     m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(), getMecanumDriveWheelPositions());
     drivetrain = new MecanumDrive(spark_fl, spark_bl, spark_fr, spark_br);
     
-    resetOdometry();
+    // resetOdometry();
     resetEncoders();
     navx.reset();
     navx.calibrate();
@@ -149,21 +149,7 @@ public class Drivetrain extends SubsystemBase {
         spark_br.getEncoder().getPosition()
       );
   }
-
-  //Getting the pose from the odometry
-  public Pose2d getPose(){ 
-    return m_odometry.getPoseMeters();
-  }
-
-  
-
-  //resetting the odometry
-  public void resetOdometry(){
-    m_odometry.resetPosition(getNavxAngle(), getMecanumDriveWheelPositions(), m_vision.getTagPose());
-  }
-
   //resetting the encoders  
-
   public void resetEncoders(){
     spark_fl.getEncoder().setPosition(0);
     spark_bl.getEncoder().setPosition(0);
