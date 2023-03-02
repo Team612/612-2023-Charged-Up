@@ -19,8 +19,8 @@ public class FollowTrajectory {
     Drivetrain m_drivetrain;
     public Command generateTrajectory(Drivetrain drivetrain, Trajectory m_traj, PoseEstimator estimator){
          
-         MecanumControllerCommand mecanumControllerCommand =
-          new MecanumControllerCommand(
+            MecanumControllerCommand mecanumControllerCommand =
+            new MecanumControllerCommand(
             m_traj,
             estimator::getCurrentPose,
             Constants.DrivetrainConstants.kFeedforward,
@@ -41,12 +41,51 @@ public class FollowTrajectory {
             drivetrain::getCurrentWheelSpeeds,
             drivetrain::mecanumVolts,
             estimator);
+
+
+
+            MecanumControllerCommandModified mecanumControllerCommandModified = new MecanumControllerCommandModified(
+            m_traj,
+            estimator::getCurrentPose,
+            Constants.DrivetrainConstants.kFeedforward,
+            Constants.DrivetrainConstants.kDriveKinematics,
+    
+            //Position controllers 
+            new PIDController(Constants.DrivetrainConstants.kPXController, 0, 0),
+            new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0),
+            new ProfiledPIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0, Constants.DrivetrainConstants.kThetaControllerConstraints),
+    
+            Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond,
+    
+            //Velocity PID's
+            new PIDController(Constants.DrivetrainConstants.kPFrontLeftVel, 0, 0),
+            new PIDController(Constants.DrivetrainConstants.kPRearLeftVel, 0, 0),
+            new PIDController(Constants.DrivetrainConstants.kPFrontRightVel, 0, 0),
+            new PIDController(Constants.DrivetrainConstants.kPRearRightVel, 0, 0),
+            drivetrain::getCurrentWheelSpeeds,
+            drivetrain::mecanumVolts,
+            estimator);
+
+
+
+
+
+
             //setting up sequence of commands
             //resetting the drivetrain odometry
 
-            return mecanumControllerCommand.andThen(new InstantCommand (() -> drivetrain.mecanumVolts(new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
+            // return mecanumControllerCommand.andThen(
+            //       new InstantCommand (() -> 
+            //       drivetrain.mecanumVolts(
+            //             new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
             
             
+            return mecanumControllerCommandModified.andThen(
+                  new InstantCommand (() -> 
+                  drivetrain.mecanumVolts(
+                        new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
+            
+
       }
       
 }
