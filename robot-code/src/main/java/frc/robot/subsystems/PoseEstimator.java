@@ -83,10 +83,8 @@ public class PoseEstimator extends SubsystemBase {
             estimatedPose.getX() > 0.0 && estimatedPose.getX() <= FIELD_LENGTH_METERS
             && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= FIELD_WIDTH_METERS) {
 
-          if (estimatedRobotPose.targetsUsed.size() > 1 && estimatedPose.getX() < 4) {
-
+          if (estimatedRobotPose.targetsUsed.size() < 2) {
             for (PhotonTrackedTarget target : estimatedRobotPose.targetsUsed) {
-
               Pose3d targetPose = m_Vision.return_tag_pose(target.getFiducialId());
               Transform3d bestTarget = target.getBestCameraToTarget();
               Pose3d camPose = targetPose.transformBy(bestTarget.inverse());
@@ -107,7 +105,12 @@ public class PoseEstimator extends SubsystemBase {
         }
       });
     }
-    m_field.setRobotPose(getCurrentPose());
+    Pose2d dashboardPose = getCurrentPose();
+    if (originPosition == OriginPosition.kRedAllianceWallRightSide) {
+      // Flip the pose when red, since the dashboard field photo cannot be rotated
+      dashboardPose = flipAlliance(dashboardPose);
+    }
+    m_field.setRobotPose(dashboardPose);
   }
 
   public Pose2d getCurrentPose() {
@@ -157,7 +160,7 @@ public class PoseEstimator extends SubsystemBase {
 
   private Pose2d flipAlliance(Pose2d poseToFlip) {
     return poseToFlip.relativeTo(new Pose2d(
-        new Translation2d(16.4846, 8.1026),
+        new Translation2d(FIELD_LENGTH_METERS, FIELD_WIDTH_METERS),
         new Rotation2d(Math.PI)));
   }
 
