@@ -8,14 +8,18 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -35,6 +39,7 @@ public class PoseEstimator extends SubsystemBase {
   public static final double FIELD_WIDTH_METERS = Units.inchesToMeters(315.5);
   private double previousPipelineTimestamp = 0;
 
+  private OriginPosition originPosition = OriginPosition.kBlueAllianceWallRightSide;
   //Matrix Stds for state estimate
   private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, 0.01);
 
@@ -119,6 +124,45 @@ public class PoseEstimator extends SubsystemBase {
 
   public void resetFieldPosition() {
     setCurrentPose(new Pose2d());
+  }
+
+
+ /**
+   * Sets the alliance. This is used to configure the origin of the AprilTag map
+   * 
+   * @param alliance alliance
+   */
+  public void setAlliance(Alliance alliance) {
+    var fieldTags = m_PhotonPoseEstimator.getFieldTags();
+    boolean allianceChanged = false;
+    switch (alliance) {
+      case Blue:
+        fieldTags.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
+        allianceChanged = (originPosition == OriginPosition.kRedAllianceWallRightSide);
+        originPosition = OriginPosition.kBlueAllianceWallRightSide;
+        break;
+      case Red:
+        fieldTags.setOrigin(OriginPosition.kRedAllianceWallRightSide);
+        allianceChanged = (originPosition == OriginPosition.kBlueAllianceWallRightSide);
+        originPosition = OriginPosition.kRedAllianceWallRightSide;
+        break;
+      default:
+        // No valid alliance data. Nothing we can do about it
+    }
+    if (allianceChanged) {
+      // The alliance changed, which changes the coordinate system.
+      // Since a tag may have been seen and the tags are all relative to the
+      // coordinate system, the estimated pose
+      // needs to be transformed to the new coordinate system.
+      var newPose = flipAlliance(m_DrivePoseEstimator.getEstimatedPosition());
+      setCurrentPose(newPose);
+    }
+  }
+
+  private Pose2d flipAlliance(Pose2d poseToFlip) {
+    return poseToFlip.relativeTo(new Pose2d(
+        new Translation2d(16.4846, 8.1026),
+        new Rotation2d(Math.PI)));
   }
 
 }

@@ -7,7 +7,9 @@ package frc.robot;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.server.PathPlannerServer;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.ShuffleBoardButtons;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -39,7 +41,7 @@ public class Robot extends TimedRobot {
 
     m_robotContainer = new RobotContainer();
     m_BoardButtons.initButtons();
-
+    checkDriverStationUpdate();
   }
 
   /**
@@ -55,6 +57,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    checkDriverStationUpdate();
     if(!printed){
       System.out.println("********ROBOT PERIODIC*****");
       printed = true;
@@ -72,6 +75,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    checkDriverStationUpdate();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -95,6 +99,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    checkDriverStationUpdate();
   }
 
   /** This function is called periodically during operator control. */
@@ -120,4 +125,15 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  private void checkDriverStationUpdate() {
+    // https://www.chiefdelphi.com/t/getalliance-always-returning-red/425782/27
+    Alliance currentAlliance = DriverStation.getAlliance();
+
+    // If we have data, and have a new alliance from last time
+    if (DriverStation.isDSAttached() && currentAlliance != Constants.DrivetrainConstants.alliance) {
+      m_robotContainer.onAllianceChanged(currentAlliance);
+      Constants.DrivetrainConstants.alliance = currentAlliance;
+    }
+  }
 }
