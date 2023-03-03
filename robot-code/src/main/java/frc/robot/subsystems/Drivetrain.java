@@ -245,6 +245,10 @@ public class Drivetrain extends SubsystemBase {
 
   public static CommandBase followTrajectory(Drivetrain driveSystem, PoseEstimator poseEstimatorSystem,
       PathPlannerTrajectory alliancePath) {
+    PIDController thetaController = new PIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0); // Rotation controller. Tune these
+    // values for your robot. Leaving them
+    // 0 will only use feedforwards.
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
     return new PPMecanumControllerCommand(alliancePath,
         poseEstimatorSystem::getCurrentPose, // Pose supplier
         Constants.DrivetrainConstants.kDriveKinematics, // MecanumDriveKinematics
@@ -252,14 +256,10 @@ public class Drivetrain extends SubsystemBase {
                                                                               // your robot. Leaving them 0 will only
                                                                               // use feedforwards.
         new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0), // Y controller (usually the same values
-                                                                              // as X controller)
-        new PIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0), // Rotation controller. Tune these
-                                                                                  // values for your robot. Leaving them
-                                                                                  // 0 will only use feedforwards.
+        thetaController,                                                                     // as X controller)
         2.5, // Max wheel velocity meters per second
         driveSystem.getCurrentWheelSpeedsConsumer(),
-        driveSystem,
-        poseEstimatorSystem);
+        false);
   }
 
 }
