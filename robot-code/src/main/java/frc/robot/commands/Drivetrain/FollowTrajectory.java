@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import frc.robot.Constants;
@@ -72,16 +71,16 @@ public class FollowTrajectory {
             //setting up sequence of commands
             //resetting the drivetrain odometry
 
-            // return mecanumControllerCommand.andThen(
-            //       new InstantCommand (() -> 
-            //       drivetrain.mecanumVolts(
-            //             new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
-            
-            
-            return mecanumControllerCommandModified.andThen(
+            return mecanumControllerCommand.andThen(
                   new InstantCommand (() -> 
                   drivetrain.mecanumVolts(
                         new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
+            
+            
+            // return mecanumControllerCommandModified.andThen(
+            //       new InstantCommand (() -> 
+            //       drivetrain.mecanumVolts(
+            //             new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
             
 
       }

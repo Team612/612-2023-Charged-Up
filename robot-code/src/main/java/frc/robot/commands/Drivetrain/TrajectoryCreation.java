@@ -38,10 +38,10 @@ public class TrajectoryCreation {
         double degrees = estimatedPose.getRotation().getRadians();
         
         return TrajectoryGenerator.generateTrajectory(
-            new Pose2d(x, y, new Rotation2d(degrees)),
+            new Pose2d(x, y, new Rotation2d(Units.degreesToRadians(degrees))),
             List.of(new Translation2d(x,y-0.5)),
             new Pose2d(x,y-1, new Rotation2d(Units.degreesToRadians(degrees))),
-            config_backwards
+            config
         );
     }
 

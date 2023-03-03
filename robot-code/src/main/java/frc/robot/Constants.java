@@ -64,10 +64,13 @@ public final class Constants {
  
      
     //Velocity controllers
-     public static final double kPFrontLeftVel = 0.34004; //0.34004 //5.3755
-     public static final double kPRearLeftVel = 0.34004;
-     public static final double kPFrontRightVel = 0.34004;
-     public static final double kPRearRightVel = 0.34004;
+
+    private static double x = 5.3755;
+
+     public static final double kPFrontLeftVel = x; //0.34004 //5.3755
+     public static final double kPRearLeftVel = x;
+     public static final double kPFrontRightVel = x;
+     public static final double kPRearRightVel = x;
 
  
      //Converting chassis velocity into individual wheel velocities
@@ -80,8 +83,8 @@ public final class Constants {
      );
      
      //trajectory constraints
-     public static final int kMaxVelocityMetersPerSecond = 1;
-     public static final int maxAccelerationMetersPerSecondSq = 1;
+     public static final double kMaxVelocityMetersPerSecond = 2.5;
+     public static final double maxAccelerationMetersPerSecondSq = 1.0;
 
      public static final double kMaxAngularVelocity = Math.PI;
      public static final double kMaxAngularAcceleration = Math.PI;

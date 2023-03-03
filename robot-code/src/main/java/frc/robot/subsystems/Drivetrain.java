@@ -211,6 +211,7 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    System.out.println(getCurrentWheelSpeeds());
   }
   
 }
