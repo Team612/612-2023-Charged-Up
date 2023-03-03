@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
@@ -92,9 +93,29 @@ public final class Constants {
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static int kGunnerControllerPort = 1;
   }
 
-  //bore encoer constants
-  public static int boreEncoderIntake = 1;
-  public static int boreEncoderPivot = 0; 
+  public static class SparkPorts {
+    public static final int pivotID = 6;
+    public static final int tele_arm = 7;
+    public static final int grabber = 5;
+  }
+
+  public static class MotorSpeeds {
+    public static final double pivot_speed = 1;
+    public static final double tele_arm_speed = 0.5;
+    public static double grabber_speed = 0.1;
+  }
+
+  public static class EncoderConstants{
+    public static int boreEncoderIntake = 1;
+
+    //all of these are subject to change
+    public static double arm_lower; // = -99.0;
+    public static double arm_upper = 130.0;
+    public static double tele_in = -3.0;
+    public static double tele_out = 84.0;
+ 
+  }
 }

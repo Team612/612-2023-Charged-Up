@@ -9,6 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.Grab;
+import frc.robot.commands.Pivot;
+import frc.robot.commands.Release;
 import frc.robot.commands.TelescopeDetract;
 import frc.robot.commands.TelescopeExtend;
 import frc.robot.commands.Drivetrain.DefaultDrive;
@@ -17,6 +21,8 @@ import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Telescope;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -38,14 +44,21 @@ public class RobotContainer {
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  private final Arm m_arm = new Arm();
-  private final double m_speed = 1;
-  private final TelescopeDetract m_telescopeDetract = new TelescopeDetract(m_arm, m_speed);
-  private final TelescopeExtend m_telescopeExtend = new TelescopeExtend(m_arm, m_speed);
+  private final Arm m_arm = Arm.getInstance();
+  private final Telescope m_scope = Telescope.getInstance();
+  private final Grabber m_grabber = Grabber.getInstance();
+
+  private final Pivot m_pivot = new Pivot(m_arm);
+  private final TelescopeDetract m_telescopeDetract = new TelescopeDetract(m_scope);
+  private final TelescopeExtend m_telescopeExtend = new TelescopeExtend(m_scope);
+  private final Grab m_grab = new Grab(m_grabber);
+  private final Release m_release = new Release(m_grabber);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  private final CommandXboxController driver =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController gunner =
+      new CommandXboxController(OperatorConstants.kGunnerControllerPort);
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -69,12 +82,15 @@ public class RobotContainer {
     // // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    m_driverController.a().whileTrue(m_telescopeExtend);
-    m_driverController.b().whileTrue(m_telescopeDetract);
+    gunner.leftBumper().whileTrue(m_telescopeExtend);
+    gunner.rightBumper().whileTrue(m_telescopeDetract);
+    gunner.leftTrigger().whileTrue(m_grab);
+    gunner.rightTrigger().whileTrue(m_release);
   }
 
   private void configureDefaultCommands(){
     m_drivetrain.setDefaultCommand(m_defaultdrive);
+    m_arm.setDefaultCommand(m_pivot);
   }
 
   

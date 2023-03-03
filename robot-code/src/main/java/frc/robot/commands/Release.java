@@ -6,16 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.MotorSpeeds;
-import frc.robot.subsystems.Telescope;
+import frc.robot.controls.ControlMap;
+import frc.robot.subsystems.Grabber;
 
-public class TelescopeExtend extends CommandBase {
-  /** Creates a new Telescope. */
-  private final Telescope m_scope;
+public class Release extends CommandBase {
+  private final Grabber m_grabber;
  
   /** Creates a new Pivot. */
-  public TelescopeExtend(Telescope scope) {
-    m_scope = scope;
-    addRequirements(m_scope);
+  public Release(Grabber grabber) {
+    m_grabber = grabber;
+    addRequirements(m_grabber);
   }
 
   // Called when the command is initially scheduled.
@@ -27,14 +27,13 @@ public class TelescopeExtend extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //if (!m_scope.isExtended())
-      m_scope.moveTelescope(-MotorSpeeds.tele_arm_speed); //extend is negative speeds, tele_arm_speed is positive
+    m_grabber.grab(-ControlMap.gunner.getRawAxis(3) * MotorSpeeds.grabber_speed); //.grab(ControlMap.gunner.getRawAxis(3) * MotorSpeeds.grabber_speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_scope.moveTelescope(0);
+    m_grabber.grab(0);
   }
 
   // Returns true when the command should end.

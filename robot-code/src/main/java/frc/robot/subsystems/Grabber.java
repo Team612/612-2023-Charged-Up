@@ -3,45 +3,40 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.SparkPorts;
 
-public class Arm extends SubsystemBase {
-  private CANSparkMax pivot;
-  static Arm instance = null;
+public class Grabber extends SubsystemBase {
+  /** Creates a new Grabber. */
+  private CANSparkMax grabber;
+  static Grabber instance = null;
+  private final DutyCycleEncoder boreEncoderArm;
 
-  /** Creates a new Arm. */
-  public Arm() {
-    pivot = new CANSparkMax(SparkPorts.pivotID, MotorType.kBrushless);
-  }
-  
-  //rename method
-  public void rotatePivot(double rotate) {
-    pivot.set(rotate);
+  public Grabber() {
+    grabber = new CANSparkMax(SparkPorts.grabber, MotorType.kBrushless);
+    boreEncoderArm = new DutyCycleEncoder(EncoderConstants.boreEncoderIntake);
   }
 
-  public double getPivotEncoder() {
-    return pivot.getEncoder().getPosition();
+  public void grab(double rotate) {
+    grabber.set(rotate);
   }
 
-  public Boolean withinThresh(){
-    if(getPivotEncoder() > EncoderConstants.arm_lower && getPivotEncoder() < EncoderConstants.arm_upper){
-      return true;
-    }
-    return false;
+  public double getGrabEncoder() {
+    return boreEncoderArm.getDistance();
   }
 
-  public static Arm getInstance(){
+  public static Grabber getInstance(){
     if (instance == null) {
-      instance = new Arm();
+      instance = new Grabber();
     }
     return instance;
   }
-
 
   @Override
   public void periodic() {
