@@ -70,7 +70,11 @@ public class RobotContainer {
     m_chooser.addOption("Forward debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter(estimator),estimator)));
     m_chooser.addOption("Backward debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.BackwardMeter(estimator),estimator)));
 
+    //66 inches between each april tag
+  
+    m_chooser.addOption("PathPlanner Strafe Right", m_follower.generatePathPlannerTrajectoryCommand(m_traj.testPath, true, m_drivetrain, estimator));
     SmartDashboard.putData(m_chooser);
+
   }
 
   private void configureButtonBindings() {
@@ -82,7 +86,6 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(m_defaultdrive);
   }
 
-  
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
   }

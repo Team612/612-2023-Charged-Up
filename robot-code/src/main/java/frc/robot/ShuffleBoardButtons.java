@@ -13,18 +13,14 @@ import frc.robot.subsystems.Vision;
 public class ShuffleBoardButtons {
     ShuffleboardTab m_smartdashboard;
     GenericEntry NavxAngle;
-
     GenericEntry AprilTagAngle;
     GenericEntry AprilTagX;
     GenericEntry AprilTagY;
-
-    
+ 
     GenericEntry PoseEstimatorAngle;
     GenericEntry PoseEstimatorX;
     GenericEntry PoseEstimatorY;
 
-
-    
     GenericEntry FLVel;
     GenericEntry FRVel;
     GenericEntry BLVel;

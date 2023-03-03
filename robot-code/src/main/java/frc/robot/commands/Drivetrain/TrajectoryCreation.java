@@ -5,6 +5,11 @@ import java.util.List;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -17,6 +22,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimator;
 
 public class TrajectoryCreation {
+
 
     public TrajectoryConfig config = new TrajectoryConfig(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq)
         .setKinematics(Constants.DrivetrainConstants.kDriveKinematics);
@@ -130,4 +136,6 @@ public class TrajectoryCreation {
         }
     }
 
+
+    public PathPlannerTrajectory testPath = PathPlanner.loadPath("Test Trajectory", new PathConstraints(2.5, 1));
 }
