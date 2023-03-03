@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import java.util.function.Consumer;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -172,6 +174,17 @@ public class Drivetrain extends SubsystemBase {
   }
 
   //getting the current wheelspeeds
+
+  public Consumer<MecanumDriveWheelSpeeds> getCurrentWheelSpeedsConsumer(){
+    Consumer<MecanumDriveWheelSpeeds> cons = value -> {
+      spark_fl.getEncoder().getVelocity();
+      spark_fr.getEncoder().getVelocity();
+      spark_bl.getEncoder().getVelocity();
+      spark_br.getEncoder().getVelocity();
+    };
+
+    return cons;
+  }
 
   public MecanumDriveWheelSpeeds getCurrentWheelSpeeds(){
     return new MecanumDriveWheelSpeeds(
