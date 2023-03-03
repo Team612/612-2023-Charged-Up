@@ -3,99 +3,66 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.Drivetrain;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPMecanumControllerCommand;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PoseEstimator;
 
-public class FollowTrajectory {
-    public Command generateTrajectory(Drivetrain drivetrain, Trajectory m_traj, PoseEstimator estimator){
-         
-            MecanumControllerCommand mecanumControllerCommand =
-            new MecanumControllerCommand(
-            m_traj,
-            estimator::getCurrentPose,
-            Constants.DrivetrainConstants.kFeedforward,
-            Constants.DrivetrainConstants.kDriveKinematics,
-    
-            //Position controllers 
-            new PIDController(Constants.DrivetrainConstants.kPXController, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0),
-            new ProfiledPIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0, Constants.DrivetrainConstants.kThetaControllerConstraints),
-    
-            Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond,
-    
-            //Velocity PID's
-            new PIDController(Constants.DrivetrainConstants.kPFrontLeftVel, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPRearLeftVel, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPFrontRightVel, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPRearRightVel, 0, 0),
-            drivetrain::getCurrentWheelSpeeds,
-            drivetrain::mecanumVolts,
-            estimator);
+public class FollowTrajectory extends CommandBase {
 
-            MecanumControllerCommandModified mecanumControllerCommandModified = new MecanumControllerCommandModified(
-            m_traj,
-            estimator::getCurrentPose,
-            Constants.DrivetrainConstants.kFeedforward,
-            Constants.DrivetrainConstants.kDriveKinematics,
-    
-            //Position controllers 
-            new PIDController(Constants.DrivetrainConstants.kPXController, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0),
-            new ProfiledPIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0, Constants.DrivetrainConstants.kThetaControllerConstraints),
-    
-            Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond,
-            //Velocity PID's
-            new PIDController(Constants.DrivetrainConstants.kPFrontLeftVel, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPRearLeftVel, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPFrontRightVel, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPRearRightVel, 0, 0),
-            drivetrain::getCurrentWheelSpeeds,
-            drivetrain::mecanumVolts,
-            estimator);
+      private final Drivetrain driveSystem;
+      private final PoseEstimator poseEstimatorSystem;
+      private final String pathName;
+      private final PathConstraints constraints;
+      private final boolean resetOdom;
 
-            //setting up sequence of commands
-            //resetting the drivetrain odometry
+      private CommandBase controllerCommand = Commands.none();
 
-            return mecanumControllerCommand.andThen(
-                  new InstantCommand (() -> 
-                  drivetrain.mecanumVolts(
-                        new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain));
+      public FollowTrajectory(
+                  Drivetrain d, PoseEstimator p, String pathName,
+                  PathConstraints constraints, boolean resetOdom) {
+            this.driveSystem = d;
+            this.poseEstimatorSystem = p;
+            this.pathName = pathName;
+            this.constraints = constraints;
+            this.resetOdom = resetOdom;
+      }
 
-      }  
+      @Override
+      public void initialize() {
+            var path = PathPlanner.loadPath(pathName, constraints);
+            if (path == null) {
+                  end(false);
+                  return;
+            }
+            PathPlannerTrajectory alliancePath = PathPlannerTrajectory.transformTrajectoryForAlliance(
+                        path,
+                        DriverStation.getAlliance());
 
+            if (resetOdom)
+                  poseEstimatorSystem.setCurrentPose(alliancePath.getInitialHolonomicPose());
+            controllerCommand = Drivetrain.followTrajectory(driveSystem, poseEstimatorSystem, alliancePath);
+            controllerCommand.initialize();
+      }
 
-      // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
-      public Command generatePathPlannerTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath, Drivetrain drivetrain, PoseEstimator estimator) {
-            return new SequentialCommandGroup(
-            new InstantCommand(() -> {
-                  // Reset odometry for the first path you run during auto
-                  // if(isFirstPath){
-                  // estimator.setCurrentPose(traj.getInitialHolonomicPose());
-                  // }
-            }),
+      @Override
+      public void execute() {
+            controllerCommand.execute();
+      }
 
-            new PPMecanumControllerCommand(traj, 
-                  estimator::getCurrentPose, // Pose supplier
-                  Constants.DrivetrainConstants.kDriveKinematics, // MecanumDriveKinematics
-                  new PIDController(Constants.DrivetrainConstants.kPXController, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                  new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0), // Y controller (usually the same values as X controller)
-                  new PIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                  2.5, // Max wheel velocity meters per second
-                  drivetrain.getCurrentWheelSpeedsConsumer(),
-                  drivetrain,
-                  estimator
-                  )
-            );
+      @Override
+      public void end(boolean interrupted) {
+            controllerCommand.end(interrupted);
+      }
+
+      @Override
+      public boolean isFinished() {
+            return controllerCommand.isFinished();
       }
 }
