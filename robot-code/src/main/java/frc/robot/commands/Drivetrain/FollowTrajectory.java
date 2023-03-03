@@ -33,7 +33,7 @@ public class FollowTrajectory {
             new ProfiledPIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0, Constants.DrivetrainConstants.kThetaControllerConstraints),
     
             Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond,
-    
+
             //Velocity PID's
             new PIDController(Constants.DrivetrainConstants.kPFrontLeftVel, 0, 0),
             new PIDController(Constants.DrivetrainConstants.kPRearLeftVel, 0, 0),

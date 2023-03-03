@@ -3,15 +3,10 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.server.PathPlannerServer;
-
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.ShuffleBoardButtons;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -20,11 +15,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
   private RobotContainer m_robotContainer;
   private final ShuffleBoardButtons m_BoardButtons = new ShuffleBoardButtons();
   private static boolean printed = false;
-
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -34,7 +27,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    // PathPlannerServer.startServer(5811);
+    PathPlannerServer.startServer(5811);
     System.out.println("********ROBOT INIT*********");
 
     m_robotContainer = new RobotContainer();
