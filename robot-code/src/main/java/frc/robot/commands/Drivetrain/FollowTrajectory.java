@@ -42,8 +42,6 @@ public class FollowTrajectory {
             drivetrain::mecanumVolts,
             estimator);
 
-
-
             MecanumControllerCommandModified mecanumControllerCommandModified = new MecanumControllerCommandModified(
             m_traj,
             estimator::getCurrentPose,
