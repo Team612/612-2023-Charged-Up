@@ -65,7 +65,7 @@ public final class Constants {
      
     //Velocity controllers
 
-    private static double x = 5.3755;
+    private static double x = 0.00026748;
 
      public static final double kPFrontLeftVel = x; //0.34004 //5.3755
      public static final double kPRearLeftVel = x;

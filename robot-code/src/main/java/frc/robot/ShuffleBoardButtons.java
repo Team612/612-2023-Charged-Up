@@ -23,6 +23,13 @@ public class ShuffleBoardButtons {
     GenericEntry PoseEstimatorX;
     GenericEntry PoseEstimatorY;
 
+
+    
+    GenericEntry FLVel;
+    GenericEntry FRVel;
+    GenericEntry BLVel;
+    GenericEntry BRVel;
+
     public void initButtons(){
         m_smartdashboard = Shuffleboard.getTab("SmartDashboard");
         NavxAngle = m_smartdashboard.add("NavX angle", 0.0).getEntry();
@@ -34,6 +41,11 @@ public class ShuffleBoardButtons {
         PoseEstimatorAngle = m_smartdashboard.add("PoseEstimator Angle", 0.0).getEntry();
         PoseEstimatorX = m_smartdashboard.add("PoseEstimator X", 0.0).getEntry();
         PoseEstimatorY = m_smartdashboard.add("PoseEstimator Y", 0.0).getEntry();
+
+        FLVel = m_smartdashboard.add("FLVel", 0.0).getEntry();
+        FRVel = m_smartdashboard.add("FRVel", 0.0).getEntry();
+        BLVel = m_smartdashboard.add("BLVel", 0.0).getEntry();
+        BRVel = m_smartdashboard.add("BRVel", 0.0).getEntry();
 
     }
 
@@ -51,6 +63,12 @@ public class ShuffleBoardButtons {
         PoseEstimatorAngle.setDouble(estimator.getRotation().getDegrees());
         PoseEstimatorX.setDouble(estimator.getX());
         PoseEstimatorY.setDouble(estimator.getY());
+
+        
+        FLVel.setDouble(drivetrain.getCurrentWheelSpeeds().frontLeftMetersPerSecond);
+        FRVel.setDouble(drivetrain.getCurrentWheelSpeeds().frontRightMetersPerSecond);
+        BLVel.setDouble(drivetrain.getCurrentWheelSpeeds().rearLeftMetersPerSecond);
+        BRVel.setDouble(drivetrain.getCurrentWheelSpeeds().rearRightMetersPerSecond);
     }
     
 }
