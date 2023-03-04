@@ -59,7 +59,7 @@ public final class Constants {
 
      //have to tune manually
      public static final double kPXController = 1; // ~ 1cm error
-     public static final double kPYController = 3;
+     public static final double kPYController = 0.1;
      public static final double kPThetaController = 4.5; 
  
      
@@ -83,7 +83,7 @@ public final class Constants {
      );
      
      //trajectory constraints
-     public static final double kMaxVelocityMetersPerSecond = 1;
+     public static final double kMaxVelocityMetersPerSecond = 1.5;
      public static final double maxAccelerationMetersPerSecondSq = 1.0;
 
      public static final double kMaxAngularVelocity = Math.PI;
