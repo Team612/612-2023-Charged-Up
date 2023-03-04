@@ -68,6 +68,8 @@ public class RobotContainer {
     m_chooser.addOption("Strafe Left debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeLeftMeter(estimator),estimator)));
     m_chooser.addOption("Forward debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter(estimator),estimator)));
     m_chooser.addOption("Backward debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.BackwardMeter(estimator),estimator)));
+    m_chooser.addOption("square debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.square(estimator),estimator)));
+    
     //66 inches between each april tag
     SmartDashboard.putData(m_chooser);
 

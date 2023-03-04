@@ -105,6 +105,22 @@ public class TrajectoryCreation {
         );
     }
 
+
+    public Trajectory square(PoseEstimator estimation){
+        Pose2d estimatedPose = estimation.getCurrentPose();
+        double x = estimatedPose.getX();
+        double y = estimatedPose.getY();
+        double degrees = estimatedPose.getRotation().getRadians();
+
+        return TrajectoryGenerator.generateTrajectory(
+            new Pose2d(x, y, new Rotation2d(degrees)),
+            List.of(new Translation2d(x+1,y), new Translation2d(x+1, y+1), new Translation2d(x, y+1)),
+            new Pose2d(x, y, new Rotation2d(degrees)),
+            config_backwards
+        );
+    }
+
+
     public Trajectory tuneAngle = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(new Translation2d(.5,0)),
