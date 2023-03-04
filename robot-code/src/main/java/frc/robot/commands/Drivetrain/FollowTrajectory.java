@@ -54,7 +54,7 @@ public class FollowTrajectory {
                   new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0),
                   new ProfiledPIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0, Constants.DrivetrainConstants.kThetaControllerConstraints),
                   1,
-                  drivetrain.getCurrentWheelSpeedsConsumer(),
+                  drivetrain.setCurrentWheelSpeedsConsumer(),
                   drivetrain,
                   estimator
             );
