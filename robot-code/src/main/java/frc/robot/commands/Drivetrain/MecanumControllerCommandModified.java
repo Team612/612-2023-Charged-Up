@@ -16,23 +16,32 @@ import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PoseEstimator;
 
 public class MecanumControllerCommandModified extends MecanumControllerCommand{
+  
+public MecanumControllerCommandModified(
+      Trajectory trajectory,
+      Supplier<Pose2d> pose,
+      MecanumDriveKinematics kinematics,
+      PIDController xController,
+      PIDController yController,
+      ProfiledPIDController thetaController,
+      double maxWheelVelocityMetersPerSecond,
+      Consumer<MecanumDriveWheelSpeeds> outputWheelSpeeds
+  ) {
+        super(trajectory,
+        pose,
+        kinematics,
+        xController,
+        yController,
+        thetaController,
+        maxWheelVelocityMetersPerSecond,
+        outputWheelSpeeds);
+    }
 
-  public MecanumControllerCommandModified(Trajectory trajectory, Supplier<Pose2d> pose,
-      SimpleMotorFeedforward feedforward, MecanumDriveKinematics kinematics, PIDController xController,
-      PIDController yController, ProfiledPIDController thetaController, double maxWheelVelocityMetersPerSecond,
-      PIDController frontLeftController, PIDController rearLeftController, PIDController frontRightController,
-      PIDController rearRightController, Supplier<MecanumDriveWheelSpeeds> currentWheelSpeeds,
-      Consumer<MecanumDriveMotorVoltages> outputDriveVoltages, PoseEstimator estimator) {
-    super(trajectory, pose, feedforward, kinematics, xController, yController, thetaController,
-        maxWheelVelocityMetersPerSecond, frontLeftController, rearLeftController, frontRightController, rearRightController,
-        currentWheelSpeeds, outputDriveVoltages, estimator);
-    //TODO Auto-generated constructor stub
-  }
-
-  public boolean isFinished() {
+public boolean isFinished() {
     return false;
   }  
 }

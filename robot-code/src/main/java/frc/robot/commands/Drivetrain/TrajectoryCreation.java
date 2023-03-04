@@ -98,8 +98,8 @@ public class TrajectoryCreation {
 
         return TrajectoryGenerator.generateTrajectory(
             new Pose2d(x, y, new Rotation2d(degrees)),
-            List.of(new Translation2d(x-2.5,y)),
-            new Pose2d(x-4.75, y, new Rotation2d(degrees
+            List.of(new Translation2d(x-0.5,y)),
+            new Pose2d(x-1.0, y, new Rotation2d(degrees
             )),
             config_backwards
         );

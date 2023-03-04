@@ -58,8 +58,8 @@ public final class Constants {
      //position controllers
 
      //have to tune manually
-     public static final double kPXController = 1; // ~ 1cm error
-     public static final double kPYController = 0.1;
+     public static final double kPXController = 1.7; // ~ 1cm error
+     public static final double kPYController = 0.3;
      public static final double kPThetaController = 4.5; 
  
      

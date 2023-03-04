@@ -79,28 +79,29 @@ public class PoseEstimator extends SubsystemBase {
       estimatedPose.getX() > 0.0 && estimatedPose.getX() <= FIELD_LENGTH_METERS
       && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= FIELD_WIDTH_METERS) {
 
-        if (estimatedRobotPose.targetsUsed.size() > 1 && estimatedPose.getX() < 4) {
+        // if (estimatedRobotPose.targetsUsed.size() > 0) {
 
-          for (PhotonTrackedTarget target : estimatedRobotPose.targetsUsed) {
+        //   for (PhotonTrackedTarget target : estimatedRobotPose.targetsUsed) {
 
-            Pose3d targetPose = m_Vision.return_tag_pose(target.getFiducialId());
-            Transform3d bestTarget = target.getBestCameraToTarget();
-            Pose3d camPose = targetPose.transformBy(bestTarget.inverse());            
-            double distance = Math.hypot(bestTarget.getX(), bestTarget.getY());
+        //     Pose3d targetPose = m_Vision.return_tag_pose(target.getFiducialId());
+        //     Transform3d bestTarget = target.getBestCameraToTarget();
+        //     Pose3d camPose = targetPose.transformBy(bestTarget.inverse());            
+        //     double distance = Math.hypot(bestTarget.getX(), bestTarget.getY());
 
-            //checking from the camera to the tag is less than 4
-            if (distance < 4 && target.getPoseAmbiguity() <= .2) {
-              previousPipelineTimestamp = estimatedRobotPose.timestampSeconds;
-              m_DrivePoseEstimator.addVisionMeasurement(camPose.toPose2d(), estimatedRobotPose.timestampSeconds);
-            }
-          }
-        } 
+        //     //checking from the camera to the tag is less than 4
+        //     if (distance < 4 && target.getPoseAmbiguity() <= .2) {
+        //       previousPipelineTimestamp = estimatedRobotPose.timestampSeconds;
+        //       m_DrivePoseEstimator.addVisionMeasurement(camPose.toPose2d(), estimatedRobotPose.timestampSeconds);
+        //       break;
+        //     }
+        //   }
+        // } 
 
-        else {
+        // else {
             previousPipelineTimestamp = estimatedRobotPose.timestampSeconds;
             m_DrivePoseEstimator.addVisionMeasurement(estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
         }
-      }
+      // }
       });
     }
     m_field.setRobotPose(getCurrentPose());

@@ -48,37 +48,27 @@ public class FollowTrajectory {
 
             MecanumControllerCommand positionMecanumControler = new MecanumControllerCommand(
                   m_traj, 
+                  estimsator::getCurrentPose,
+                  Constants.DrivetrainConstants.kDriveKinematics,
+                  new PIDController(Constants.DrivetrainConstants.kPXController, 0, 0),
+                  new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0),
+                  new ProfiledPIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0, Constants.DrivetrainConstants.kThetaControllerConstraints),
+                  1.5,
+                  drivetrain.getCurrentWheelSpeedsConsumer(),
+                  drivetrain,
+                  estimator
+            );
+
+            MecanumControllerCommandModified mecanumControllerCommandModified = new MecanumControllerCommandModified(
+                  m_traj, 
                   estimator::getCurrentPose,
                   Constants.DrivetrainConstants.kDriveKinematics,
                   new PIDController(Constants.DrivetrainConstants.kPXController, 0, 0),
                   new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0),
                   new ProfiledPIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0, Constants.DrivetrainConstants.kThetaControllerConstraints),
                   1.5,
-                  drivetrain.setCurrentWheelSpeedsConsumer(),
-                  drivetrain,
-                  estimator
-            );
-
-            MecanumControllerCommandModified mecanumControllerCommandModified = new MecanumControllerCommandModified(
-            m_traj,
-            estimator::getCurrentPose,
-            Constants.DrivetrainConstants.kFeedforward,
-            Constants.DrivetrainConstants.kDriveKinematics,
-    
-            //Position controllers 
-            new PIDController(Constants.DrivetrainConstants.kPXController, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0),
-            new ProfiledPIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0, Constants.DrivetrainConstants.kThetaControllerConstraints),
-    
-            Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond,
-            //Velocity PID's
-            new PIDController(Constants.DrivetrainConstants.kPFrontLeftVel, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPRearLeftVel, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPFrontRightVel, 0, 0),
-            new PIDController(Constants.DrivetrainConstants.kPRearRightVel, 0, 0),
-            drivetrain::getCurrentWheelSpeeds,
-            drivetrain::mecanumVolts,
-            estimator);
+                  drivetrain.getCurrentWheelSpeedsConsumer()
+                  );
 
 
 

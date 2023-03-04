@@ -35,7 +35,6 @@ public class Drivetrain extends SubsystemBase {
 
   private MecanumDrive drivetrain;
   public double vel = Constants.DrivetrainConstants.kEncoderDistancePerPulse / 60; // velocity is in rpm so we need to
-                                                                                   // get it into rps
 
   private static AHRS navx;
 
@@ -44,6 +43,7 @@ public class Drivetrain extends SubsystemBase {
   MecanumDriveOdometry m_odometry;
 
   private Vision m_vision;
+
 
   public Drivetrain() {
 
@@ -183,7 +183,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public Consumer<MecanumDriveWheelSpeeds> setCurrentWheelSpeedsConsumer() {
+  public Consumer<MecanumDriveWheelSpeeds> getCurrentWheelSpeedsConsumer() {
     Consumer<MecanumDriveWheelSpeeds> cons = value -> {
       setMecanumWheelSpeeds(value);
     };
@@ -192,13 +192,10 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void setMecanumWheelSpeeds(MecanumDriveWheelSpeeds wheelspeeds) {
+
+    
     driveMecanum(wheelspeeds.frontLeftMetersPerSecond, wheelspeeds.rearLeftMetersPerSecond,
         wheelspeeds.frontRightMetersPerSecond, wheelspeeds.rearRightMetersPerSecond);
-  }
-
-  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
-    MecanumDriveWheelSpeeds wheelSpeeds = Constants.DrivetrainConstants.kDriveKinematics.toWheelSpeeds(chassisSpeeds);
-    setWheelSpeeds(wheelSpeeds);
   }
 
   public void setWheelSpeeds(MecanumDriveWheelSpeeds wheelSpeeds) {
