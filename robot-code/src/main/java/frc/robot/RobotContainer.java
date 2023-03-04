@@ -8,11 +8,16 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Drivetrain.AutoBalance;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
@@ -48,13 +53,14 @@ public class RobotContainer {
   private final FollowTrajectory m_follower = new FollowTrajectory();
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
-
+  private boolean mode = true;
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
+  private final GenericHID m_driverController =
+      new GenericHID(OperatorConstants.kDriverControllerPort);
+  
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -73,7 +79,11 @@ public class RobotContainer {
     else{
       System.out.println("********************************No targets*****************************************");
     }
-
+    if (mode) {
+      m_drivetrain.driveMecanum(m_driverController.getRawAxis(0), m_driverController.getRawAxis(1), m_driverController.getRawAxis(2));
+    } else {
+      m_drivetrain.FieldOrientedDrive(m_driverController.getRawAxis(0), m_driverController.getRawAxis(1), m_driverController.getRawAxis(2));
+    }
   }
 
   private void configureShuffleBoardBindings(){
@@ -89,8 +99,9 @@ public class RobotContainer {
 
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    m_driverController.y().whileTrue(new SetForward(m_drivetrain));
+    if (m_driverController.getRawButtonPressed(2)) {
+      mode = !mode;
+    }
   }
 
   private void configureDefaultCommands(){

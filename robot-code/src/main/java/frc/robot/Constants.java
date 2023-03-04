@@ -96,7 +96,7 @@ public final class Constants {
   }
 
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int kDriverControllerPort = 8;
   }
   public static String cameraName = "Microsoft_LifeCam_HD-3000";
 }
