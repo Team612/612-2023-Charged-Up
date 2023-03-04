@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import com.revrobotics.SparkMaxPIDController;
+
 
 public class Drivetrain extends SubsystemBase {
   private final CANSparkMax spark_fl;
@@ -170,6 +173,48 @@ public class Drivetrain extends SubsystemBase {
       spark_br.getEncoder().getVelocity());
 
   }
+
+
+  public Consumer<MecanumDriveWheelSpeeds> getCurrentWheelSpeedsConsumer() {
+    Consumer<MecanumDriveWheelSpeeds> cons = value -> {
+      spark_fl.getEncoder().getVelocity();
+      spark_fr.getEncoder().getVelocity();
+      spark_bl.getEncoder().getVelocity();
+      spark_br.getEncoder().getVelocity();
+    };
+
+    return cons;
+  }
+
+
+  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
+    MecanumDriveWheelSpeeds wheelSpeeds = Constants.DrivetrainConstants.kDriveKinematics.toWheelSpeeds(chassisSpeeds);
+    setWheelSpeeds(wheelSpeeds);
+  }
+
+  public void setWheelSpeeds(MecanumDriveWheelSpeeds wheelSpeeds) {
+    double metersPerSec = 4.5;
+    // Make sure none of the wheels tries to go faster than our max allowed.
+    wheelSpeeds.desaturate(metersPerSec);
+
+    // Use PID control to get to the desired speeds (set point) by measuring
+    // the current wheel speed using encoders (process variable)
+
+    spark_fl.getPIDController().setReference(wheelSpeeds.frontLeftMetersPerSecond,
+        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.frontLeftMetersPerSecond / metersPerSec,
+        SparkMaxPIDController.ArbFFUnits.kPercentOut);
+    spark_fr.getPIDController().setReference(wheelSpeeds.frontRightMetersPerSecond,
+        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.frontRightMetersPerSecond / metersPerSec,
+        SparkMaxPIDController.ArbFFUnits.kPercentOut);
+    spark_bl.getPIDController().setReference(wheelSpeeds.rearLeftMetersPerSecond,
+        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.rearLeftMetersPerSecond / metersPerSec,
+        SparkMaxPIDController.ArbFFUnits.kPercentOut);
+    spark_br.getPIDController().setReference(wheelSpeeds.rearRightMetersPerSecond,
+        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.rearRightMetersPerSecond / metersPerSec,
+        SparkMaxPIDController.ArbFFUnits.kPercentOut);
+  }
+
+
 
   //getting wheel voltages and amps
   public double[] getWheelVoltages(){

@@ -59,7 +59,7 @@ public final class Constants {
 
      //have to tune manually
      public static final double kPXController = 1; // ~ 1cm error
-     public static final double kPYController = 1;
+     public static final double kPYController = 3;
      public static final double kPThetaController = 4.5; 
  
      
