@@ -74,28 +74,5 @@ public class FollowTrajectory {
 
       }  
 
-
-      // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
-      public Command generatePathPlannerTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath, Drivetrain drivetrain, PoseEstimator estimator) {
-            return new SequentialCommandGroup(
-            new InstantCommand(() -> {
-                  // Reset odometry for the first path you run during auto
-                  // if(isFirstPath){
-                  // estimator.setCurrentPose(traj.getInitialHolonomicPose());
-                  // }
-            }),
-
-            new PPMecanumControllerCommand(traj, 
-                  estimator::getCurrentPose, // Pose supplier
-                  Constants.DrivetrainConstants.kDriveKinematics, // MecanumDriveKinematics
-                  new PIDController(Constants.DrivetrainConstants.kPXController, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                  new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0), // Y controller (usually the same values as X controller)
-                  new PIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                  2.5, // Max wheel velocity meters per second
-                  drivetrain.getCurrentWheelSpeedsConsumer(),
-                  drivetrain,
-                  estimator
-                  )
-            );
-      }
+      
 }

@@ -38,6 +38,7 @@ public class TrajectoryCreation {
         config); 
     
     public Trajectory StrafeRightMeter(PoseEstimator estimation){ 
+        System.out.println("************************" + config.getMaxVelocity()+  "****************************");
         Pose2d estimatedPose = estimation.getCurrentPose();
         double x = estimatedPose.getX();
         double y = estimatedPose.getY();

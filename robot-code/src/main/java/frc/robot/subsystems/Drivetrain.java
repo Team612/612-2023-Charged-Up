@@ -41,7 +41,6 @@ public class Drivetrain extends SubsystemBase {
 
   private Vision m_vision;
  
-
   public Drivetrain() {
 
     spark_fl = new CANSparkMax(Constants.DrivetrainConstants.SPARK_FL, MotorType.kBrushless);
@@ -58,6 +57,8 @@ public class Drivetrain extends SubsystemBase {
     spark_fr.setIdleMode(IdleMode.kBrake);
     spark_bl.setIdleMode(IdleMode.kBrake);
     spark_br.setIdleMode(IdleMode.kBrake);
+    resetEncoders();
+
 
     spark_fr.getEncoder().setPositionConversionFactor(Constants.DrivetrainConstants.kEncoderDistancePerPulse);
     spark_fl.getEncoder().setPositionConversionFactor(Constants.DrivetrainConstants.kEncoderDistancePerPulse);
@@ -76,7 +77,6 @@ public class Drivetrain extends SubsystemBase {
     drivetrain = new MecanumDrive(spark_fl, spark_bl, spark_fr, spark_br);
     
     // resetOdometry();
-    resetEncoders();
     navx.reset();
     navx.calibrate();
   }
@@ -140,6 +140,7 @@ public class Drivetrain extends SubsystemBase {
     spark_fr.setVoltage(volts.frontRightVoltage);
     spark_bl.setVoltage(volts.rearLeftVoltage);
     spark_br.setVoltage(volts.rearRightVoltage);
+    
   }
 
   //Getting the MecanumDriveWheelPositions 
@@ -168,17 +169,6 @@ public class Drivetrain extends SubsystemBase {
       spark_bl.getEncoder().getVelocity(),
       spark_br.getEncoder().getVelocity());
 
-  }
-
-  public Consumer<MecanumDriveWheelSpeeds> getCurrentWheelSpeedsConsumer(){
-    Consumer<MecanumDriveWheelSpeeds> cons = value -> {
-      spark_fl.getEncoder().getVelocity();
-      spark_fr.getEncoder().getVelocity();
-      spark_bl.getEncoder().getVelocity();
-      spark_br.getEncoder().getVelocity();
-    };
-
-    return cons;
   }
 
   //getting wheel voltages and amps
@@ -224,7 +214,6 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // System.out.println(getCurrentWheelSpeeds());
   }
   
 }
