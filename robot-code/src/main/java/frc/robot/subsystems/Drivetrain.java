@@ -3,16 +3,12 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
 import java.util.function.Consumer;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
@@ -42,7 +38,6 @@ public class Drivetrain extends SubsystemBase {
 
   MecanumDriveOdometry m_odometry;
 
-  private Vision m_vision;
 
 
   public Drivetrain() {
@@ -71,8 +66,6 @@ public class Drivetrain extends SubsystemBase {
     spark_fl.getEncoder().setVelocityConversionFactor(vel);
     spark_br.getEncoder().setVelocityConversionFactor(vel);
     spark_bl.getEncoder().setVelocityConversionFactor(vel);
-
-    m_vision = Vision.getVisionInstance();
     navx = new AHRS(I2C.Port.kMXP);
     navxAngleOffset = new Rotation2d();
     m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(),
@@ -187,13 +180,10 @@ public class Drivetrain extends SubsystemBase {
     Consumer<MecanumDriveWheelSpeeds> cons = value -> {
       setMecanumWheelSpeeds(value);
     };
-
     return cons;
   }
 
-  public void setMecanumWheelSpeeds(MecanumDriveWheelSpeeds wheelspeeds) {
-
-    
+  public void setMecanumWheelSpeeds(MecanumDriveWheelSpeeds wheelspeeds) {  
     driveMecanum(wheelspeeds.frontLeftMetersPerSecond, wheelspeeds.rearLeftMetersPerSecond,
         wheelspeeds.frontRightMetersPerSecond, wheelspeeds.rearRightMetersPerSecond);
   }

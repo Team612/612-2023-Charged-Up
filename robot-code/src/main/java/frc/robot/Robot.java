@@ -52,7 +52,6 @@ public class Robot extends TimedRobot {
       System.out.println("********ROBOT PERIODIC*****");
       printed = true;
     }
-    m_robotContainer.runCommands();
     CommandScheduler.getInstance().run();
     m_BoardButtons.updateButtons();
   }

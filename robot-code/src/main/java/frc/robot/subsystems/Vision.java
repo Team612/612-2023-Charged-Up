@@ -113,7 +113,6 @@ public class Vision extends SubsystemBase {
         robotToCam);
     m_PoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
-
   }
 
   public static Vision getVisionInstance() {

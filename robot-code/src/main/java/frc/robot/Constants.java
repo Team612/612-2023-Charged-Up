@@ -49,28 +49,19 @@ public final class Constants {
      public static final double kS = 0.12141; 
      public static final double kV = 4.1481;  
      public static final double kA = 0.58895;
-    
-
-     //Angular gains
-     public static final double kV_Angular = 4.218; // do not touch
-     public static final double kA_Angular = 0.15213; // do not touch
- 
+     
      //position controllers
 
      //have to tune manually
      public static final double kPXController = 1.7; // ~ 1cm error
      public static final double kPYController = 0.3;
      public static final double kPThetaController = 4.5; 
- 
      
-    //Velocity controllers
+     //angular constraints
+     public static final double kMaxAngularVelocity = Math.PI;
+     public static final double kMaxAngularAcceleration = Math.PI;
+     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(kMaxAngularVelocity, kMaxAngularAcceleration);
 
-    private static double x = 0.34004;
-
-     public static final double kPFrontLeftVel = x; //0.34004 //5.3755
-     public static final double kPRearLeftVel = x;
-     public static final double kPFrontRightVel = x;
-     public static final double kPRearRightVel = x;
 
  
      //Converting chassis velocity into individual wheel velocities
@@ -86,12 +77,7 @@ public final class Constants {
      public static final double kMaxVelocityMetersPerSecond = 1.5;
      public static final double maxAccelerationMetersPerSecondSq = 1.0;
 
-     public static final double kMaxAngularVelocity = Math.PI;
-     public static final double kMaxAngularAcceleration = Math.PI;
- 
-     //angular constraints
-     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = 
-         new TrapezoidProfile.Constraints(kMaxAngularVelocity, kMaxAngularAcceleration);
+    
  
      //Feedforward 
      public static final SimpleMotorFeedforward kFeedforward =
