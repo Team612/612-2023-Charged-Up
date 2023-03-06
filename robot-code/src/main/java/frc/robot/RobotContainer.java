@@ -23,7 +23,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Telescope;
-
+import frc.robot.commands.Drivetrain.SlowmoDrive;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -38,6 +38,7 @@ public class RobotContainer {
 
 
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
+  private final SlowmoDrive m_slowmodrive = new SlowmoDrive(m_drivetrain);
 
  // Trajectories
   private final FollowTrajectory m_follower = new FollowTrajectory();
@@ -70,6 +71,7 @@ public class RobotContainer {
   private void configureShuffleBoardBindings(){
     m_chooser.addOption("TestTrajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.testTrajectory));
     SmartDashboard.putData(m_chooser);
+    SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
   }
 
   private void configureButtonBindings() {
@@ -86,6 +88,8 @@ public class RobotContainer {
     gunner.rightBumper().whileTrue(m_telescopeDetract);
     gunner.leftTrigger().whileTrue(m_grab);
     gunner.rightTrigger().whileTrue(m_release);
+ 
+  
   }
 
   private void configureDefaultCommands(){

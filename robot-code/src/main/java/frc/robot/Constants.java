@@ -25,7 +25,8 @@ public final class Constants {
      public final static int SPARK_FR = 1;
      public final static int SPARK_BL = 4;
      public final static int SPARK_BR = 3;
- 
+    //multipler for slowmo
+    public static double slowmo = 1;
      //wheel diameter
      public static final double kWheelDiameterMeters = 0; 
      
