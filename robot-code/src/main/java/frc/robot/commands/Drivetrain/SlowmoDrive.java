@@ -27,6 +27,12 @@ public class SlowmoDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (Constants.DrivetrainConstants.slowmo == 0.50){ //if the command is pressed again
+      Constants.DrivetrainConstants.slowmo = 1.0;
+    }
+    else {
+      Constants.DrivetrainConstants.slowmo = 0.50; 
+    } //yes, its a command that changes one value, deal with it
     
   }
 
@@ -39,12 +45,6 @@ public class SlowmoDrive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Constants.DrivetrainConstants.slowmo == 0.50){ //if the command is pressed again
-      Constants.DrivetrainConstants.slowmo = 1.0;
-    }
-    else {
-      Constants.DrivetrainConstants.slowmo = 0.50; 
-    } //yes, its a command that changes one value, deal with it
     return true;
   
 }

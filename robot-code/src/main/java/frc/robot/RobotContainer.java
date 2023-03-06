@@ -21,24 +21,14 @@ import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Vision;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.RollOff;
-
-
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Grab;
 import frc.robot.commands.Pivot;
 import frc.robot.commands.Release;
 import frc.robot.commands.TelescopeDetract;
 import frc.robot.commands.TelescopeExtend;
-import frc.robot.commands.Drivetrain.DefaultDrive;
-import frc.robot.commands.Drivetrain.FollowTrajectory;
-import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Telescope;
 import frc.robot.commands.Drivetrain.SlowmoDrive;
