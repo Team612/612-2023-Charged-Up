@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EncoderConstants;
@@ -18,14 +19,21 @@ public class Telescope extends SubsystemBase {
   /** Creates a new Telescope. */
   public Telescope() {
     telescope = new CANSparkMax(SparkPorts.tele_arm, MotorType.kBrushless);
+    telescope.setIdleMode(IdleMode.kBrake);
   }
   
   public void moveTelescope(double speed) {
     telescope.set(speed);
     currTelescope = speed;
   }
+  public double getVoltage(){
+    return telescope.getOutputCurrent();
+  }
   public double getTeleEncoder() {
     return telescope.getEncoder().getPosition();
+  }
+  public double getTeleEncoderRate(){
+    return telescope.getEncoder().getVelocity();
   }
   public boolean isRetracted() {
     return getTeleEncoder() <= EncoderConstants.tele_in;

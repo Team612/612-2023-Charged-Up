@@ -25,7 +25,8 @@ public final class Constants {
      public final static int SPARK_FR = 1;
      public final static int SPARK_BL = 4;
      public final static int SPARK_BR = 3;
- 
+    //multipler for slowmo
+    public static double slowmo = 1;
      //wheel diameter
      public static final double kWheelDiameterMeters = 0; 
      
@@ -113,9 +114,13 @@ public final class Constants {
 
     //all of these are subject to change
     public static double arm_lower; // = -99.0;
-    public static double arm_upper = 130.0;
-    public static double tele_in = -3.0;
-    public static double tele_out = 84.0;
+    public static double arm_upper; // = 130.0;
+    public static double tele_in; // = -3.0;
+    public static double tele_out; // = 84.0;
+    public static double tele_extension_rate = 5.0;
+    public static double tele_extension_rate_thresh = 1.0;
+    public static double tele_motor_voltage = 5.0;
+    public static double tele_motor_voltage_thresh = 5.0;
  
   }
 }

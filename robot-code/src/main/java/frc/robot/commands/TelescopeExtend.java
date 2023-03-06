@@ -5,16 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.MotorSpeeds;
 import frc.robot.subsystems.Telescope;
 
 public class TelescopeExtend extends CommandBase {
   /** Creates a new Telescope. */
   private final Telescope m_scope;
+  private final int counter;
  
   /** Creates a new Pivot. */
   public TelescopeExtend(Telescope scope) {
     m_scope = scope;
+    counter = 0;
     addRequirements(m_scope);
   }
 
@@ -29,6 +32,8 @@ public class TelescopeExtend extends CommandBase {
   public void execute() {
     //if (!m_scope.isExtended())
       m_scope.moveTelescope(-MotorSpeeds.tele_arm_speed); //extend is negative speeds, tele_arm_speed is positive
+      System.out.println("Rate: " + m_scope.getTeleEncoderRate());
+      System.out.println("Current: " + m_scope.getVoltage());
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +45,19 @@ public class TelescopeExtend extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    /*
+     if (m_scope.getTeleEncoderRate() <= EncoderConstants.tele_extension_rate - EncoderConstants.tele_extension_rate_thresh && m_scope.getVoltage() >= EncoderConstants.tele_motor_voltage + tele_motor_voltage_thresh) {
+      counter++;
+      if (counter == 5) {
+        return true;
+      } 
+    }
+    else counter = 0;
+
+    return false;
+  }
+     */
+    
     return false;
   }
 }

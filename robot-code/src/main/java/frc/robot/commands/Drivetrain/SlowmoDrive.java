@@ -6,42 +6,46 @@ package frc.robot.commands.Drivetrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.controls.ControlMap;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class DefaultDrive extends CommandBase {
-  /** Creates a new DefaultDrive. */
+public class SlowmoDrive extends CommandBase {
   Drivetrain m_drivetrain;
-  Constants.DrivetrainConstants m_slowmo;
-  public DefaultDrive(Drivetrain drivetrain) {
-    m_drivetrain = drivetrain;
-    addRequirements(drivetrain);
+  /** Creates a new SlowmoDrive. */
+  public SlowmoDrive(Drivetrain d) {
+    m_drivetrain = d;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.driveMecanum(0, 0, 0, 0);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(0) * m_slowmo.slowmo,-ControlMap.driver.getRawAxis(1) * m_slowmo.slowmo, ControlMap.driver.getRawAxis(4) * m_slowmo.slowmo);
-    m_drivetrain.driveMecanum(-ControlMap.driver.getRawAxis(1) * DrivetrainConstants.slowmo, ControlMap.driver.getRawAxis(0) * DrivetrainConstants.slowmo, ControlMap.driver.getRawAxis(4) * DrivetrainConstants.slowmo);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.driveMecanum(0, 0, 0, 0);
+   
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-  }
+    if (Constants.DrivetrainConstants.slowmo == 0.50){ //if the command is pressed again
+      Constants.DrivetrainConstants.slowmo = 1.0;
+    }
+    else {
+      Constants.DrivetrainConstants.slowmo = 0.50; 
+    } //yes, its a command that changes one value, deal with it
+    return true;
+  
+}
 }
