@@ -36,6 +36,10 @@ public class Telescope extends SubsystemBase {
   }
   */
 
+  public double getTelescopeEncoder() {
+    return telescope.getEncoder().getPosition();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -76,22 +76,31 @@ public final class Constants {
      );
      
      //trajectory constraints
-     public static final int kMaxVelocityMetersPerSecond = 3;
-     public static final int maxAccelerationMetersPerSecondSq = 1;
-     public static final double kMaxAngularVelocity = Math.PI;
-     public static final double kMaxAngularAcceleration = Math.PI;
+     
  
      //angular constraints
-     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = 
-         new TrapezoidProfile.Constraints(kMaxAngularVelocity, kMaxAngularAcceleration);
+     
 
       //controllers
-      public static final ProfiledPIDController rotationController = 
-        new ProfiledPIDController(.01, 0, 0, kThetaControllerConstraints);
+      
      //Feedforward 
      public static final SimpleMotorFeedforward kFeedforward =
          new SimpleMotorFeedforward(Constants.DrivetrainConstants.kS, Constants.DrivetrainConstants.kV, Constants.DrivetrainConstants.kA);
      
+  }
+
+  public static class ArmConstants {
+    public static final int kMaxVelocityMetersPerSecond = 3;
+    public static final int maxAccelerationMetersPerSecondSq = 1;
+    public static final double kMaxAngularVelocity = Math.PI;
+    public static final double kMaxAngularAcceleration = Math.PI;
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = 
+         new TrapezoidProfile.Constraints(kMaxAngularVelocity, kMaxAngularAcceleration);
+    public static final ProfiledPIDController rotationController = 
+         new ProfiledPIDController(.01, 0, 0, kThetaControllerConstraints);
+    public static final TrapezoidProfile.Constraints kPullOutConstraints = new TrapezoidProfile.Constraints(kMaxVelocityMetersPerSecond, maxAccelerationMetersPerSecondSq);
+    public static final ProfiledPIDController translationController = 
+         new ProfiledPIDController(.01, 0, 0, kPullOutConstraints);
   }
 
   public static class OperatorConstants {

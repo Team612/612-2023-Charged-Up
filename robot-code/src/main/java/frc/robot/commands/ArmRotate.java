@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DrivetrainConstants;
 
 // In Team 612, we are safe as one. We will not tolerate laziness.
@@ -27,12 +28,12 @@ public class ArmRotate extends CommandBase {
 
     @Override
     public void initialize() {
-        DrivetrainConstants.rotationController.setGoal(m_endAngle);
+        ArmConstants.rotationController.setGoal(m_endAngle);
     }
 
     @Override
     public void execute() {
-        m_arm.rotatePivot(DrivetrainConstants.rotationController.calculate(m_arm.getPivotEncoder(), m_endAngle));
+        m_arm.rotatePivot(ArmConstants.rotationController.calculate(m_arm.getPivotEncoder(), m_endAngle));
     }
 
     @Override

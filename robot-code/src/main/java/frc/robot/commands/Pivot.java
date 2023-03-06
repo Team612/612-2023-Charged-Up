@@ -36,7 +36,9 @@ public class Pivot extends CommandBase {
   numero dos 
   aryan katoch
   numero uno
-  joe biden 
+  joe biden
+  numero cero
+  donald trumpet
   */
   
   // Called every time the scheduler runs while the command is scheduled.
