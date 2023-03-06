@@ -5,10 +5,14 @@
 package frc.robot.subsystems;
 
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -71,8 +75,28 @@ public class PoseEstimator extends SubsystemBase {
         if (estimatedRobotPose.timestampSeconds != previousPipelineTimestamp &&
             estimatedPose.getX() > 0.0 && estimatedPose.getX() <= FIELD_LENGTH_METERS
             && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= FIELD_WIDTH_METERS) {
-          previousPipelineTimestamp = estimatedRobotPose.timestampSeconds;
-          m_DrivePoseEstimator.addVisionMeasurement(estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
+
+            if (estimatedRobotPose.targetsUsed.size() < 2) {
+              for (PhotonTrackedTarget target : estimatedRobotPose.targetsUsed) {
+                Pose3d targetPose = m_Vision.return_tag_pose(target.getFiducialId());
+                Transform3d bestTarget = target.getBestCameraToTarget();
+                Pose3d camPose = targetPose.transformBy(bestTarget.inverse());
+                double distance = Math.hypot(bestTarget.getX(), bestTarget.getY());
+  
+                // checking from the camera to the tag is less than 4
+                if (distance < 4 && target.getPoseAmbiguity() <= .2) {
+                  previousPipelineTimestamp = estimatedRobotPose.timestampSeconds;
+                  m_DrivePoseEstimator.addVisionMeasurement(camPose.toPose2d(), estimatedRobotPose.timestampSeconds);
+                }
+              }
+            }
+
+
+
+            else{
+              previousPipelineTimestamp = estimatedRobotPose.timestampSeconds;
+              m_DrivePoseEstimator.addVisionMeasurement(estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
+            }
         }
       });
     }

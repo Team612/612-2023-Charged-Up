@@ -92,4 +92,25 @@ public class TrajectoryCreation {
             config_backwards
         );
     }
+
+
+
+    public Trajectory LeaveAndDock(PoseEstimator estimation){
+        Pose2d estimatedPose = estimation.getCurrentPose();
+        double x = estimatedPose.getX();
+        double y = estimatedPose.getY();
+        double degrees = estimatedPose.getRotation().getRadians();
+
+        return TrajectoryGenerator.generateTrajectory(
+            new Pose2d(x, y, new Rotation2d(degrees)),
+            List.of(
+                new Translation2d(x, y-1.5),
+                new Translation2d(x-2.5,y-1.5), 
+                new Translation2d(x-4, y-1.5), 
+                new Translation2d(x-4, y-0.5)
+            ),
+            new Pose2d(x-2.5, y, new Rotation2d(degrees)),
+            config_backwards
+        );
+    }
 }

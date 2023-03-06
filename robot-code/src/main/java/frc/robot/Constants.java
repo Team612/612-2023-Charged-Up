@@ -54,7 +54,7 @@ public final class Constants {
 
      //have to tune manually
      public static final double kPXController = 1.7; // ~ 1cm error
-     public static final double kPYController = 0.3;
+     public static final double kPYController = 0.23;
      public static final double kPThetaController = 4.5; 
      
      //angular constraints

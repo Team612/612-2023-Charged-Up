@@ -188,27 +188,6 @@ public class Drivetrain extends SubsystemBase {
         wheelspeeds.frontRightMetersPerSecond, wheelspeeds.rearRightMetersPerSecond);
   }
 
-  public void setWheelSpeeds(MecanumDriveWheelSpeeds wheelSpeeds) {
-    double metersPerSec = 4.5;
-    // Make sure none of the wheels tries to go faster than our max allowed.
-    wheelSpeeds.desaturate(metersPerSec);
-
-    // Use PID control to get to the desired speeds (set point) by measuring
-    // the current wheel speed using encoders (process variable)
-
-    spark_fl.getPIDController().setReference(wheelSpeeds.frontLeftMetersPerSecond,
-        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.frontLeftMetersPerSecond / metersPerSec,
-        SparkMaxPIDController.ArbFFUnits.kPercentOut);
-    spark_fr.getPIDController().setReference(wheelSpeeds.frontRightMetersPerSecond,
-        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.frontRightMetersPerSecond / metersPerSec,
-        SparkMaxPIDController.ArbFFUnits.kPercentOut);
-    spark_bl.getPIDController().setReference(wheelSpeeds.rearLeftMetersPerSecond,
-        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.rearLeftMetersPerSecond / metersPerSec,
-        SparkMaxPIDController.ArbFFUnits.kPercentOut);
-    spark_br.getPIDController().setReference(wheelSpeeds.rearRightMetersPerSecond,
-        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.rearRightMetersPerSecond / metersPerSec,
-        SparkMaxPIDController.ArbFFUnits.kPercentOut);
-  }
 
   // getting wheel voltages and amps
   public double[] getWheelVoltages() {
