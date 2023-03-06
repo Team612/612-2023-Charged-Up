@@ -8,6 +8,7 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
@@ -21,17 +22,19 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
   private final String pathName;
   private final PathConstraints constraints;
   private final boolean resetOdom;
+  private final boolean isBlueAlliance;
 
   private CommandBase controllerCommand = Commands.none();
 
   /** Creates a new FollowTrajectoryPathPlanner. */
-  public FollowTrajectoryPathPlanner(Drivetrain d, PoseEstimator p, String pathName, PathConstraints constraints, boolean resetOdom) {
+  public FollowTrajectoryPathPlanner(Drivetrain d, PoseEstimator p, String pathName, PathConstraints constraints, boolean resetOdom, boolean isBlueAlliance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveSystem = d;
     this.poseEstimatorSystem = p;
     this.pathName = pathName;
     this.constraints = constraints;
     this.resetOdom = resetOdom;
+    this.isBlueAlliance = isBlueAlliance;
 
     addRequirements(this.driveSystem);
   }
@@ -45,7 +48,18 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
       end(false);
       return;
     }
-    PathPlannerTrajectory alliancePath = PathPlannerTrajectory.transformTrajectoryForAlliance(path, Constants.DrivetrainConstants.redAlliance);
+
+    Alliance alliance;
+
+    if(isBlueAlliance){
+      alliance = Alliance.Red;
+    }
+    else{
+      alliance = Alliance.Blue;
+    }
+
+    
+    PathPlannerTrajectory alliancePath = PathPlannerTrajectory.transformTrajectoryForAlliance(path, alliance);
     if(resetOdom){
       driveSystem.resetOdometry();
     }
