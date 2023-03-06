@@ -19,12 +19,12 @@ public class Grabber extends SubsystemBase {
   private final DutyCycleEncoder boreEncoderArm;
 
   public Grabber() {
-    grabber = new CANSparkMax(SparkPorts.grabber, MotorType.kBrushless);
+    grabber = new CANSparkMax(SparkPorts.grabber, MotorType.kBrushed);
     boreEncoderArm = new DutyCycleEncoder(EncoderConstants.boreEncoderIntake);
   }
 
-  public void grab(double rotate) {
-    grabber.set(rotate);
+  public void grab(double speed) {
+    grabber.set(speed);
   }
 
   public double getGrabEncoder() {

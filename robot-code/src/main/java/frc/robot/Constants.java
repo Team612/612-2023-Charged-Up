@@ -105,7 +105,7 @@ public final class Constants {
   public static class MotorSpeeds {
     public static final double pivot_speed = 1;
     public static final double tele_arm_speed = 0.5;
-    public static double grabber_speed = 0.1;
+    public static double grabber_speed = 0.3;
   }
 
   public static class EncoderConstants{
