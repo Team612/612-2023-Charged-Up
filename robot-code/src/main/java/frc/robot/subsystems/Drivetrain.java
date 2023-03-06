@@ -6,17 +6,24 @@ package frc.robot.subsystems;
 import java.util.function.Consumer;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.I2C;
+import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -239,5 +246,55 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
   }
+
+  //Path Planner methods
+  public void setChassisSpeeds(ChassisSpeeds chassisSpeeds){
+    MecanumDriveWheelSpeeds wheelSpeeds = Constants.DrivetrainConstants.kDriveKinematics.toWheelSpeeds(chassisSpeeds);
+    setWheelSpeeds(wheelSpeeds);
+
+  }
+
+  public void setWheelSpeeds(MecanumDriveWheelSpeeds wheelSpeeds){
+    double metersPerSec = 4.5;
+    // Make sure none of the wheels tries to go faster than our max allowed.
+    wheelSpeeds.desaturate(metersPerSec);
+
+    // Use PID control to get to the desired speeds (set point) by measuring
+    // the current wheel speed using encoders (process variable)
+
+    spark_fl.getPIDController().setReference(wheelSpeeds.frontLeftMetersPerSecond,
+        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.frontLeftMetersPerSecond / metersPerSec,
+        SparkMaxPIDController.ArbFFUnits.kPercentOut);
+    spark_fr.getPIDController().setReference(wheelSpeeds.frontRightMetersPerSecond,
+        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.frontRightMetersPerSecond / metersPerSec,
+        SparkMaxPIDController.ArbFFUnits.kPercentOut);
+    spark_bl.getPIDController().setReference(wheelSpeeds.rearLeftMetersPerSecond,
+        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.rearLeftMetersPerSecond / metersPerSec,
+        SparkMaxPIDController.ArbFFUnits.kPercentOut);
+    spark_br.getPIDController().setReference(wheelSpeeds.rearRightMetersPerSecond,
+        CANSparkMax.ControlType.kVelocity, 0, wheelSpeeds.rearRightMetersPerSecond / metersPerSec,
+        SparkMaxPIDController.ArbFFUnits.kPercentOut);
+  }
   
+  public static CommandBase followTrajectory(Drivetrain driveSystem, PoseEstimator poseEstimatorSystem, PathPlannerTrajectory alliancePath){
+    PIDController thetaController = new PIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0);
+
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    Consumer<ChassisSpeeds> chassisSpeedSetter = (ChassisSpeeds speeds) -> {
+      driveSystem.setChassisSpeeds(speeds);
+    };
+
+    return new PPMecanumControllerCommand(
+        alliancePath,
+        poseEstimatorSystem::getCurrentPose,
+        new PIDController(Constants.DrivetrainConstants.kPXController, 0, 0), // X controller. Tune these values for
+                                                                              // your robot. Leaving them 0 will only
+                                                                              // use feedforwards.
+        new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0), // Y controller (usually the same values
+        thetaController, // as X controller)
+        chassisSpeedSetter,
+        false);
+  }
 }
+
+

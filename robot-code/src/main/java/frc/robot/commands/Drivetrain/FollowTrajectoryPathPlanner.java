@@ -4,39 +4,71 @@
 
 package frc.robot.commands.Drivetrain;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPMecanumControllerCommand;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PoseEstimator;
 
-/** Add your docs here. */
-public class FollowTrajectoryPathPlanner {
-    Drivetrain m_drivetrain;
-    public Command generateTrajectory(Drivetrain drivetrain, PathPlannerTrajectory traj, PoseEstimator estimator){
-        PPMecanumControllerCommand mecanumControllerCommand = 
-            new PPMecanumControllerCommand(
-                traj, 
-                estimator::getCurrentPose,
-                Constants.DrivetrainConstants.kDriveKinematics,
-                new PIDController(Constants.DrivetrainConstants.kPXController, 0, 0),
-                new PIDController(Constants.DrivetrainConstants.kPYController, 0, 0),
-                new PIDController(Constants.DrivetrainConstants.kPThetaController, 0, 0),
-                Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond,
-                this.m_drivetrain.getCurrentWheelSpeedsConsumer(),
-                true,
-                drivetrain);
+public class FollowTrajectoryPathPlanner extends CommandBase {
 
-        return(new InstantCommand(() -> drivetrain.resetOdometry()).andThen(Commands.print("wef"))
-        //run ppmecanumcontroller
-        .andThen(mecanumControllerCommand)
-        //make sure robot stops
-        .andThen(new InstantCommand (() -> drivetrain.mecanumVolts(new MecanumDriveMotorVoltages(0,0,0,0)), drivetrain)));
+  private final Drivetrain driveSystem;
+  private final PoseEstimator poseEstimatorSystem;
+  private final String pathName;
+  private final PathConstraints constraints;
+  private final boolean resetOdom;
+
+  private CommandBase controllerCommand = Commands.none();
+
+  /** Creates a new FollowTrajectoryPathPlanner. */
+  public FollowTrajectoryPathPlanner(Drivetrain d, PoseEstimator p, String pathName, PathConstraints constraints, boolean resetOdom) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.driveSystem = d;
+    this.poseEstimatorSystem = p;
+    this.pathName = pathName;
+    this.constraints = constraints;
+    this.resetOdom = resetOdom;
+
+    addRequirements(this.driveSystem);
+  }
+
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    PathPlannerTrajectory path = PathPlanner.loadPath(pathName, constraints);
+    if(path == null){
+      end(false);
+      return;
     }
+    PathPlannerTrajectory alliancePath = PathPlannerTrajectory.transformTrajectoryForAlliance(path, Constants.DrivetrainConstants.redAlliance);
+    if(resetOdom){
+      driveSystem.resetOdometry();
+    }
+
+    controllerCommand = Drivetrain.followTrajectory(driveSystem, poseEstimatorSystem, alliancePath);
+    controllerCommand.initialize();
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    controllerCommand.execute();
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    controllerCommand.end(interrupted);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return controllerCommand.isFinished();
+  }
 }
