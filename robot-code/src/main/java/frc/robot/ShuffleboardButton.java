@@ -25,7 +25,6 @@ public class ShuffleboardButton {
         pivotEntry = m_encoderTab.add("Pivot Encoder", 0.0).getEntry();
         telescopeEntry = m_encoderTab.add("Telescope Encoder", 0.0).getEntry();
         BoreEncoders = m_encoderTab.add("Bore Encoder",0.0).getEntry();
-
     }
 
     public void updateButtons(){
