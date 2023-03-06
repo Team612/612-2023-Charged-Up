@@ -19,7 +19,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
+  private final ShuffleboardButton m_boardbuttons = new ShuffleboardButton();
+  //private final RioLooger log = new RioLogger();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    m_boardbuttons.initButtons();
     m_robotContainer = new RobotContainer();
   }
 
@@ -40,6 +42,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    m_boardbuttons.updateButtons();
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -86,6 +89,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     // System.out.println(RobotContainer.m_Vision.return_camera_pose_tag(RobotContainer.camera.getLatestResult().getBestTarget().getFiducialId(), RobotContainer.camera.getLatestResult()));
+    m_boardbuttons.updateButtons();
   }
 
   @Override

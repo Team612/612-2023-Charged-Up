@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
@@ -25,19 +26,20 @@ public final class Constants {
      public final static int SPARK_FR = 1;
      public final static int SPARK_BL = 4;
      public final static int SPARK_BR = 3;
- 
+    //multipler for slowmo
+    public static double slowmo = 1;
      //wheel diameter
-     public static final double kWheelDiameterMeters = 0.1524; 
+     public static final double kWheelDiameterMeters = 0; 
      
      //Distance between centers of right and left wheels on robot
-     public static final double kTrackWidth = 0.5969; 
+     public static final double kTrackWidth = 0; 
  
      //Distance between centers of front and back wheels on robot
-     public static final double kWheelBase = 0.676275; 
+     public static final double kWheelBase = 0; 
  
  
-     public static final double kEncoderCPR = 1; 
-     public static final double kGearReduction = 16;
+     public static final double kEncoderCPR = 0; 
+     public static final double kGearReduction = 0;
      
      //Finding Distance per pulse
      public static final double kEncoderDistancePerPulse =
@@ -97,6 +99,34 @@ public final class Constants {
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static int kGunnerControllerPort = 1;
+  }
+
+  public static class SparkPorts {
+    public static final int pivotID = 6;
+    public static final int tele_arm = 7;
+    public static final int grabber = 5;
+  }
+
+  public static class MotorSpeeds {
+    public static final double pivot_speed = 1;
+    public static final double tele_arm_speed = 0.5;
+    public static double grabber_speed = 0.1;
+  }
+
+  public static class EncoderConstants{
+    public static int boreEncoderIntake = 1;
+
+    //all of these are subject to change
+    public static double arm_lower; // = -99.0;
+    public static double arm_upper; // = 130.0;
+    public static double tele_in; // = -3.0;
+    public static double tele_out; // = 84.0;
+    public static double tele_extension_rate = 5.0;
+    public static double tele_extension_rate_thresh = 1.0;
+    public static double tele_motor_voltage = 5.0;
+    public static double tele_motor_voltage_thresh = 5.0;
+ 
   }
   public static String cameraName = "Microsoft_LifeCam_HD-3000";
 }

@@ -8,6 +8,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation3d;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,11 +23,25 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.RollOff;
 
 
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.Grab;
+import frc.robot.commands.Pivot;
+import frc.robot.commands.Release;
+import frc.robot.commands.TelescopeDetract;
+import frc.robot.commands.TelescopeExtend;
+import frc.robot.commands.Drivetrain.DefaultDrive;
+import frc.robot.commands.Drivetrain.FollowTrajectory;
+import frc.robot.commands.Drivetrain.TrajectoryCreation;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Telescope;
+import frc.robot.commands.Drivetrain.SlowmoDrive;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -43,19 +58,30 @@ public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
+  private final SlowmoDrive m_slowmodrive = new SlowmoDrive(m_drivetrain);
 
-  // Trajectories
+ // Trajectories
   private final FollowTrajectory m_follower = new FollowTrajectory();
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
 
+  private final Arm m_arm = Arm.getInstance();
+  private final Telescope m_scope = Telescope.getInstance();
+  private final Grabber m_grabber = Grabber.getInstance();
+
+  private final Pivot m_pivot = new Pivot(m_arm);
+  private final TelescopeDetract m_telescopeDetract = new TelescopeDetract(m_scope);
+  private final TelescopeExtend m_telescopeExtend = new TelescopeExtend(m_scope);
+  private final Grab m_grab = new Grab(m_grabber);
+  private final Release m_release = new Release(m_grabber);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  private final CommandXboxController driver =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController gunner =
+      new CommandXboxController(OperatorConstants.kGunnerControllerPort);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureButtonBindings();
@@ -83,6 +109,7 @@ public class RobotContainer {
     m_chooser.addOption("TestTrajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.testTrajectory));
     m_chooser.addOption("Vision Trajectory", m_follower.generateTrajectory(m_drivetrain, m_traj.return_Trajectory(camera, m_Vision, new Pose3d(14.2, 1.071626, 0.462788, new Rotation3d(new Quaternion(0,0,0,1))))));
     SmartDashboard.putData(m_chooser);
+    SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
   }
 
   private void configureButtonBindings() {
@@ -90,16 +117,18 @@ public class RobotContainer {
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
     //Button-Bindings
-    m_driverController.y().whileTrue(new SetForward(m_drivetrain));
-    m_driverController.a().whileTrue(new DockingSequence(m_drivetrain));
+    driver.y().whileTrue(new SetForward(m_drivetrain));
+    driver.a().whileTrue(new DockingSequence(m_drivetrain));
+    gunner.leftBumper().whileTrue(m_telescopeExtend);
+    gunner.rightBumper().whileTrue(m_telescopeDetract);
+    gunner.leftTrigger().whileTrue(m_grab);
+    gunner.rightTrigger().whileTrue(m_release);
   }
 
   private void configureDefaultCommands(){
     m_drivetrain.setDefaultCommand(m_defaultdrive);
+    m_arm.setDefaultCommand(m_pivot);
   }
-
-  
-  
 
   
   public Command getAutonomousCommand() {
