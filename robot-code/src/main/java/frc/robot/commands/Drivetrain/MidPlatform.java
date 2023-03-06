@@ -3,22 +3,16 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.Drivetrain;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.controls.ControlMap;
 import frc.robot.subsystems.Drivetrain;
 
-public class DefaultDrive extends CommandBase {
-  /** Creates a new DefaultDrive. */
-  
-  Drivetrain m_drivetrain;
-  private Rotation2d initAngle;
-  Constants.DrivetrainConstants m_slowmo;
-  public DefaultDrive(Drivetrain drivetrain) {
+public class MidPlatform extends CommandBase {
+  /** Creates a new MidPlatform. */
+  private final Drivetrain m_drivetrain;
+  private double initialPos;
+  public MidPlatform(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -27,15 +21,14 @@ public class DefaultDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initAngle = m_drivetrain.getNavxYawAngle();
+    initialPos = m_drivetrain.getEncoderPosition();
     m_drivetrain.driveMecanum(0, 0, 0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(0) * m_slowmo.slowmo,-ControlMap.driver.getRawAxis(1) * m_slowmo.slowmo, ControlMap.driver.getRawAxis(4) * m_slowmo.slowmo);
-    m_drivetrain.driveMecanum(-ControlMap.driver.getRawAxis(1) * DrivetrainConstants.slowmo, ControlMap.driver.getRawAxis(0) * DrivetrainConstants.slowmo, ControlMap.driver.getRawAxis(4) * DrivetrainConstants.slowmo);
+    m_drivetrain.driveMecanum(0.5, 0.5, 0.5, 0.5);
   }
 
   // Called once the command ends or is interrupted.
@@ -47,6 +40,6 @@ public class DefaultDrive extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_drivetrain.getEncoderPosition() - initialPos >= 1.25;
   }
 }

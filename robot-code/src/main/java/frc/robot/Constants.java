@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -45,27 +46,31 @@ public final class Constants {
          ((kWheelDiameterMeters * Math.PI)) / (kGearReduction);
   
      //Feedforward gains for system dynamics 
-     public static final double kS = 0; 
-     public static final double kV = 0;  
-     public static final double kA = 0;
+     public static final double kS = 0.11858; 
+     public static final double kV = 4.2016;  
+     public static final double kA = 0.32842;
      
      //Angular gains
      public static final double kV_Angular = 1; // do not touch
      public static final double kA_Angular = 1; // do not touch
- 
+    //thresholds
+    public static final int offbalancepositive = 15;
+    public static final int offbalancepositivehalf = 5; //might need to change later
+    public static final int offbalancepositivehalfneg = -5;
+     
      //position controllers
  
      //have to tune manually
-     public static final double kPXController = 0;
-     public static final double kPYController = 0;
-     public static final double kPThetaController = 0; 
+     public static final double kPXController = .0165;
+     public static final double kPYController = .15;
+     public static final double kPThetaController = .5; 
  
      
      //Velocity controllers
-     public static final double kPFrontLeftVel = 0; 
-     public static final double kPRearLeftVel = 0;
-     public static final double kPFrontRightVel = 0;
-     public static final double kPRearRightVel = 0;
+     public static final double kPFrontLeftVel = 4.6504; 
+     public static final double kPRearLeftVel = 4.6504;
+     public static final double kPFrontRightVel = 4.6504;
+     public static final double kPRearRightVel = 4.6504;
  
      //Converting chassis velocity into individual wheel velocities
      public static final MecanumDriveKinematics kDriveKinematics =
@@ -77,7 +82,7 @@ public final class Constants {
      );
      
      //trajectory constraints
-     public static final int kMaxVelocityMetersPerSecond = 3;
+     public static final int kMaxVelocityMetersPerSecond = 2;
      public static final int maxAccelerationMetersPerSecondSq = 1;
      public static final double kMaxAngularVelocity = Math.PI;
      public static final double kMaxAngularAcceleration = Math.PI;
@@ -123,4 +128,5 @@ public final class Constants {
     public static double tele_motor_voltage_thresh = 5.0;
  
   }
+  public static String cameraName = "Microsoft_LifeCam_HD-3000";
 }
