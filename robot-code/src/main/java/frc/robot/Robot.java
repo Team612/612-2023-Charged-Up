@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.ShuffleBoardButtons;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +34,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     System.out.println("********ROBOT INIT*********");
+    PathPlannerServer.startServer(5811);
 
     m_robotContainer = new RobotContainer();
     m_BoardButtons.initButtons();
@@ -55,7 +58,6 @@ public class Robot extends TimedRobot {
       System.out.println("********ROBOT PERIODIC*****");
       printed = true;
     }
-    m_robotContainer.runCommands();
     CommandScheduler.getInstance().run();
     m_BoardButtons.updateButtons();
   }
