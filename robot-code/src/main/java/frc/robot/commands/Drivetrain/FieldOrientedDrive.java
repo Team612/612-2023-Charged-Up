@@ -5,30 +5,36 @@
 package frc.robot.commands.Drivetrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.controls.ControlMap;
 import frc.robot.subsystems.Drivetrain;
 
-public class SetForward extends CommandBase {
-  /** Creates a new SetForward. */
+public class FieldOrientedDrive extends CommandBase {
+  /** Creates a new FieldOrientedDrive. */
   Drivetrain m_drivetrain;
-  public SetForward(Drivetrain drivetrain) {
+  public FieldOrientedDrive(Drivetrain drivetrain) {
+    // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
     addRequirements(drivetrain);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.setNavxAngleOffset(m_drivetrain.getNavxAngle());
+    m_drivetrain.driveMecanum(0, 0, 0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drivetrain.driveMecanum(0, 0, 0, 0);
+  }
 
   // Returns true when the command should end.
   @Override
