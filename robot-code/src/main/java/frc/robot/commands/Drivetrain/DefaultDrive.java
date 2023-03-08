@@ -36,6 +36,7 @@ public class DefaultDrive extends CommandBase {
   public void execute() {
     // m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
     m_drivetrain.RobotOrientedDrive(-ControlMap.driver.getRawAxis(1) * DrivetrainConstants.slowmo, ControlMap.driver.getRawAxis(0) * DrivetrainConstants.slowmo, ControlMap.driver.getRawAxis(4) * DrivetrainConstants.slowmo);
+    //m_drivetrain.driveMecanum(0.5, -0.5, -0.5, 0.5);
   }
 
   // Called once the command ends or is interrupted.

@@ -123,7 +123,8 @@ public final class Constants {
    public static class MotorSpeeds {
      public static final double pivot_speed = 1;
      public static final double tele_arm_speed = 0.5;
-     public static double grabber_speed = 0.3;
+     public static double grabber_speed = 0.8;
+    public static double slow_down_release = 0.6;
    }
  
    public static class EncoderConstants{
@@ -138,6 +139,10 @@ public final class Constants {
     public static double tele_extension_rate_thresh = 1.0;
     public static double tele_motor_voltage = 5.0;
     public static double tele_motor_voltage_thresh = 5.0;
+    public static double grabber_extension_rate = 5.0;
+    public static double grabber_extension_rate_thresh = 1.0;
+    public static double grabber_motor_voltage = 5.0;
+    public static double grabber_motor_voltage_thresh = 5.0;
   
    }
 

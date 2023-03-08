@@ -26,7 +26,7 @@ public class Telescope extends SubsystemBase {
     telescope.set(speed);
     currTelescope = speed;
   }
-  public double getVoltage(){
+  public double getCurrent(){
     return telescope.getOutputCurrent();
   }
   public double getTeleEncoder() {

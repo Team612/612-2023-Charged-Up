@@ -13,10 +13,14 @@ import frc.robot.subsystems.Telescope;
 public class TelescopeDetract extends CommandBase {
   /** Creates a new Telescope. */
   private final Telescope m_scope;
+  private int counter;
+  private int start_timer;
  
   /** Creates a new Pivot. */
   public TelescopeDetract(Telescope scope) {
     m_scope = scope;
+    counter = 0;
+    start_timer = 0;
     addRequirements(m_scope);
   }
 
@@ -31,17 +35,29 @@ public class TelescopeDetract extends CommandBase {
   public void execute(){
     //if (!m_scope.isRetracted())
       m_scope.moveTelescope(MotorSpeeds.tele_arm_speed); //detract is positive speeds, tele_arm_speed is positive
+      start_timer++;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_scope.moveTelescope(0);
+    start_timer = 0;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished(){
-    return false;
+    if(start_timer >= 10 && m_scope.getCurrent() >= (EncoderConstants.tele_motor_voltage + EncoderConstants.tele_motor_voltage_thresh)){
+      if (m_scope.getTeleEncoderRate() <= EncoderConstants.tele_extension_rate - EncoderConstants.tele_extension_rate_thresh && m_scope.getCurrent() >= EncoderConstants.tele_motor_voltage + EncoderConstants.tele_motor_voltage_thresh) {
+        counter++;
+        if (counter == 5) {
+          return true;
+        } 
+      }
+      else counter = 0;
+  
+   }
+   return false;
   }
 }

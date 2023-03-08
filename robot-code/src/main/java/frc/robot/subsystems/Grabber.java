@@ -32,6 +32,10 @@ public class Grabber extends SubsystemBase {
     return 0.0;//boreEncoderArm.getDistance();
   }
 
+  public double getCurrent(){
+    return grabber.getOutputCurrent();
+  }
+
   public static Grabber getInstance(){
     if (instance == null) {
       instance = new Grabber();

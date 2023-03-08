@@ -33,7 +33,7 @@ public class TelescopeExtend extends CommandBase {
     //if (!m_scope.isExtended())
       m_scope.moveTelescope(-MotorSpeeds.tele_arm_speed); //extend is negative speeds, tele_arm_speed is positive
       System.out.println("Rate: " + m_scope.getTeleEncoderRate());
-      System.out.println("Current: " + m_scope.getVoltage());
+      System.out.println("Current: " + m_scope.getCurrent());
   }
 
   // Called once the command ends or is interrupted.

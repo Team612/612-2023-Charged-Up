@@ -27,7 +27,7 @@ public class Release extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_grabber.grab(-ControlMap.gunner.getRawAxis(3) * MotorSpeeds.grabber_speed); //.grab(ControlMap.gunner.getRawAxis(3) * MotorSpeeds.grabber_speed);
+    m_grabber.grab(MotorSpeeds.grabber_speed * MotorSpeeds.slow_down_release); //.grab(ControlMap.gunner.getRawAxis(3) * MotorSpeeds.grabber_speed);
   }
 
   // Called once the command ends or is interrupted.
