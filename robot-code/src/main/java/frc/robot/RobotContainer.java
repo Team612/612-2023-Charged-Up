@@ -4,23 +4,17 @@
 
 package frc.robot;
 import com.pathplanner.lib.PathConstraints;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.DefaultDrive;
-import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
-import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
-import frc.robot.commands.Drivetrain.followTag;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Vision;
 import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.RollOff;
@@ -30,10 +24,13 @@ import frc.robot.commands.Release;
 import frc.robot.commands.TelescopeDetract;
 import frc.robot.commands.TelescopeExtend;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Telescope;
-
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import frc.robot.commands.Drivetrain.FieldOrientedDrive;
+import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
+import frc.robot.commands.Drivetrain.followTag;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -46,13 +43,15 @@ public class RobotContainer {
   
   //subsystem declarations 
   private final Drivetrain m_drivetrain = Drivetrain.getInstance();
-  
-  public final Vision m_Vision = Vision.getVisionInstance();
-  //public final Vision m_Vision = new Vision(camera);
 
-  public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
 
-  private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);  
+  private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
+
+ // Trajectories
+  private final FollowTrajectory m_follower = new FollowTrajectory();
+  private final TrajectoryCreation m_traj = new TrajectoryCreation();
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+
   private final Arm m_arm = Arm.getInstance();
   private final Telescope m_scope = Telescope.getInstance();
   private final Grabber m_grabber = Grabber.getInstance();
@@ -62,12 +61,12 @@ public class RobotContainer {
   private final TelescopeExtend m_telescopeExtend = new TelescopeExtend(m_scope);
   private final Grab m_grab = new Grab(m_grabber);
   private final Release m_release = new Release(m_grabber);
-
-  // Trajectories
-  private final FollowTrajectory m_follower = new FollowTrajectory();
-  private final TrajectoryCreation m_traj = new TrajectoryCreation();
-  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   
+  public final Vision m_Vision = Vision.getVisionInstance();
+  //public final Vision m_Vision = new Vision(camera);
+
+  public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -78,8 +77,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureButtonBindings();
-    configureDefaultCommands();
     configureShuffleBoardBindings();
+    configureDefaultCommands();
   }
 
   private void configureShuffleBoardBindings(){
@@ -109,12 +108,17 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
+    gunner.leftBumper().whileTrue(m_telescopeExtend);
+    gunner.rightBumper().whileTrue(m_telescopeDetract);
+    gunner.leftTrigger().whileTrue(m_grab);
+    gunner.rightTrigger().whileTrue(m_release);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
   }
 
   private void configureDefaultCommands(){
     m_drivetrain.setDefaultCommand(m_defaultdrive);
+    m_arm.setDefaultCommand(m_pivot);
   }
 
   

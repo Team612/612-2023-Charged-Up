@@ -39,7 +39,7 @@ public class Pivot extends CommandBase {
    */
   @Override
   public void execute() {
-    if(m_arm.withinThresh()){
+    if(m_arm.withinThresh() || (!(EncoderConstants.arm_upper == 0.0 && EncoderConstants.arm_lower == 0.0))){ //test
       m_arm.rotatePivot(ControlMap.gunner.getRawAxis(1) * MotorSpeeds.pivot_speed);
 
     }

@@ -5,8 +5,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EncoderConstants;
@@ -16,19 +16,20 @@ public class Grabber extends SubsystemBase {
   /** Creates a new Grabber. */
   private CANSparkMax grabber;
   static Grabber instance = null;
-  private final DutyCycleEncoder boreEncoderArm;
+  //private final DutyCycleEncoder boreEncoderArm;
 
   public Grabber() {
-    grabber = new CANSparkMax(SparkPorts.grabber, MotorType.kBrushless);
-    boreEncoderArm = new DutyCycleEncoder(EncoderConstants.boreEncoderIntake);
+    grabber = new CANSparkMax(SparkPorts.grabber, MotorType.kBrushed);
+    grabber.setIdleMode(IdleMode.kBrake);
+    //boreEncoderArm = new DutyCycleEncoder(EncoderConstants.boreEncoderIntake);
   }
 
-  public void grab(double rotate) {
-    grabber.set(rotate);
+  public void grab(double speed) {
+    grabber.set(speed);
   }
 
   public double getGrabEncoder() {
-    return boreEncoderArm.getDistance();
+    return 0.0;//boreEncoderArm.getDistance();
   }
 
   public static Grabber getInstance(){
