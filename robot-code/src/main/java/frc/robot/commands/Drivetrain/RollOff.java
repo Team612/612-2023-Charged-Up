@@ -3,17 +3,16 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.Drivetrain;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.controls.ControlMap;
 import frc.robot.subsystems.Drivetrain;
 
-public class DefaultDrive extends CommandBase {
-  /** Creates a new DefaultDrive. */
-  
-  Drivetrain m_drivetrain;
-  public DefaultDrive(Drivetrain drivetrain) {
-    m_drivetrain = drivetrain;
-    addRequirements(drivetrain);
+public class RollOff extends CommandBase {
+  /** Creates a new RollOff. */
+  private final Drivetrain m_drivetrain;
+  public RollOff(Drivetrain d) {
+    m_drivetrain = d;
+    addRequirements(d);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -26,8 +25,7 @@ public class DefaultDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
-    m_drivetrain.RobotOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
+    m_drivetrain.driveMecanum(-0.1, -0.1, -0.1, -0.1);
   }
 
   // Called once the command ends or is interrupted.
