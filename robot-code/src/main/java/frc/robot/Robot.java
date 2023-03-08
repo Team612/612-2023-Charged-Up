@@ -6,10 +6,12 @@ package frc.robot;
 
 import com.pathplanner.lib.server.PathPlannerServer;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.ShuffleBoardButtons;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -25,6 +27,10 @@ public class Robot extends TimedRobot {
   private final ShuffleBoardButtons m_BoardButtons = new ShuffleBoardButtons();
   private static boolean printed = false;
 
+  private final Arm m_arm = new Arm();
+
+  DigitalInput topLimitSwitch = new DigitalInput(0);
+  DigitalInput bottomLimitSwitch = new DigitalInput(1);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -99,6 +105,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_BoardButtons.updateButtons();
+    if (topLimitSwitch.get()) {
+      m_arm.rotatePivot(0);
+    } else if (bottomLimitSwitch.get()) {
+      m_arm.rotatePivot(0);
+    }
   }
 
   @Override

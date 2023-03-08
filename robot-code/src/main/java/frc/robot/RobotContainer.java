@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Drivetrain.AutoBalance;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
@@ -61,6 +62,7 @@ public class RobotContainer {
   private final TelescopeExtend m_telescopeExtend = new TelescopeExtend(m_scope);
   private final Grab m_grab = new Grab(m_grabber);
   private final Release m_release = new Release(m_grabber);
+  private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
   
   public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
@@ -114,6 +116,7 @@ public class RobotContainer {
     gunner.rightTrigger().whileTrue(m_release);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
+    m_driverController.x().toggleOnTrue(m_autoBalance);
   }
 
   private void configureDefaultCommands(){
