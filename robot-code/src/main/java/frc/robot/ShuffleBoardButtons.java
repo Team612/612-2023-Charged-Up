@@ -4,14 +4,19 @@
 package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.Telescope;
 import frc.robot.subsystems.Vision;
 
 public class ShuffleBoardButtons {
     ShuffleboardTab m_smartdashboard;
+
     GenericEntry NavxAngle;
     GenericEntry EncoderPosX;
     GenericEntry EncoderPosY;
@@ -24,6 +29,22 @@ public class ShuffleBoardButtons {
     GenericEntry PoseEstimatorAngle;
     GenericEntry PoseEstimatorX;
     GenericEntry PoseEstimatorY;
+    GenericEntry fodState;
+
+    GenericEntry grabberCurrentGraph;
+    GenericEntry telescopeCurrentGraph;
+
+
+    ShuffleboardTab m_encoderTab;
+    GenericEntry BoreEncoders;
+    GenericEntry pivotEntry;
+    GenericEntry telescopeEntry;
+    GenericEntry telescopeEncoderRate;
+
+
+
+
+    
 
     public void initButtons(){
         m_smartdashboard = Shuffleboard.getTab("SmartDashboard");
@@ -39,16 +60,30 @@ public class ShuffleBoardButtons {
         PoseEstimatorX = m_smartdashboard.add("PoseEstimator X", 0.0).getEntry();
         PoseEstimatorY = m_smartdashboard.add("PoseEstimator Y", 0.0).getEntry();
 
+
+        fodState = m_smartdashboard.add("FOD state?", false).getEntry();
+
+        m_encoderTab = Shuffleboard.getTab("Encoder");
+        pivotEntry = m_encoderTab.add("Pivot Encoder", 0.0).getEntry();
+        telescopeEntry = m_encoderTab.add("Telescope Encoder", 0.0).getEntry();
+        BoreEncoders = m_encoderTab.add("Bore Encoder",0.0).getEntry();
+        telescopeEncoderRate = m_encoderTab.add("Telescope Encoder Rate", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
+
+        grabberCurrentGraph = m_smartdashboard.add("Grabber Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
+        telescopeCurrentGraph = m_smartdashboard.add("Telescope Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
     }
 
     public void updateButtons(){
         Pose2d vision = Vision.getVisionInstance().getTagPose();
-        Pose2d drivetrain = Drivetrain.getInstance().getPose();
+        Drivetrain drivetrain = Drivetrain.getInstance();
         Pose2d estimator = PoseEstimator.getPoseEstimatorInstance().getCurrentPose();
+        Grabber grabber = Grabber.getInstance();
+        Telescope telescope = Telescope.getInstance();
+        Arm arm = Arm.getInstance();
         
-        NavxAngle.setDouble(drivetrain.getRotation().getDegrees());
-        EncoderPosX.setDouble(drivetrain.getX());
-        EncoderPosY.setDouble(drivetrain.getY());    
+        NavxAngle.setDouble(drivetrain.getPose().getRotation().getDegrees());
+        EncoderPosX.setDouble(drivetrain.getPose().getX());
+        EncoderPosY.setDouble(drivetrain.getPose().getY());    
 
         AprilTagX.setDouble(vision.getX());
         AprilTagY.setDouble(vision.getY());
@@ -57,6 +92,16 @@ public class ShuffleBoardButtons {
         PoseEstimatorAngle.setDouble(estimator.getRotation().getDegrees());
         PoseEstimatorX.setDouble(estimator.getX());
         PoseEstimatorY.setDouble(estimator.getY());
+
+        fodState.setBoolean(drivetrain.getFodState());
+
+        pivotEntry.setDouble(arm.getPivotEncoder());
+        telescopeEntry.setDouble(telescope.getTeleEncoder());
+        BoreEncoders.setDouble(grabber.getGrabEncoder());
+        grabberCurrentGraph.setDouble(grabber.getCurrent());
+        telescopeCurrentGraph.setDouble(telescope.getCurrent());
+        telescopeEncoderRate.setDouble(telescope.getTeleEncoderRate());
+
     }
     
 }

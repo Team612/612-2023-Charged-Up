@@ -21,7 +21,6 @@ import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.I2C;
-import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -49,6 +48,8 @@ public class Drivetrain extends SubsystemBase {
   MecanumDriveOdometry m_odometry;
 
   private Vision m_vision;
+
+  private boolean isFieldOriented;
  
 
   public Drivetrain() {
@@ -265,9 +266,7 @@ public class Drivetrain extends SubsystemBase {
     return spark_bl.getEncoder().getPosition();
   }
 
-  @Override
-  public void periodic() {
-  }
+ 
 
   //Path Planner methods
   public void setChassisSpeeds(ChassisSpeeds chassisSpeeds){
@@ -275,6 +274,15 @@ public class Drivetrain extends SubsystemBase {
     setWheelSpeeds(wheelSpeeds);
 
   }
+
+  public boolean getFodState(){
+    return isFieldOriented;
+  }
+
+  public void setFodState(boolean isFod){
+    isFieldOriented = isFod;
+  }
+
 
   public void setWheelSpeeds(MecanumDriveWheelSpeeds wheelSpeeds){
     // double metersPerSec = 4.5;
@@ -322,5 +330,9 @@ public class Drivetrain extends SubsystemBase {
         thetaController, // as X controller)
         chassisSpeedSetter,
         false);
+  }
+
+  @Override
+  public void periodic() {
   }
 }

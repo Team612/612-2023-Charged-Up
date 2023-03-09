@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 public class ControlMap{
     //driver ports
-    private static int DRIVER_PORT = 0;
-    private static int GUNNER_PORT = 1;
+    private static int DRIVER_PORT = 2;
+    private static int GUNNER_PORT = 3;
     
     //Controller objects
     public static Joystick driver = new Joystick(DRIVER_PORT);

@@ -8,12 +8,9 @@ import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.ShuffleBoardButtons;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Drivetrain;
-
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -27,7 +24,7 @@ public class Robot extends TimedRobot {
   private final ShuffleBoardButtons m_BoardButtons = new ShuffleBoardButtons();
   private static boolean printed = false;
 
-  private final Arm m_arm = new Arm();
+  private final Arm m_arm = Arm.getInstance();
 
   DigitalInput topLimitSwitch = new DigitalInput(0);
   DigitalInput bottomLimitSwitch = new DigitalInput(1);
@@ -105,11 +102,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_BoardButtons.updateButtons();
-    if (topLimitSwitch.get()) {
-      m_arm.rotatePivot(0);
-    } else if (bottomLimitSwitch.get()) {
-      m_arm.rotatePivot(0);
-    }
   }
 
   @Override

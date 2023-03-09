@@ -3,9 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.Drivetrain;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
@@ -16,7 +13,6 @@ public class DefaultDrive extends CommandBase {
   /** Creates a new DefaultDrive. */
   
   Drivetrain m_drivetrain;
-  private Rotation2d initAngle;
   Constants.DrivetrainConstants m_slowmo;
   public DefaultDrive(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
@@ -27,8 +23,9 @@ public class DefaultDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initAngle = m_drivetrain.getNavxAngle();
     m_drivetrain.driveMecanum(0, 0, 0, 0);
+    m_drivetrain.setFodState(false);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

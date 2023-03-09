@@ -21,6 +21,7 @@ public class FieldOrientedDrive extends CommandBase {
   @Override
   public void initialize() {
     m_drivetrain.driveMecanum(0, 0, 0, 0);
+    m_drivetrain.setFodState(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
