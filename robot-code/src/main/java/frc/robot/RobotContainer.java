@@ -14,6 +14,7 @@ import frc.robot.commands.Drivetrain.AutoBalance;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
+import frc.robot.commands.Drivetrain.SlowmoDrive;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
@@ -112,6 +113,8 @@ public class RobotContainer {
     m_chooser.addOption("BlueLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeaveAndDock", new PathConstraints(2.5, 1), true, true)));
     m_chooser.addOption("BlueLeftLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeave", new PathConstraints(2.5, 1), true, true)));
     SmartDashboard.putData(m_chooser);
+    SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
+    
   }
 
   private void configureButtonBindings() {

@@ -6,13 +6,18 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.SparkPorts;
 
 public class Arm extends SubsystemBase {
   private CANSparkMax pivot;
   static Arm instance = null;
+  private DigitalInput topLimitSwitch = new DigitalInput(0);
+  private DigitalInput bottomLimitSwitch = new DigitalInput(1);
 
   /** Creates a new Arm. */
   public Arm() {
@@ -43,9 +48,11 @@ public class Arm extends SubsystemBase {
     return instance;
   }
 
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (bottomLimitSwitch.get()) {
+      pivot.getEncoder().setPosition(0);
+    }
   }
 }
