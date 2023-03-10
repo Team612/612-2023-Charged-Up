@@ -51,9 +51,6 @@ public class Pivot extends CommandBase {
     //   m_arm.rotatePivot(0);
     // }
     m_arm.rotatePivot(ControlMap.gunner.getRawAxis(1) * MotorSpeeds.pivot_speed);
-
-
-
   }
 
   // Called once the command ends or is interrupted.

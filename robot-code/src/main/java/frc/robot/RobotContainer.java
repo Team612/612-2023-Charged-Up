@@ -14,6 +14,7 @@ import frc.robot.commands.Drivetrain.AutoBalance;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
+import frc.robot.commands.Drivetrain.SlowmoDrive;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
@@ -22,6 +23,7 @@ import frc.robot.commands.Drivetrain.RollOff;
 import frc.robot.commands.Grab;
 import frc.robot.commands.Pivot;
 import frc.robot.commands.Release;
+import frc.robot.commands.ScoreArm;
 import frc.robot.commands.TelescopeDetract;
 import frc.robot.commands.TelescopeExtend;
 import frc.robot.subsystems.Arm;
@@ -63,6 +65,7 @@ public class RobotContainer {
   private final Grab m_grab = new Grab(m_grabber);
   private final Release m_release = new Release(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
+  private final ScoreArm m_scoreArm = new ScoreArm(m_arm);
   
   public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
@@ -107,6 +110,8 @@ public class RobotContainer {
     m_chooser.addOption("BlueLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeaveAndDock", new PathConstraints(2.5, 1), true, true)));
     m_chooser.addOption("BlueLeftLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeave", new PathConstraints(2.5, 1), true, true)));
     SmartDashboard.putData(m_chooser);
+    SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
+    
   }
 
   private void configureButtonBindings() {
@@ -114,6 +119,7 @@ public class RobotContainer {
     gunner.rightBumper().whileTrue(m_telescopeDetract);
     gunner.leftTrigger().whileTrue(m_grab);
     gunner.rightTrigger().whileTrue(m_release);
+    gunner.a().onTrue(m_scoreArm);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
     m_driverController.x().toggleOnTrue(m_autoBalance);
