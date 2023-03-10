@@ -38,6 +38,7 @@ import frc.robot.commands.Drivetrain.followTag;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+import frc.robot.commands.PivotPositions.MidPosition;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -58,11 +59,15 @@ public class RobotContainer {
   private final Grabber m_grabber = Grabber.getInstance();
 
   private final Pivot m_pivot = new Pivot(m_arm);
+  private final MidPosition m_midPosition = new MidPosition(m_arm);
+
   private final TelescopeDetract m_telescopeDetract = new TelescopeDetract(m_scope);
   private final TelescopeExtend m_telescopeExtend = new TelescopeExtend(m_scope);
   private final Grab m_grab = new Grab(m_grabber);
   private final Release m_release = new Release(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
+
+
   
   public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
@@ -73,7 +78,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final CommandXboxController gunner =
+  private final CommandXboxController m_gunnerController =
       new CommandXboxController(OperatorConstants.kGunnerControllerPort);
 
   public RobotContainer() {
@@ -110,13 +115,14 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    gunner.leftBumper().whileTrue(m_telescopeExtend);
-    gunner.rightBumper().whileTrue(m_telescopeDetract);
-    gunner.leftTrigger().whileTrue(m_grab);
-    gunner.rightTrigger().whileTrue(m_release);
+    m_gunnerController.leftBumper().whileTrue(m_telescopeExtend);
+    m_gunnerController.rightBumper().whileTrue(m_telescopeDetract);
+    m_gunnerController.leftTrigger().whileTrue(m_grab);
+    m_gunnerController.rightTrigger().whileTrue(m_release);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
     m_driverController.x().toggleOnTrue(m_autoBalance);
+    m_gunnerController.b().onTrue(m_midPosition);
   }
 
   private void configureDefaultCommands(){

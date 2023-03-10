@@ -2,44 +2,55 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Drivetrain;
+package frc.robot.commands.PivotPositions;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.controls.ControlMap;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.Constants;
+import frc.robot.Constants.EncoderConstants;
+import frc.robot.subsystems.Arm;
 
-public class FieldOrientedDrive extends CommandBase {
-  /** Creates a new FieldOrientedDrive. */
-  Drivetrain m_drivetrain;
-  public FieldOrientedDrive(Drivetrain drivetrain) {
+public class MidPosition extends CommandBase {
+  /** Creates a new MidPosition. */
+  private Arm m_arm;
+  public MidPosition(Arm arm) {
+    m_arm = arm;
+    addRequirements(arm);
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drivetrain = drivetrain;
-    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.driveMecanum(0, 0, 0, 0);
-    m_drivetrain.setFodState(true);
+    //start not moving
+    
+    //clockwise is postive
+    //counter clockwise is negative
+    //clockwise up 
+    //counterclock is down
+    
+    m_arm.rotatePivot(0); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.FieldOrientedDrive(-ControlMap.driver_joystick.getRawAxis(1), ControlMap.driver_joystick.getRawAxis(0), ControlMap.driver_joystick.getRawAxis(4));
+    //Rotate
+    m_arm.rotatePivot(0.5); 
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.driveMecanum(0, 0, 0, 0);
+    //stop
+    m_arm.rotatePivot(0); 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //stop at the angle
+    if(m_arm.getPivotEncoder() >= EncoderConstants.MidPositionCube) return true;
     return false;
   }
 }

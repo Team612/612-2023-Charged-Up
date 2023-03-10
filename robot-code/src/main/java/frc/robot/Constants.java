@@ -128,11 +128,18 @@ public final class Constants {
    }
  
    public static class EncoderConstants{
-     public static int boreEncoderIntake = 1;
+    public static final double LowPositionCube = 10;
+    public static final double MidPositionCube = 80;
+    public static final double HighPositionCube = 100;
+    public static final double LowPositionCone = 40;
+    public static final double HighPositionCone = 100;
+    public static final double HumanStationIntake = 60;
+
+    public static int boreEncoderIntake = 1;
  
      //all of these are subject to change
-     public static double arm_lower; // = -99.0;
-     public static double arm_upper; // = 130.0;
+     public static double arm_lower = 0.0; // = -99.0;
+     public static double arm_upper = 0.0; // = 130.0;
      public static double tele_in; // = -3.0;
      public static double tele_out; // = 84.0;
     public static double tele_extension_rate = 5.0;
@@ -143,6 +150,8 @@ public final class Constants {
     public static double grabber_extension_rate_thresh = 1.0;
     public static double grabber_motor_voltage = 5.0;
     public static double grabber_motor_voltage_thresh = 5.0;
+
+    public static double sticky_grabber_thresh = 10;
   
    }
 
