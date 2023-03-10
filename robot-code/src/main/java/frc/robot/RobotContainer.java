@@ -9,19 +9,24 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
+import frc.robot.commands.Drivetrain.Purple;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
+import frc.robot.commands.Drivetrain.Yellow;
 import frc.robot.commands.Drivetrain.followTag;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.led;
 import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.RollOff;
 
@@ -37,6 +42,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
   //subsystem declarations 
+  private final led m_led = new led();
+
   private final Drivetrain m_drivetrain = Drivetrain.getInstance();
   
   public final Vision m_Vision = Vision.getVisionInstance();
@@ -86,12 +93,18 @@ public class RobotContainer {
     m_chooser.addOption("BlueRightLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueRightLeave", new PathConstraints(2.5, 1), true, true)));
     m_chooser.addOption("BlueLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeaveAndDock", new PathConstraints(2.5, 1), true, true)));
     m_chooser.addOption("BlueLeftLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeave", new PathConstraints(2.5, 1), true, true)));
+    
     SmartDashboard.putData(m_chooser);
   }
 
   private void configureButtonBindings() {
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
+    
+    //will change button later
+    m_driverController.a().toggleOnTrue(new Purple(m_drivetrain, m_led));
+    m_driverController.a().toggleOnFalse(new Yellow(m_drivetrain, m_led));
+
   }
 
   private void configureDefaultCommands(){
