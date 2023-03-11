@@ -41,9 +41,9 @@ public class TelescopeExtend extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(m_scope.getTeleEncoder() >= EncoderConstants.tele_out){
-    //   return true;
-    // }
+    if(m_scope.getTeleEncoder() >= EncoderConstants.tele_out){
+      return true;
+    }
     return false;
   }
 }

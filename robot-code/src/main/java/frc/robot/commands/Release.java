@@ -51,17 +51,6 @@ public class Release extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if((start_timer >= 10) && m_grabber.getCurrent() >= (EncoderConstants.grabber_motor_voltage + EncoderConstants.grabber_motor_voltage_thresh)){
-    //   count++;
-    //   if(count == 5) return true;
-    // }
-    // else count = 0;
-
-    // if(m_grabber.getCurrent() >= EncoderConstants.sticky_grabber_thresh){
-    //   count++;
-    //   if(count == 5) return true;
-    // }
-    // else count = 0;
     if(count >= 5) return true;
 
     return false;
