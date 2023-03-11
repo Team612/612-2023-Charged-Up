@@ -103,6 +103,7 @@ public class TrajectoryCreation {
 
     public PathPlannerTrajectory onthefly(PoseEstimator estimation, Vision vision, boolean isBlueAlliance){
         Pose2d estimatedPose = estimation.getCurrentPose();
+        System.out.println("**************" + estimatedPose + "********************");        
         double x = estimatedPose.getX();
         double y = estimatedPose.getY();
         Rotation2d angle = estimatedPose.getRotation();
@@ -110,14 +111,15 @@ public class TrajectoryCreation {
         Pose2d tagPose = vision.return_tag_pose(id).toPose2d();
         double tagX = tagPose.getX();
         double tagY = tagPose.getY();
+        System.out.println(angle);
 
 
         if(isBlueAlliance){
             return PathPlanner.generatePath(
                 new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
                 Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
-                new PathPoint(new Translation2d(x, y), angle.times(-1)),
-                new PathPoint(new Translation2d(tagX + 1, tagY), angle.times(-1))
+                new PathPoint(new Translation2d(x, y), new Rotation2d(), angle), 
+                new PathPoint(new Translation2d(tagX + 1, tagY), Rotation2d.fromDegrees(180), angle)
             );
         }
         else{
