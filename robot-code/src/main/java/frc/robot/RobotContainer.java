@@ -39,7 +39,9 @@ import frc.robot.commands.Drivetrain.followTag;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
-import frc.robot.commands.PivotPositions.MidPosition;
+import frc.robot.commands.PivotPositions.MidPositionCube;
+import frc.robot.commands.Sequential.ScoreMidCone;
+import frc.robot.commands.Sequential.ScoreMidCube;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -60,7 +62,7 @@ public class RobotContainer {
   private final Grabber m_grabber = Grabber.getInstance();
 
   private final Pivot m_pivot = new Pivot(m_arm);
-  private final MidPosition m_midPosition = new MidPosition(m_arm);
+  private final MidPositionCube m_midPosition = new MidPositionCube(m_arm);
 
   private final TelescopeDetract m_telescopeDetract = new TelescopeDetract(m_scope);
   private final TelescopeExtend m_telescopeExtend = new TelescopeExtend(m_scope);
@@ -92,6 +94,9 @@ public class RobotContainer {
   private void configureShuffleBoardBindings(){
     m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
     m_chooser.addOption("RollOff", new RollOff(m_drivetrain));
+
+    m_chooser.addOption("Score Mid Position Cube", new ScoreMidCube());
+    m_chooser.addOption("Score Mid Position Cone", new ScoreMidCone());
     
     m_chooser.addOption("align trajectory", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(m_Vision.getCamera(), new Translation2d(1.6,0)),estimator)));
     m_chooser.addOption("Align", new ProxyCommand(() -> new followTag(m_drivetrain, m_Vision.getCamera())));

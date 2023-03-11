@@ -9,15 +9,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.SparkPorts;
 
 public class Arm extends SubsystemBase {
   private CANSparkMax pivot;
   static Arm instance = null;
-  private DigitalInput topLimitSwitch = new DigitalInput(0);
-  private DigitalInput bottomLimitSwitch = new DigitalInput(1);
+  private DigitalInput bottomLimitSwitch = new DigitalInput(0);
 
   /** Creates a new Arm. */
   public Arm() {

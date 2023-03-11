@@ -140,8 +140,7 @@ public final class Constants {
      //all of these are subject to change
      public static double arm_lower = 10.0; // = -99.0;
      public static double arm_upper = 130.0; // = 130.0;
-     public static double arm_score_low = 89;
-     public static double arm_score_high = 91;
+     public static double arm_mid = 90;
      public static double tele_in; // = -3.0;
      public static double tele_out; // = 84.0;
     public static double tele_extension_rate = 5.0;
