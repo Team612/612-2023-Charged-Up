@@ -98,9 +98,9 @@ public class RobotContainer {
     m_chooser.addOption("Score Mid Position Cube", new ScoreMidCube());
     m_chooser.addOption("Score Mid Position Cone", new ScoreMidCone());
     
-    m_chooser.addOption("align trajectory", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(m_Vision.getCamera(), new Translation2d(1.6,0)),estimator)));
+   // m_chooser.addOption("align trajectory", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.return_alignTrajectory(m_Vision.getCamera(), new Translation2d(1.6,0)),estimator)));
     m_chooser.addOption("Align", new ProxyCommand(() -> new followTag(m_drivetrain, m_Vision.getCamera())));
-    m_chooser.addOption("Tune Angles", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle,estimator)));
+   // m_chooser.addOption("Tune Angles", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.tuneAngle,estimator)));
     
     m_chooser.addOption("Strafe Right debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeRightMeter(estimator),estimator)));
     m_chooser.addOption("Strafe Left debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeLeftMeter(estimator),estimator)));
