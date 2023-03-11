@@ -4,67 +4,49 @@
 
 package frc.robot.commands.Drivetrain;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.Vision;
 
-public class FollowTrajectoryPathPlanner extends CommandBase {
-
+public class RunOnTheFly extends CommandBase {
   private final Drivetrain driveSystem;
+  private final Vision m_vision;
   private final PoseEstimator poseEstimatorSystem;
-  private final String pathName;
-  private final PathConstraints constraints;
   private final boolean resetOdom;
+  private final TrajectoryCreation m_traj;
   private final boolean isBlueAlliance;
 
   private CommandBase controllerCommand = Commands.none();
 
-  /** Creates a new FollowTrajectoryPathPlanner. */
-  public FollowTrajectoryPathPlanner(Drivetrain d, PoseEstimator p, String pathName, PathConstraints constraints, boolean resetOdom, boolean isBlueAlliance) {
+  /** Creates a new RunOnTheFly. */
+  public RunOnTheFly(Drivetrain d, PoseEstimator p, boolean resetOdom, boolean isBlueAlliance, TrajectoryCreation traj, Vision v) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveSystem = d;
     this.poseEstimatorSystem = p;
-    this.pathName = pathName;
-    this.constraints = constraints;
     this.resetOdom = resetOdom;
     this.isBlueAlliance = isBlueAlliance;
+    this.m_traj = traj;
+    this.m_vision = v;
 
-    addRequirements(this.driveSystem);
+    addRequirements(this.driveSystem, this.m_vision);
   }
-
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    PathPlannerTrajectory path = PathPlanner.loadPath(pathName, constraints);
-    if(path == null){
-      end(false);
-      return;
-    }
+    PathPlannerTrajectory path = m_traj.onthefly(poseEstimatorSystem, m_vision, isBlueAlliance);
 
-    Alliance alliance;
-
-    if(isBlueAlliance){
-      alliance = Alliance.Blue;
-    }
-    else{
-      alliance = Alliance.Blue;
-    }
-
-    
-    PathPlannerTrajectory alliancePath = PathPlannerTrajectory.transformTrajectoryForAlliance(path, alliance);
     if(resetOdom){
       driveSystem.resetOdometry();
     }
 
-    controllerCommand = Drivetrain.followTrajectory(driveSystem, poseEstimatorSystem, alliancePath);
+    controllerCommand = Drivetrain.followTrajectory(driveSystem, poseEstimatorSystem, path);
     controllerCommand.initialize();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

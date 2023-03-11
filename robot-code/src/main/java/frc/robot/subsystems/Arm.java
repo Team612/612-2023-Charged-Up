@@ -16,8 +16,8 @@ import frc.robot.Constants.SparkPorts;
 public class Arm extends SubsystemBase {
   private CANSparkMax pivot;
   static Arm instance = null;
-  private DigitalInput topLimitSwitch = new DigitalInput(0);
-  private DigitalInput bottomLimitSwitch = new DigitalInput(1);
+  // private DigitalInput topLimitSwitch = new DigitalInput(0);
+  // private DigitalInput bottomLimitSwitch = new DigitalInput(1);
 
   /** Creates a new Arm. */
   public Arm() {
@@ -51,8 +51,8 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (bottomLimitSwitch.get()) {
-      pivot.getEncoder().setPosition(0);
-    }
+    // if (bottomLimitSwitch.get()) {
+    //   pivot.getEncoder().setPosition(0);
+    // }
   }
 }

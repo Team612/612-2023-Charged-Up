@@ -41,11 +41,6 @@ public class ShuffleBoardButtons {
     GenericEntry telescopeEntry;
     GenericEntry telescopeEncoderRate;
 
-
-
-
-    
-
     public void initButtons(){
         m_smartdashboard = Shuffleboard.getTab("SmartDashboard");
         NavxAngle = m_smartdashboard.add("NavX angle", 0.0).getEntry();
@@ -60,6 +55,7 @@ public class ShuffleBoardButtons {
         PoseEstimatorX = m_smartdashboard.add("PoseEstimator X", 0.0).getEntry();
         PoseEstimatorY = m_smartdashboard.add("PoseEstimator Y", 0.0).getEntry();
 
+        telescopeEncoderRate = m_smartdashboard.add("Telescope Encoder Rate", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
 
         fodState = m_smartdashboard.add("FOD state?", false).getEntry();
 
@@ -67,7 +63,6 @@ public class ShuffleBoardButtons {
         pivotEntry = m_encoderTab.add("Pivot Encoder", 0.0).getEntry();
         telescopeEntry = m_encoderTab.add("Telescope Encoder", 0.0).getEntry();
         BoreEncoders = m_encoderTab.add("Bore Encoder",0.0).getEntry();
-        telescopeEncoderRate = m_encoderTab.add("Telescope Encoder Rate", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
 
         grabberCurrentGraph = m_smartdashboard.add("Grabber Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
         telescopeCurrentGraph = m_smartdashboard.add("Telescope Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();

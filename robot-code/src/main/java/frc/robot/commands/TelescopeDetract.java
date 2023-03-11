@@ -27,7 +27,7 @@ public class TelescopeDetract extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+   
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,29 +35,29 @@ public class TelescopeDetract extends CommandBase {
   public void execute(){
     //if (!m_scope.isRetracted())
       m_scope.moveTelescope(MotorSpeeds.tele_arm_speed); //detract is positive speeds, tele_arm_speed is positive
-      start_timer++;
+      //start_timer++;
+      // if (m_scope.getLimitBottom().get()) {
+      //   m_scope.resetEncoder();
+      // }
+      // if (m_scope.getTeleEncoderRate() <= EncoderConstants.tele_extension_rate || m_scope.getCurrent() >= EncoderConstants.tele_motor_voltage) {
+      //   counter++;
+      // }
+      // else counter = 0;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_scope.moveTelescope(0);
-    start_timer = 0;
+    //start_timer = 0;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished(){
-    if(start_timer >= 10 && m_scope.getCurrent() >= (EncoderConstants.tele_motor_voltage + EncoderConstants.tele_motor_voltage_thresh)){
-      if (m_scope.getTeleEncoderRate() <= EncoderConstants.tele_extension_rate - EncoderConstants.tele_extension_rate_thresh && m_scope.getCurrent() >= EncoderConstants.tele_motor_voltage + EncoderConstants.tele_motor_voltage_thresh) {
-        counter++;
-        if (counter == 5) {
-          return true;
-        } 
-      }
-      else counter = 0;
-  
-   }
+    // if (counter >= 5) {
+    //   return true;
+    // }
    return false;
   }
 }

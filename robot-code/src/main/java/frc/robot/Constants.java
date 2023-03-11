@@ -34,10 +34,10 @@ public final class Constants {
      public static final double kWheelDiameterMeters = 0.1524; 
      
      //Distance between centers of right and left wheels on robot
-     public static final double kTrackWidth = 0.5969; // for phoenix 0.668655
+     public static final double kTrackWidth = Units.inchesToMeters(26.625);//0.5969; // for phoenix 0.668655
  
      //Distance between centers of front and back wheels on robot
-     public static final double kWheelBase = 0.676275; // for phoenix .5334
+     public static final double kWheelBase =  Units.inchesToMeters(21);//  0.676275; // for phoenix .5334
  
  
      public static final double kEncoderCPR = 1; 
@@ -86,8 +86,8 @@ public final class Constants {
      );
      
      //trajectory constraints
-     public static final int kMaxVelocityMetersPerSecond = 2;
-     public static final int maxAccelerationMetersPerSecondSq = 1;
+     public static final double kMaxVelocityMetersPerSecond = 5;
+     public static final double maxAccelerationMetersPerSecondSq = .525;
 
      public static final double kMaxAngularVelocity = Math.PI;
      public static final double kMaxAngularAcceleration = Math.PI;
