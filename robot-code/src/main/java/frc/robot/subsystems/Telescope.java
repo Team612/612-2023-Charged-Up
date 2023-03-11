@@ -16,8 +16,7 @@ public class Telescope extends SubsystemBase {
   private CANSparkMax telescope;
   private double currTelescope = 0.0;
   static Telescope instance = null;
-  private DigitalInput topLimitSwitch = new DigitalInput(0);
-  private DigitalInput bottomLimitSwitch = new DigitalInput(1);
+  private DigitalInput bottomLimitSwitch = new DigitalInput(0);
 
   /** Creates a new Telescope. */
   public Telescope() {
