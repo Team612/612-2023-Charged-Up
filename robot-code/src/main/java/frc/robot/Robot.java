@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.pathplanner.lib.server.PathPlannerServer;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +27,7 @@ public class Robot extends TimedRobot {
   private static boolean printed = false;
 
   private final Arm m_arm = Arm.getInstance();
+  UsbCamera driver_cam;
 
   DigitalInput topLimitSwitch = new DigitalInput(0);
   DigitalInput bottomLimitSwitch = new DigitalInput(1);
@@ -39,7 +42,8 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     System.out.println("********ROBOT INIT*********");
     PathPlannerServer.startServer(5811);
-
+    driver_cam = CameraServer.startAutomaticCapture();
+    driver_cam.setFPS(20);
     m_robotContainer = new RobotContainer();
     m_BoardButtons.initButtons();
 
