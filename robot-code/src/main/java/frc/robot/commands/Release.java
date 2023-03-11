@@ -32,10 +32,10 @@ public class Release extends CommandBase {
   @Override
   public void execute() {
     m_grabber.grab(-MotorSpeeds.grabber_speed);
-    if(m_grabber.getCurrent() >= EncoderConstants.sticky_grabber_thresh){
-      count++;
-    }
-    else count = 0;
+    // if(m_grabber.getCurrent() >= EncoderConstants.sticky_grabber_thresh){
+    //   count++;
+    // }
+    // else count = 0;
     //start_timer++;
     System.out.println(start_timer);
     System.out.println(count);
