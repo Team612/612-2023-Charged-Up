@@ -39,18 +39,18 @@ public class Pivot extends CommandBase {
    */
   @Override
   public void execute() {
-    // if(m_arm.withinThresh()){
-    //   m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
+    if(m_arm.withinThresh()){
+      m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
 
-    // }
-    // else if((isGoingUp() && m_arm.getPivotEncoder() > EncoderConstants.arm_lower) || (!isGoingUp() && m_arm.getPivotEncoder() < EncoderConstants.arm_upper)){
-    //   m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
+    }
+    else if((isGoingUp() && m_arm.getPivotEncoder() > EncoderConstants.arm_lower) || (!isGoingUp() && m_arm.getPivotEncoder() < EncoderConstants.arm_upper)){
+      m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
 
-    // }
-    // else{
-    //   m_arm.rotatePivot(0);
-    // }
-    m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
+    }
+    else{
+      m_arm.rotatePivot(0);
+    }
+    //m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
 
 
 
