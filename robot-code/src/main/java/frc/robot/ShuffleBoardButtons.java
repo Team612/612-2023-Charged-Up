@@ -41,6 +41,13 @@ public class ShuffleBoardButtons {
     GenericEntry telescopeEntry;
     GenericEntry telescopeEncoderRate;
 
+    public static GenericEntry grabberSpikeTresh;
+
+
+
+    GenericEntry isGrabbing;
+    GenericEntry isReleasing;
+
     public void initButtons(){
         m_smartdashboard = Shuffleboard.getTab("SmartDashboard");
         NavxAngle = m_smartdashboard.add("NavX angle", 0.0).getEntry();
@@ -63,6 +70,12 @@ public class ShuffleBoardButtons {
         pivotEntry = m_encoderTab.add("Pivot Encoder", 0.0).getEntry();
         telescopeEntry = m_encoderTab.add("Telescope Encoder", 0.0).getEntry();
         BoreEncoders = m_encoderTab.add("Bore Encoder",0.0).getEntry();
+
+        grabberSpikeTresh = m_smartdashboard.add("GrabberSpikeTresh",0.0).getEntry();
+        isGrabbing = m_smartdashboard.add("isGrabbing", false).getEntry();
+        isReleasing = m_smartdashboard.add("isReleasing", false).getEntry();
+
+
 
         grabberCurrentGraph = m_smartdashboard.add("Grabber Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
         telescopeCurrentGraph = m_smartdashboard.add("Telescope Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
@@ -97,6 +110,8 @@ public class ShuffleBoardButtons {
         telescopeCurrentGraph.setDouble(telescope.getCurrent());
         telescopeEncoderRate.setDouble(telescope.getTeleEncoderRate());
 
+        isGrabbing.setBoolean(grabber.getBooleanGrabber());
+        
     }
     
 }

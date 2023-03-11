@@ -138,8 +138,8 @@ public final class Constants {
     public static int boreEncoderIntake = 1;
  
      //all of these are subject to change
-     public static double arm_lower = 10.0; // = -99.0;
-     public static double arm_upper = 130.0; // = 130.0;
+     public static double arm_lower = -91.0; // = -99.0;
+     public static double arm_upper = 100.0; // = 130.0;
      public static double arm_score_low = 89;
      public static double arm_score_high = 91;
      public static double tele_in; // = -3.0;

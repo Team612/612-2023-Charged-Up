@@ -16,6 +16,9 @@ public class Grabber extends SubsystemBase {
   /** Creates a new Grabber. */
   private CANSparkMax grabber;
   static Grabber instance = null;
+
+  private boolean isGrabbing;
+
   //private final DutyCycleEncoder boreEncoderArm;
 
   public Grabber() {
@@ -41,6 +44,14 @@ public class Grabber extends SubsystemBase {
       instance = new Grabber();
     }
     return instance;
+  }
+
+  public void setBooleanGrabber(boolean state){
+    isGrabbing = state;
+  }
+
+  public boolean getBooleanGrabber(){
+    return isGrabbing;
   }
 
   @Override
