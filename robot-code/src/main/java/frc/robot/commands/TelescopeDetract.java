@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.ShuffleBoardButtons;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.MotorSpeeds;
 import frc.robot.controls.ControlMap;
@@ -35,13 +36,13 @@ public class TelescopeDetract extends CommandBase {
   public void execute(){
       m_scope.moveTelescope(MotorSpeeds.tele_arm_speed); //detract is positive speeds, tele_arm_speed is positive
       start_timer++;
-      // if (m_scope.getLimitBottom().get()) {
-      //   m_scope.resetEncoder();
-      // }
-      // if (m_scope.getTeleEncoderRate() <= EncoderConstants.tele_extension_rate || m_scope.getCurrent() >= EncoderConstants.tele_motor_voltage) {
-      //   counter++;
-      // }
-      // else counter = 0;
+      if (m_scope.getLimitBottom().get()) {
+        m_scope.resetEncoder();
+      }
+      if (m_scope.getTeleEncoderRate() >= ShuffleBoardButtons.teleEncoderRateThresh.getDouble(0) || m_scope.getCurrent() >= ShuffleBoardButtons.teleSpikeThresh.getDouble(0)) {
+        counter++;
+      }
+      else counter = 0;
   }
 
   // Called once the command ends or is interrupted.

@@ -12,104 +12,87 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Telescope;
-import frc.robot.subsystems.Vision;
-
 public class ShuffleBoardButtons {
-    ShuffleboardTab m_smartdashboard;
-
-    GenericEntry NavxAngle;
-    GenericEntry EncoderPosX;
-    GenericEntry EncoderPosY;
-
-    GenericEntry AprilTagAngle;
-    GenericEntry AprilTagX;
-    GenericEntry AprilTagY;
-
+    ShuffleboardTab m_driverTab;
+    ShuffleboardTab m_encoderTab;
+    ShuffleboardTab m_graphTab;
+    ShuffleboardTab m_debugTab;
     
+    GenericEntry NavxAngle;
     GenericEntry PoseEstimatorAngle;
     GenericEntry PoseEstimatorX;
     GenericEntry PoseEstimatorY;
     GenericEntry fodState;
-
     GenericEntry grabberCurrentGraph;
     GenericEntry telescopeCurrentGraph;
-
-
-    ShuffleboardTab m_encoderTab;
     GenericEntry BoreEncoders;
     GenericEntry pivotEntry;
     GenericEntry telescopeEntry;
     GenericEntry telescopeEncoderRate;
-
-    public static GenericEntry grabberSpikeTresh;
-
-
-
     GenericEntry isGrabbing;
     GenericEntry isReleasing;
 
+    //accessable entires
+    public static GenericEntry grabberSpikeTresh;
+    public static GenericEntry teleEncoderRateThresh;
+    public static GenericEntry teleSpikeThresh;
+
+
     public void initButtons(){
-        m_smartdashboard = Shuffleboard.getTab("SmartDashboard");
-        NavxAngle = m_smartdashboard.add("NavX angle", 0.0).getEntry();
-        EncoderPosX = m_smartdashboard.add("Drivetrain Encoder X Position", 0).getEntry();
-        EncoderPosY = m_smartdashboard.add("Drivetrain Encoder Y Position", 0).getEntry();
-       
-        AprilTagAngle = m_smartdashboard.add("TagPose Angle", 0.0).getEntry();
-        AprilTagX = m_smartdashboard.add("TagPose X", 0).getEntry();
-        AprilTagY = m_smartdashboard.add("TagPose Y", 0).getEntry();
-
-        PoseEstimatorAngle = m_smartdashboard.add("PoseEstimator Angle", 0.0).getEntry();
-        PoseEstimatorX = m_smartdashboard.add("PoseEstimator X", 0.0).getEntry();
-        PoseEstimatorY = m_smartdashboard.add("PoseEstimator Y", 0.0).getEntry();
-
-        telescopeEncoderRate = m_smartdashboard.add("Telescope Encoder Rate", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
-
-        fodState = m_smartdashboard.add("FOD state?", false).getEntry();
-
+        m_driverTab = Shuffleboard.getTab("DriverTab");
         m_encoderTab = Shuffleboard.getTab("Encoder");
+        m_graphTab = Shuffleboard.getTab("Graphs");
+        m_debugTab = Shuffleboard.getTab("Debug Tab");
+
+        //debug entries
+
+        NavxAngle = m_debugTab.add("NavX angle", 0.0).getEntry();
+        PoseEstimatorAngle = m_debugTab.add("PoseEstimator Angle", 0.0).getEntry();
+        PoseEstimatorX = m_debugTab.add("PoseEstimator X", 0.0).getEntry();
+        PoseEstimatorY = m_debugTab.add("PoseEstimator Y", 0.0).getEntry();
+
+        //smartdashboard entries
+
+        fodState = m_driverTab.add("FOD state?", false).getEntry();
+        isGrabbing = m_driverTab.add("isGrabbing", false).getEntry();
+        isReleasing = m_driverTab.add("isReleasing", false).getEntry();
+
+
+        // encoder entries
         pivotEntry = m_encoderTab.add("Pivot Encoder", 0.0).getEntry();
-        telescopeEntry = m_encoderTab.add("Telescope Encoder", 0.0).getEntry();
         BoreEncoders = m_encoderTab.add("Bore Encoder",0.0).getEntry();
 
-        grabberSpikeTresh = m_smartdashboard.add("GrabberSpikeTresh",0.0).getEntry();
-        isGrabbing = m_smartdashboard.add("isGrabbing", false).getEntry();
-        isReleasing = m_smartdashboard.add("isReleasing", false).getEntry();
+        //graphing entries
+        grabberSpikeTresh = m_graphTab.add("GrabberSpikeTresh",0.0).getEntry();
+        grabberCurrentGraph = m_graphTab.add("Grabber Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
+        telescopeCurrentGraph = m_graphTab.add("Telescope Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
+        telescopeEncoderRate = m_graphTab.add("Telescope Encoder Rate", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
+        telescopeEntry = m_graphTab.add("Telescope Encoder", 0.0).getEntry();
+        teleEncoderRateThresh = m_graphTab.add("TeleEncoderThresh", 0.0).getEntry();
+        teleSpikeThresh = m_graphTab.add("TeleSpikeThresh", 0.0).getEntry();
 
 
-
-        grabberCurrentGraph = m_smartdashboard.add("Grabber Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
-        telescopeCurrentGraph = m_smartdashboard.add("Telescope Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
     }
 
     public void updateButtons(){
-        Pose2d vision = Vision.getVisionInstance().getTagPose();
         Drivetrain drivetrain = Drivetrain.getInstance();
         Pose2d estimator = PoseEstimator.getPoseEstimatorInstance().getCurrentPose();
         Grabber grabber = Grabber.getInstance();
         Telescope telescope = Telescope.getInstance();
         Arm arm = Arm.getInstance();
+
         
         NavxAngle.setDouble(drivetrain.getPose().getRotation().getDegrees());
-        EncoderPosX.setDouble(drivetrain.getPose().getX());
-        EncoderPosY.setDouble(drivetrain.getPose().getY());    
-
-        AprilTagX.setDouble(vision.getX());
-        AprilTagY.setDouble(vision.getY());
-        AprilTagAngle.setDouble(vision.getRotation().getDegrees());  
-        
         PoseEstimatorAngle.setDouble(estimator.getRotation().getDegrees());
         PoseEstimatorX.setDouble(estimator.getX());
         PoseEstimatorY.setDouble(estimator.getY());
-
         fodState.setBoolean(drivetrain.getFodState());
-
         pivotEntry.setDouble(arm.getPivotEncoder());
         telescopeEntry.setDouble(telescope.getTeleEncoder());
         BoreEncoders.setDouble(grabber.getGrabEncoder());
         grabberCurrentGraph.setDouble(grabber.getCurrent());
         telescopeCurrentGraph.setDouble(telescope.getCurrent());
         telescopeEncoderRate.setDouble(telescope.getTeleEncoderRate());
-
         isGrabbing.setBoolean(grabber.getBooleanGrabber());
         
     }

@@ -5,6 +5,7 @@
 package frc.robot;
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -111,7 +112,10 @@ public class RobotContainer {
     m_chooser.addOption("BlueRightLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueRightLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
     m_chooser.addOption("BlueLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
     m_chooser.addOption("BlueLeftLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
-    m_chooser.addOption("align with tag", new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision)));
+    m_chooser.addOption("align with tag", new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, 0)));
+    m_chooser.addOption("align with left node", new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(22))));
+    m_chooser.addOption("align with right node", new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(-22))));
+
     SmartDashboard.putData(m_chooser);
     SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
     

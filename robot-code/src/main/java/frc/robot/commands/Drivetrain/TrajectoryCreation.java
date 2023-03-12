@@ -101,7 +101,7 @@ public class TrajectoryCreation {
         );
     }
 
-    public PathPlannerTrajectory onthefly(PoseEstimator estimation, Vision vision, boolean isBlueAlliance){
+    public PathPlannerTrajectory onthefly(PoseEstimator estimation, Vision vision, boolean isBlueAlliance, double y_translation){
         Pose2d estimatedPose = estimation.getCurrentPose();
         System.out.println("**************" + estimatedPose + "********************");        
         double x = estimatedPose.getX();
@@ -115,11 +115,12 @@ public class TrajectoryCreation {
 
 
         if(isBlueAlliance){
+            // Rotation2d displacement = new Rotation2d(Units.degreesToRadians(-180)).minus(angle);
             return PathPlanner.generatePath(
                 new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
                 Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
                 new PathPoint(new Translation2d(x, y), new Rotation2d(), angle), 
-                new PathPoint(new Translation2d(tagX + 1, tagY), Rotation2d.fromDegrees(180), angle)
+                new PathPoint(new Translation2d(tagX + 1.2, tagY+y_translation), new Rotation2d(), new Rotation2d(Units.degreesToRadians(-180)))
             );
         }
         else{
@@ -127,7 +128,7 @@ public class TrajectoryCreation {
                 new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
                 Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
                 new PathPoint(new Translation2d(x, y), angle),
-                new PathPoint(new Translation2d(tagX - 1, tagY), angle)
+                new PathPoint(new Translation2d(tagX - 1, tagY-y_translation), angle)
             );
         }
     }

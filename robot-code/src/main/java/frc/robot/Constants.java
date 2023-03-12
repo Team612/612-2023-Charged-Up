@@ -148,8 +148,8 @@ public final class Constants {
     public static double tele_extension_rate_thresh = 1.0;
     public static double tele_motor_voltage = 5.0;
     public static double tele_motor_voltage_thresh = 5.0;
-    public static double grabber_extension_rate = 5.0;
-    public static double grabber_extension_rate_thresh = 1.0;
+    public static double grabber_extension_rate = 1000.0;
+    public static double grabber_extension_rate_thresh = 200.0;
     public static double grabber_motor_voltage = 5.0;
     public static double grabber_motor_voltage_thresh = 5.0;
 
