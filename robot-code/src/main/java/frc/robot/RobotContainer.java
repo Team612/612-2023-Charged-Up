@@ -41,8 +41,12 @@ import frc.robot.commands.Drivetrain.followTag;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
-import frc.robot.commands.PivotPositions.MidPosition;
-
+import frc.robot.commands.PivotPositions.HighPositionCone;
+import frc.robot.commands.PivotPositions.HighPositionCube;
+import frc.robot.commands.PivotPositions.LowPosition;
+import frc.robot.commands.PivotPositions.MidPositionCone;
+import frc.robot.commands.PivotPositions.MidPositionCube;
+import frc.robot.controls.ControlMap;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
@@ -62,7 +66,6 @@ public class RobotContainer {
   private final Grabber m_grabber = Grabber.getInstance();
 
   private final Pivot m_pivot = new Pivot(m_arm);
-  private final MidPosition m_midPosition = new MidPosition(m_arm);
 
   private final TelescopeDetract m_telescopeDetract = new TelescopeDetract(m_scope);
   private final TelescopeExtend m_telescopeExtend = new TelescopeExtend(m_scope);
@@ -70,6 +73,11 @@ public class RobotContainer {
   private final Release m_release = new Release(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
 
+  private final HighPositionCone m_HighPositionCone = new HighPositionCone(m_arm);
+  private final HighPositionCube m_HighPositionCube = new HighPositionCube(m_arm);
+  private final LowPosition m_LowPosition  = new LowPosition(m_arm);
+  private final MidPositionCone m_MidPositionCone = new MidPositionCone(m_arm);
+  private final MidPositionCube m_MidPositionCube = new MidPositionCube(m_arm);
 
   
   public final Vision m_Vision = Vision.getVisionInstance();
@@ -129,8 +137,16 @@ public class RobotContainer {
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
     m_driverController.x().toggleOnTrue(m_autoBalance);
-    m_gunnerController.b().onTrue(m_midPosition);
+
+    ControlMap.yellow_1.whileTrue(m_HighPositionCone);
+    ControlMap.yellow_2.whileTrue(m_HighPositionCube);
+    ControlMap.green_1.whileTrue(m_MidPositionCone);
+    ControlMap.red_1.whileTrue(m_MidPositionCube);
+    ControlMap.red_2.whileTrue(m_LowPosition);
+    ControlMap.red_3.whileTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, 0)));
+
   }
+
 
   private void configureDefaultCommands(){
     m_drivetrain.setDefaultCommand(m_defaultdrive);

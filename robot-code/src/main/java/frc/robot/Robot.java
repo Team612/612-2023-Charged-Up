@@ -25,7 +25,6 @@ public class Robot extends TimedRobot {
   private final ShuffleBoardButtons m_BoardButtons = new ShuffleBoardButtons();
   private static boolean printed = false;
 
-  private final Arm m_arm = Arm.getInstance();
   UsbCamera driver_cam;
 
   /**

@@ -16,7 +16,7 @@ public class Telescope extends SubsystemBase {
   private CANSparkMax telescope;
   private double currTelescope = 0.0;
   static Telescope instance = null;
-  private DigitalInput bottomLimitSwitch = new DigitalInput(0);
+  // private DigitalInput bottomLimitSwitch = new DigitalInput(0);
 
   /** Creates a new Telescope. */
   public Telescope() {
@@ -56,9 +56,6 @@ public class Telescope extends SubsystemBase {
     return instance;
   }
 
-  public DigitalInput getLimitBottom() {
-    return bottomLimitSwitch;
-  }
 
   public void resetEncoder() {
     telescope.getEncoder().setPosition(0);

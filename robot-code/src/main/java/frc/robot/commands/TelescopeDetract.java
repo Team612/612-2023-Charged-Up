@@ -35,14 +35,14 @@ public class TelescopeDetract extends CommandBase {
   @Override
   public void execute(){
       m_scope.moveTelescope(MotorSpeeds.tele_arm_speed); //detract is positive speeds, tele_arm_speed is positive
-      start_timer++;
-      if (m_scope.getLimitBottom().get()) {
-        m_scope.resetEncoder();
-      }
-      if (m_scope.getTeleEncoderRate() >= ShuffleBoardButtons.teleEncoderRateThresh.getDouble(0) || m_scope.getCurrent() >= ShuffleBoardButtons.teleSpikeThresh.getDouble(0)) {
-        counter++;
-      }
-      else counter = 0;
+      // start_timer++;
+      // if (m_scope.getLimitBottom().get()) {
+      //   m_scope.resetEncoder();
+      // }
+      // if (m_scope.getTeleEncoderRate() >= ShuffleBoardButtons.teleEncoderRateThresh.getDouble(0) || m_scope.getCurrent() >= ShuffleBoardButtons.teleSpikeThresh.getDouble(0)) {
+      //   counter++;
+      // }
+      // else counter = 0;
   }
 
   // Called once the command ends or is interrupted.
