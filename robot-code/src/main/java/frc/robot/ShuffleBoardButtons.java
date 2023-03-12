@@ -36,6 +36,7 @@ public class ShuffleBoardButtons {
     public static GenericEntry grabberSpikeTresh;
     public static GenericEntry teleEncoderRateThresh;
     public static GenericEntry teleSpikeThresh;
+    public static GenericEntry transformationYTune;
 
 
     public void initButtons(){
@@ -70,6 +71,8 @@ public class ShuffleBoardButtons {
         telescopeEntry = m_graphTab.add("Telescope Encoder", 0.0).getEntry();
         teleEncoderRateThresh = m_graphTab.add("TeleEncoderThresh", 0.0).getEntry();
         teleSpikeThresh = m_graphTab.add("TeleSpikeThresh", 0.0).getEntry();
+
+        transformationYTune = m_debugTab.add("Transformation Y", 0.0).getEntry();
 
 
     }

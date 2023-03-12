@@ -23,6 +23,9 @@ public class Release extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //input range: 0.5 to 1 --> 0.5 r = 0.5
+    //output range: 0 to 1 --> 1 R = 1
+    //
     
   }
 
@@ -30,6 +33,8 @@ public class Release extends CommandBase {
   @Override
   public void execute() {
     m_grabber.grab(ControlMap.gunner_joystick.getRawAxis(3) * MotorSpeeds.grabber_speed);
+    System.out.println("axis input: " + 2*(ControlMap.gunner_joystick.getRawAxis(3)-0.5));
+    
     System.out.println("*******RELEASING*********");
     // if(m_grabber.getCurrent() >= EncoderConstants.sticky_grabber_thresh){
     //   count++;
