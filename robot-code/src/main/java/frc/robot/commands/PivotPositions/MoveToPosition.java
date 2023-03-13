@@ -5,15 +5,20 @@
 package frc.robot.commands.PivotPositions;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.ShuffleBoardButtons;
 import frc.robot.subsystems.Arm;
 
-public class HighPositionCone extends CommandBase {
+public class MoveToPosition extends CommandBase {
   /** Creates a new HighPositionCone. */
   private Arm m_arm;
-  public HighPositionCone(Arm arm) {
+  private double m_speed;
+  private double m_pivot_position;
+  private final double m_pivot_threshold;
+
+  public MoveToPosition(Arm arm, double speed, double pivot_position) {
     m_arm = arm;
+    m_speed = speed;
+    m_pivot_position = pivot_position;
+    m_pivot_threshold = 2;
     addRequirements(arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -26,23 +31,26 @@ public class HighPositionCone extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_arm.getPivotEncoder() >= ShuffleBoardButtons.highCone.getDouble(0)) {
-      m_arm.rotatePivot(-0.5);
-    } else if (m_arm.getPivotEncoder() <= ShuffleBoardButtons.highCone.getDouble(0)) {
-      m_arm.rotatePivot(0.5);
+    if (m_arm.getPivotEncoder() >= m_pivot_position) {
+      m_arm.rotatePivot(-m_speed);
+    } else if (m_arm.getPivotEncoder() <= m_pivot_position) {
+      m_arm.rotatePivot(m_speed);
     }
+    
+    System.out.println(m_pivot_position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_arm.rotatePivot(0);
+    
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_arm.getPivotEncoder() == Constants.EncoderConstants.HighPositionCone) return true;
+    if(m_arm.getPivotEncoder() >= m_pivot_position - m_pivot_threshold &&  m_arm.getPivotEncoder() <= m_pivot_position + m_pivot_threshold) return true;
     return false;
   }
 }

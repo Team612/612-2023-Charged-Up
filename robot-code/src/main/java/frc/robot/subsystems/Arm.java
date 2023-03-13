@@ -8,14 +8,14 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.SparkPorts;
 
 public class Arm extends SubsystemBase {
+  private static final double DEADZONE = 0.1;
   private CANSparkMax pivot;
   static Arm instance = null;
-
+  
   /** Creates a new Arm. */
   public Arm() {
     pivot = new CANSparkMax(SparkPorts.pivotID, MotorType.kBrushless);
@@ -24,6 +24,8 @@ public class Arm extends SubsystemBase {
   
   //rename method
   public void rotatePivot(double rotate) {
+    
+    if(Math.abs(rotate) < DEADZONE) rotate = 0;
     pivot.set(rotate);
   }
 

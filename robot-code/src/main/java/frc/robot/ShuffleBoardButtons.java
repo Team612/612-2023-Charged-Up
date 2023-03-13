@@ -41,18 +41,10 @@ public class ShuffleBoardButtons {
     public static GenericEntry lowGeneral;
     public static GenericEntry midCube;
     public static GenericEntry highCube;
-    public static GenericEntry mideCone;
+    public static GenericEntry midCone;
     public static GenericEntry highCone;
     public static GenericEntry humanStation;
     public static GenericEntry ground;
-
-
-
-
-
-
-
-
 
     public void initButtons(){
         m_driverTab = Shuffleboard.getTab("DriverTab");
@@ -70,7 +62,7 @@ public class ShuffleBoardButtons {
         lowGeneral = m_debugTab.add("low General", 0.0).getEntry();
         midCube = m_debugTab.add("midCube", 0.0).getEntry();
         highCube = m_debugTab.add("highCube", 0.0).getEntry();
-        mideCone = m_debugTab.add("mideCone", 0.0).getEntry();
+        midCone = m_debugTab.add("mideCone", 0.0).getEntry();
         highCone = m_debugTab.add("highCone", 0.0).getEntry();
         humanStation = m_debugTab.add("humanStation", 0.0).getEntry();
         ground = m_debugTab.add("ground", 0.0).getEntry();

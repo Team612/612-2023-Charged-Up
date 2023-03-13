@@ -30,7 +30,7 @@ public class Grab extends CommandBase {
   @Override
   public void execute() {
     
-    m_grabber.grab(-MotorSpeeds.grabber_speed);
+    m_grabber.grab(MotorSpeeds.grabber_speed); //sticky grabber is positive for grab.
     System.out.println("*******GRABBING*********");
 
     if(m_grabber.getCurrent() >= ShuffleBoardButtons.grabberSpikeTresh.getDouble(0)){

@@ -41,11 +41,7 @@ import frc.robot.commands.Drivetrain.followTag;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
-import frc.robot.commands.PivotPositions.HighPositionCone;
-import frc.robot.commands.PivotPositions.HighPositionCube;
-import frc.robot.commands.PivotPositions.LowPosition;
-import frc.robot.commands.PivotPositions.MidPositionCone;
-import frc.robot.commands.PivotPositions.MidPositionCube;
+import frc.robot.commands.PivotPositions.MoveToPosition;
 import frc.robot.controls.ControlMap;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -73,11 +69,16 @@ public class RobotContainer {
   private final Release m_release = new Release(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
 
-  private final HighPositionCone m_HighPositionCone = new HighPositionCone(m_arm);
-  private final HighPositionCube m_HighPositionCube = new HighPositionCube(m_arm);
-  private final LowPosition m_LowPosition  = new LowPosition(m_arm);
-  private final MidPositionCone m_MidPositionCone = new MidPositionCone(m_arm);
-  private final MidPositionCube m_MidPositionCube = new MidPositionCube(m_arm);
+  // private final MoveToPosition m_HighPositionCone = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCone.getDouble(0));
+  // private final MoveToPosition m_HighPositionCube = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCube.getDouble(0));
+  // private final MoveToPosition m_MidPositionCone = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCone.getDouble(0));
+  // private final MoveToPosition m_MidPositionCube = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCube.getDouble(0));
+  // private final MoveToPosition m_HumanStation = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.humanStation.getDouble(0));
+  // private final MoveToPosition m_GroundIntake = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.ground.getDouble(0));
+
+  //button binded
+  // private final MoveToPosition m_LowGeneral = 
+
 
   
   public final Vision m_Vision = Vision.getVisionInstance();
@@ -126,7 +127,6 @@ public class RobotContainer {
 
     SmartDashboard.putData(m_chooser);
     SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
-    
   }
 
   private void configureButtonBindings() {
@@ -138,11 +138,10 @@ public class RobotContainer {
     m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
     m_driverController.x().toggleOnTrue(m_autoBalance);
 
-    ControlMap.yellow_1.whileTrue(m_HighPositionCone);
-    ControlMap.yellow_2.whileTrue(m_HighPositionCube);
-    ControlMap.green_1.whileTrue(m_MidPositionCone);
-    ControlMap.red_1.whileTrue(m_MidPositionCube);
-    ControlMap.red_2.whileTrue(m_LowPosition);
+    ControlMap.green_1.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCone.getDouble(0))));
+    ControlMap.red_3.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCone.getDouble(0))));
+    ControlMap.yellow_2.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCube.getDouble(0))));
+    ControlMap.red_2.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCube.getDouble(0))));
     ControlMap.red_3.whileTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, 0)));
 
   }

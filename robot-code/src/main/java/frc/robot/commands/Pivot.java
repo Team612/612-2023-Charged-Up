@@ -5,13 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.MotorSpeeds;
 import frc.robot.controls.ControlMap;
 import frc.robot.subsystems.Arm;
 
 public class Pivot extends CommandBase {
   private final Arm m_arm;
+  
  
   /** Creates a new Pivot. */
   public Pivot(Arm arm) {

@@ -37,12 +37,14 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_BoardButtons.initButtons();
 
+    m_robotContainer = new RobotContainer();
+
+
     System.out.println("********ROBOT INIT*********");
     PathPlannerServer.startServer(5811);
     driver_cam = CameraServer.startAutomaticCapture();
     driver_cam.setFPS(20);
 
-    m_robotContainer = new RobotContainer();
 
   }
 
