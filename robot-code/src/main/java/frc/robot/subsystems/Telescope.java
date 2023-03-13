@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import com.revrobotics.SparkMaxLimitSwitch;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EncoderConstants;
@@ -16,6 +17,7 @@ public class Telescope extends SubsystemBase {
   private CANSparkMax telescope;
   private double currTelescope = 0.0;
   static Telescope instance = null;
+
   // private DigitalInput bottomLimitSwitch = new DigitalInput(0);
 
   /** Creates a new Telescope. */
@@ -61,11 +63,16 @@ public class Telescope extends SubsystemBase {
     telescope.getEncoder().setPosition(0);
   }
 
+  
+  public boolean getLimitSwitch(){
+    return telescope.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen).isPressed();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // if (bottomLimitSwitch.get()) {
-    //   telescope.getEncoder().setPosition(0);
-    // }
+    if (getLimitSwitch()) {
+      resetEncoder();
+    }
   }
 }

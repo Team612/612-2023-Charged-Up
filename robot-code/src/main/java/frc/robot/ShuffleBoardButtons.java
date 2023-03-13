@@ -17,6 +17,7 @@ public class ShuffleBoardButtons {
     ShuffleboardTab m_encoderTab;
     ShuffleboardTab m_graphTab;
     ShuffleboardTab m_debugTab;
+    ShuffleboardTab m_limitSwitchTab;
     
     GenericEntry NavxAngle;
     GenericEntry PoseEstimatorAngle;
@@ -31,6 +32,10 @@ public class ShuffleBoardButtons {
     GenericEntry telescopeEncoderRate;
     GenericEntry isGrabbing;
     GenericEntry isReleasing;
+
+    GenericEntry pivotBLS;
+    GenericEntry telescopeLimitSwitch;
+    
 
     //accessable entires
     public static GenericEntry grabberSpikeTresh;
@@ -51,6 +56,7 @@ public class ShuffleBoardButtons {
         m_encoderTab = Shuffleboard.getTab("Encoder");
         m_graphTab = Shuffleboard.getTab("Graphs");
         m_debugTab = Shuffleboard.getTab("Debug Tab");
+        m_limitSwitchTab = Shuffleboard.getTab("Limit Switch Tab");
 
         //debug entries
 
@@ -83,11 +89,13 @@ public class ShuffleBoardButtons {
         grabberCurrentGraph = m_graphTab.add("Grabber Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
         telescopeCurrentGraph = m_graphTab.add("Telescope Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
         telescopeEncoderRate = m_graphTab.add("Telescope Encoder Rate", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
-        telescopeEntry = m_graphTab.add("Telescope Encoder", 0.0).getEntry();
+        telescopeEntry = m_encoderTab.add("Telescope Encoder", 0.0).getEntry();
         teleEncoderRateThresh = m_graphTab.add("TeleEncoderThresh", 0.0).getEntry();
         teleSpikeThresh = m_graphTab.add("TeleSpikeThresh", 0.0).getEntry();
 
+        pivotBLS = m_limitSwitchTab.add("pivotLimitSwitchState", false).getEntry();
 
+        telescopeLimitSwitch = m_limitSwitchTab.add("telescopeLimitSwitch", false).getEntry();
 
 
     }
@@ -112,7 +120,9 @@ public class ShuffleBoardButtons {
         telescopeCurrentGraph.setDouble(telescope.getCurrent());
         telescopeEncoderRate.setDouble(telescope.getTeleEncoderRate());
         isGrabbing.setBoolean(grabber.getBooleanGrabber());
+        pivotBLS.setBoolean(arm.getPivotBottomLimitSwitchState());
         
+        telescopeLimitSwitch.setBoolean(telescope.getLimitSwitch());
     }
     
 }

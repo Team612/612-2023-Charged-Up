@@ -15,13 +15,25 @@ public class ControlMap{
     public static Joystick driver_buttons = new Joystick(DRIVER_PORT_BUTTONS);
     public static Joystick gunner_buttons = new Joystick(GUNNER_PORT_BUTTONS);
 
-    public static JoystickButton yellow_1 = new JoystickButton(driver_buttons,1);
-    public static JoystickButton yellow_2 = new JoystickButton(driver_buttons,2);
-    public static JoystickButton green_1 = new JoystickButton(driver_buttons,3);
-    public static JoystickButton red_1 = new JoystickButton(driver_buttons,4);
-    public static JoystickButton red_2 = new JoystickButton(driver_buttons,5);
-    public static JoystickButton red_3 = new JoystickButton(driver_buttons,6);
+
+    public static JoystickButton blue1 = new JoystickButton(gunner_buttons, 1);
+    public static JoystickButton blue2 = new JoystickButton(gunner_buttons, 2);
+    public static JoystickButton green2 = new JoystickButton(gunner_buttons, 3);
+    public static JoystickButton red4 = new JoystickButton(gunner_buttons, 4);
+    public static JoystickButton red5 = new JoystickButton(gunner_buttons, 5);
+    public static JoystickButton red6 = new JoystickButton(gunner_buttons, 6);
+
+    // public static JoystickButton yellow_1 = new JoystickButton(driver_buttons,1);
+    // public static JoystickButton yellow_2 = new JoystickButton(driver_buttons,2);
+    // public static JoystickButton green_1 = new JoystickButton(driver_buttons,3);
+    // public static JoystickButton red_1 = new JoystickButton(driver_buttons,4);
+    // public static JoystickButton red_2 = new JoystickButton(driver_buttons,5);
+    // public static JoystickButton red_3 = new JoystickButton(driver_buttons,6);
     
+
+
+
+
    
     // public static JoystickButton GUNNER_A = new JoystickButton(gunner_joystick, 1); //A
     // public static JoystickButton GUNNER_B = new JoystickButton(gunner_joystick, 2); //B

@@ -4,7 +4,6 @@
 
 package frc.robot;
 import com.pathplanner.lib.PathConstraints;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,6 +50,7 @@ public class RobotContainer {
 
 
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
+  private final FieldOrientedDrive m_FieldOrientedDrive = new FieldOrientedDrive(m_drivetrain);
 
  // Trajectories
   private final FollowTrajectory m_follower = new FollowTrajectory();
@@ -135,20 +135,20 @@ public class RobotContainer {
     m_gunnerController.leftTrigger().whileTrue(m_grab);
     m_gunnerController.rightTrigger().whileTrue(m_release);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
-    m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
+    m_driverController.back().toggleOnTrue(m_defaultdrive);
     m_driverController.x().toggleOnTrue(m_autoBalance);
 
-    ControlMap.green_1.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCone.getDouble(0))));
-    ControlMap.red_3.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCone.getDouble(0))));
-    ControlMap.yellow_2.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCube.getDouble(0))));
-    ControlMap.red_2.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCube.getDouble(0))));
-    ControlMap.red_3.whileTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, 0)));
-
+    ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCube.getDouble(0))));
+    ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCube.getDouble(0))));
+    ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCone.getDouble(0))));
+    ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCone.getDouble(0))));
+    // ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCube.getDouble(0))));
+  
   }
 
 
   private void configureDefaultCommands(){
-    m_drivetrain.setDefaultCommand(m_defaultdrive);
+    m_drivetrain.setDefaultCommand(m_FieldOrientedDrive);
     m_arm.setDefaultCommand(m_pivot);
   }
 

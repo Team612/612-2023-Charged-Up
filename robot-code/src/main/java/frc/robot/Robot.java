@@ -11,7 +11,6 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Arm;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -23,7 +22,6 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   private final ShuffleBoardButtons m_BoardButtons = new ShuffleBoardButtons();
-  private static boolean printed = false;
 
   UsbCamera driver_cam;
 
@@ -40,7 +38,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
 
-    System.out.println("********ROBOT INIT*********");
+    // System.out.println("********ROBOT INIT*********");
     PathPlannerServer.startServer(5811);
     driver_cam = CameraServer.startAutomaticCapture();
     driver_cam.setFPS(20);
@@ -62,10 +60,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    if(!printed){
-      System.out.println("********ROBOT PERIODIC*****");
-      printed = true;
-    }
+
     CommandScheduler.getInstance().run();
     m_BoardButtons.updateButtons();
   }
