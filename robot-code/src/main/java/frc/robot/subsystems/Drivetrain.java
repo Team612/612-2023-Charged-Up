@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.StaticPivot;
+import frc.robot.subsystems.Arm;
 
 public class Drivetrain extends SubsystemBase {
   /** Creates a new Drivetrain. */
@@ -30,7 +32,7 @@ public class Drivetrain extends SubsystemBase {
   private final CANSparkMax spark_br;
 
   static Drivetrain instance = null;
-  
+  private Arm m_arm;
   private final double DEADZONE = 0.1;
   public int offbalancepositive = Constants.DrivetrainConstants.offbalancepositive;
 
@@ -55,6 +57,7 @@ public class Drivetrain extends SubsystemBase {
     spark_br = new CANSparkMax(Constants.DrivetrainConstants.SPARK_BR, MotorType.kBrushless);
     
     navx = new AHRS(I2C.Port.kMXP); //TO BE CHANGED WE DON'T KNOW THIS YET
+    m_arm = new Arm();
     // navx.reset();
     // navx.calibrate();
     // zeroYaw();

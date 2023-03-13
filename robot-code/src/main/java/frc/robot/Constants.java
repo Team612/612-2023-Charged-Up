@@ -116,7 +116,7 @@ public final class Constants {
 
   public static class EncoderConstants{
     public static int boreEncoderIntake = 1;
-
+    public static double staticValue = 0;
     //all of these are subject to change
     public static double arm_lower; // = -99.0;
     public static double arm_upper; // = 130.0;
