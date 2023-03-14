@@ -36,8 +36,6 @@ public class MoveToPosition extends CommandBase {
     } else if (m_arm.getPivotEncoder() <= m_pivot_position) {
       m_arm.rotatePivot(m_speed);
     }
-    
-    System.out.println(m_pivot_position);
   }
 
   // Called once the command ends or is interrupted.

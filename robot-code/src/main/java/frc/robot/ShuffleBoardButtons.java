@@ -48,7 +48,7 @@ public class ShuffleBoardButtons {
     public static GenericEntry highCube;
     public static GenericEntry midCone;
     public static GenericEntry highCone;
-    public static GenericEntry humanStation;
+    public static GenericEntry humanStation; //telescope debug 
     public static GenericEntry ground;
 
     public void initButtons(){

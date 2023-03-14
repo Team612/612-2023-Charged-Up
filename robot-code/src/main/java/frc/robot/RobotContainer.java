@@ -31,9 +31,11 @@ import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Telescope;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
 import frc.robot.commands.Drivetrain.followTag;
+import frc.robot.commands.PivotPositions.ExtendToPosition;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -68,6 +70,13 @@ public class RobotContainer {
   private final Grab m_grab = new Grab(m_grabber);
   private final Release m_release = new Release(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
+
+  private final SequentialCommandGroup m_midCone = new SequentialCommandGroup(
+    new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCone.getDouble(0)).
+    andThen(new ExtendToPosition(m_scope, 0.3, ShuffleBoardButtons.humanStation.getDouble(0))));
+
+  
+
 
   // private final MoveToPosition m_HighPositionCone = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCone.getDouble(0));
   // private final MoveToPosition m_HighPositionCube = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCube.getDouble(0));
@@ -140,8 +149,11 @@ public class RobotContainer {
 
     ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCube.getDouble(0))));
     ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCube.getDouble(0))));
-    ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCone.getDouble(0))));
+    ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> m_midCone));
     ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCone.getDouble(0))));
+    
+
+
     // ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCube.getDouble(0))));
   
   }
