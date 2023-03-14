@@ -14,14 +14,16 @@ import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.LedCommands.Purple;
+import frc.robot.LedCommands.TeleopDefault;
+import frc.robot.LedCommands.Yellow;
+import frc.robot.LedCommands.YellowSparkles;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
-import frc.robot.commands.Drivetrain.Purple;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
-import frc.robot.commands.Drivetrain.Yellow;
 import frc.robot.commands.Drivetrain.followTag;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PoseEstimator;
@@ -29,6 +31,7 @@ import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.led;
 import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.RollOff;
+import frc.robot.LedCommands.TeleopDefault;
 
 
 /**
@@ -52,6 +55,7 @@ public class RobotContainer {
   public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
 
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
+  private final TeleopDefault m_default = new TeleopDefault(m_led);
 
   // Trajectories
   private final FollowTrajectory m_follower = new FollowTrajectory();
@@ -93,7 +97,7 @@ public class RobotContainer {
     m_chooser.addOption("BlueRightLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueRightLeave", new PathConstraints(2.5, 1), true, true)));
     m_chooser.addOption("BlueLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeaveAndDock", new PathConstraints(2.5, 1), true, true)));
     m_chooser.addOption("BlueLeftLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeave", new PathConstraints(2.5, 1), true, true)));
-    
+    m_chooser.addOption("YellowSparkles", new YellowSparkles(m_led));
     SmartDashboard.putData(m_chooser);
   }
 
@@ -102,13 +106,13 @@ public class RobotContainer {
     m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
     
     //will change button later
-    m_driverController.a().toggleOnTrue(new Purple(m_drivetrain, m_led));
-    m_driverController.a().toggleOnFalse(new Yellow(m_drivetrain, m_led));
-
+    m_driverController.a().toggleOnTrue(new Purple(m_led));
+    m_driverController.a().toggleOnFalse(new Yellow(m_led));   
   }
 
   private void configureDefaultCommands(){
     m_drivetrain.setDefaultCommand(m_defaultdrive);
+    m_led.setDefaultCommand(m_default);
   }
 
   
