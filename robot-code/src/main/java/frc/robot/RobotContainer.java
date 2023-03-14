@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -32,7 +33,7 @@ import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Telescope;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
 import frc.robot.commands.Drivetrain.followTag;
@@ -72,25 +73,25 @@ public class RobotContainer {
   private final Release m_release = new Release(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
 
-  private final SequentialCommandGroup m_midCone = new SequentialCommandGroup(
+  private final ParallelCommandGroup m_midCone = new ParallelCommandGroup(
     new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionConePivot).
-    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionConeTele)));
+    alongWith(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionConeTele)));
   
-  private final SequentialCommandGroup m_midCube = new SequentialCommandGroup(
+  private final ParallelCommandGroup m_midCube = new ParallelCommandGroup(
     new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionCubePivot).
-    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionCubeTele)));
+    alongWith(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionCubeTele)));
 
-  private final SequentialCommandGroup m_highCube = new SequentialCommandGroup(
+  private final ParallelCommandGroup m_highCube = new ParallelCommandGroup(
     new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionCubePivot).
-    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionCubeTele)));
+    alongWith(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionCubeTele)));
 
-  private final SequentialCommandGroup m_highCone = new SequentialCommandGroup(
+  private final ParallelCommandGroup m_highCone = new ParallelCommandGroup(
     new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionConePivot).
-    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionConeTele)));
+    alongWith(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionConeTele)));
   
-  private final SequentialCommandGroup m_lowGeneral = new SequentialCommandGroup(
+  private final ParallelCommandGroup m_lowGeneral = new ParallelCommandGroup(
     new MoveToPosition(m_arm, 0.3, EncoderConstants.LowPositionPivot).
-    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.LowPositionTele)));
+    alongWith(new ExtendToPosition(m_scope, 0.3, EncoderConstants.LowPositionTele)));
   
       
 
