@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.AutoBalance;
 import frc.robot.commands.Drivetrain.DefaultDrive;
@@ -72,8 +73,26 @@ public class RobotContainer {
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
 
   private final SequentialCommandGroup m_midCone = new SequentialCommandGroup(
-    new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCone.getDouble(0)).
-    andThen(new ExtendToPosition(m_scope, 0.3, ShuffleBoardButtons.humanStation.getDouble(0))));
+    new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionConePivot).
+    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionConeTele)));
+  
+  private final SequentialCommandGroup m_midCube = new SequentialCommandGroup(
+    new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionCubePivot).
+    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionCubeTele)));
+
+  private final SequentialCommandGroup m_highCube = new SequentialCommandGroup(
+    new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionCubePivot).
+    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionCubeTele)));
+
+  private final SequentialCommandGroup m_highCone = new SequentialCommandGroup(
+    new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionConePivot).
+    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionConeTele)));
+  
+  private final SequentialCommandGroup m_lowGeneral = new SequentialCommandGroup(
+    new MoveToPosition(m_arm, 0.3, EncoderConstants.LowPositionPivot).
+    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.LowPositionTele)));
+  
+      
 
   
 
@@ -147,10 +166,11 @@ public class RobotContainer {
     m_driverController.back().toggleOnTrue(m_defaultdrive);
     m_driverController.x().toggleOnTrue(m_autoBalance);
 
-    ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCube.getDouble(0))));
-    ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCube.getDouble(0))));
+    ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));
+    ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
     ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> m_midCone));
-    ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCone.getDouble(0))));
+    ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
+    ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
     
 
 
