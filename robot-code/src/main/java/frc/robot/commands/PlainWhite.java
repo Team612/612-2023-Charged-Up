@@ -3,35 +3,33 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-import frc.robot.subsystems.led;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class led1 extends CommandBase {
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.led;
+
+public class PlainWhite extends CommandBase {
   private led m_led;
-  /** Creates a new led1. */
-  public led1(led l) {
-    m_led = l;
-    addRequirements(m_led);
+  /** Creates a new PlainWhite. */
+
+  public PlainWhite(led l) {
+      m_led = l;
+      addRequirements(m_led);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_led.led1(); 
+    m_led.PlainWhite();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    System.out.println("here");
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
