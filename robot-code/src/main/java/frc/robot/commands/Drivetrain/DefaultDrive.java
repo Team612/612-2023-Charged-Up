@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.controls.ControlMap;
 import frc.robot.subsystems.Drivetrain;
 
@@ -11,6 +13,7 @@ public class DefaultDrive extends CommandBase {
   /** Creates a new DefaultDrive. */
   
   Drivetrain m_drivetrain;
+  Constants.DrivetrainConstants m_slowmo;
   public DefaultDrive(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     addRequirements(drivetrain);
@@ -21,13 +24,16 @@ public class DefaultDrive extends CommandBase {
   @Override
   public void initialize() {
     m_drivetrain.driveMecanum(0, 0, 0, 0);
+    m_drivetrain.setFodState(false);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
-    m_drivetrain.RobotOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
+    m_drivetrain.RobotOrientedDrive(-ControlMap.driver_joystick.getRawAxis(1) * DrivetrainConstants.slowmo, ControlMap.driver_joystick.getRawAxis(0) * DrivetrainConstants.slowmo, ControlMap.driver_joystick.getRawAxis(4) * DrivetrainConstants.slowmo);
+    //m_drivetrain.driveMecanum(0.5, -0.5, -0.5, 0.5);
   }
 
   // Called once the command ends or is interrupted.

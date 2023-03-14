@@ -6,41 +6,46 @@ package frc.robot.commands.Drivetrain;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.controls.ControlMap;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class DriveUp extends CommandBase {
-  /** Creates a new DriveUp. */
-  private final Drivetrain m_drivetrain;
-
-  public DriveUp(Drivetrain drivetrain) {
+public class SlowmoDrive extends CommandBase {
+  Drivetrain m_drivetrain;
+  /** Creates a new SlowmoDrive. */
+  public SlowmoDrive(Drivetrain d) {
+    m_drivetrain = d;
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drivetrain = drivetrain;
-    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Constants.DrivetrainConstants.slowmo = 1.0;
-    //m_drivetrain.calibrate();
-    m_drivetrain.driveMecanum(0, 0, 0, 0);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.driveMecanum(0.5, 0.5, 0.5, 0.5);
+    if (Constants.DrivetrainConstants.slowmo == 0.50){ //if the command is pressed again
+      Constants.DrivetrainConstants.slowmo = 1.0;
+    }
+    else {
+      Constants.DrivetrainConstants.slowmo = 0.50; 
+    } //yes, its a command that changes one value, deal with it
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.driveMecanum(0, 0, 0, 0);
+   
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_drivetrain.getPitch()) >= 10;
-  }
+    return true;
+  
+}
 }

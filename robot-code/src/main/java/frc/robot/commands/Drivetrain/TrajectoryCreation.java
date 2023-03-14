@@ -2,19 +2,23 @@
 package frc.robot.commands.Drivetrain;
 
 import java.util.List;
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
+import frc.robot.ShuffleBoardButtons;
 import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.Vision;
 
 public class TrajectoryCreation {
 
@@ -73,7 +77,7 @@ public class TrajectoryCreation {
 
         
 
-        System.out.println("*************************** END PRINT **********************************");
+        // System.out.println("*************************** END PRINT **********************************");
 
         return TrajectoryGenerator.generateTrajectory(
             new Pose2d(x, y, new Rotation2d(degrees)),
@@ -98,35 +102,39 @@ public class TrajectoryCreation {
         );
     }
 
-    public Trajectory tuneAngle = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(.5,0)),
-        new Pose2d(1,0, new Rotation2d(Units.degreesToRadians(120))), 
-        config
-    );
+    public PathPlannerTrajectory onthefly(PoseEstimator estimation, Vision vision, boolean isBlueAlliance, double y_translation){
+        Pose2d estimatedPose = estimation.getCurrentPose();
+        System.out.println("**************" + estimatedPose + "********************");        
+        double x = estimatedPose.getX();
+        double y = estimatedPose.getY();
+        Rotation2d angle = estimatedPose.getRotation();
+        int id = vision.getCamera().getLatestResult().getBestTarget().getFiducialId();
+        Pose2d tagPose = vision.return_tag_pose(id).toPose2d();
+        double tagX = tagPose.getX();
+        double tagY = tagPose.getY();
+        System.out.println(angle);
 
-    public Trajectory return_alignTrajectory(PhotonCamera camera, Translation2d finalPose){
-        PhotonPipelineResult result = camera.getLatestResult();
-        if(result.hasTargets()){
-            PhotonTrackedTarget bestTarget = result.getBestTarget();
-            Double yaw = -bestTarget.getYaw();
-            
-            Transform3d transform3d = bestTarget.getBestCameraToTarget();
-            double x = transform3d.getX();
-            double y = transform3d.getY();
-            
-            
-            return TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0,0, new Rotation2d(0)),
-                List.of(new Translation2d((x - finalPose.getX())/2,(y - finalPose.getY()) / 2)),
-                new Pose2d(x - finalPose.getX(),y - finalPose.getY(), new Rotation2d(Units.degreesToRadians(yaw))),
-                config
+
+        if(isBlueAlliance){
+            // Rotation2d displacement = new Rotation2d(Units.degreesToRadians(-180)).minus(angle);
+            // Rotation2d thetaDisplacement = new Rotation2d(Units.degreesToRadians(180)).minus(angle);
+            return PathPlanner.generatePath(
+                new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
+                Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
+                new PathPoint(new Translation2d(x, y), new Rotation2d(), angle), 
+                //new PathPoint(new Translation2d(tagX + 1.8, tagY+(y_translation/2)), new Rotation2d(), angle.plus(thetaDisplacement.div(2))),
+                new PathPoint(new Translation2d(tagX + 1.1, tagY+y_translation-Units.inchesToMeters(5)), new Rotation2d(), new Rotation2d(Units.degreesToRadians(180)))
+                
+                
             );
-             
         }
         else{
-            // System.out.println("doesn't work, Arjun sucks");
-            return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(-0.5,0)),new Pose2d(-1,0, new Rotation2d(0)), config_backwards);
+            return PathPlanner.generatePath(
+                new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
+                Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
+                new PathPoint(new Translation2d(x, y), angle),
+                new PathPoint(new Translation2d(tagX - 1, tagY-y_translation), angle)
+            );
         }
     }
 }
