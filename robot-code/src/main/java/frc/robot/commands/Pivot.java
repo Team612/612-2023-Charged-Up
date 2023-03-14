@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.MotorSpeeds;
 import frc.robot.controls.ControlMap;
@@ -12,7 +13,8 @@ import frc.robot.subsystems.Arm;
 
 public class Pivot extends CommandBase {
   private final Arm m_arm;
- 
+  private double thresh;
+  private boolean freeze;
   /** Creates a new Pivot. */
   public Pivot(Arm arm) {
     m_arm = arm;
@@ -22,7 +24,8 @@ public class Pivot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    freeze = false;
+    thresh = 0;
   }
 
   public boolean isGoingUp(){
@@ -39,18 +42,35 @@ public class Pivot extends CommandBase {
    */
   @Override
   public void execute() {
-    if(m_arm.withinThresh() || (!(EncoderConstants.arm_upper == 0.0 && EncoderConstants.arm_lower == 0.0))){ //test
+    // if(m_arm.withinThresh() || (!(EncoderConstants.arm_upper == 0.0 && EncoderConstants.arm_lower == 0.0))){ //test
+    //   m_arm.rotatePivot(ControlMap.gunner.getRawAxis(1) * MotorSpeeds.pivot_speed);
+
+    // }
+    // else if((isGoingUp() && m_arm.getPivotEncoder() > EncoderConstants.arm_lower) || (!isGoingUp() && m_arm.getPivotEncoder() < EncoderConstants.arm_upper)){
+    //   m_arm.rotatePivot(ControlMap.gunner.getRawAxis(1) * MotorSpeeds.pivot_speed);
+
+    // }
+    // else{
+    //   m_arm.rotatePivot(0);
+    // }
+
+    if(ControlMap.gunner.getRawAxis(1) == 0){
+      if (freeze == false){
+      thresh = m_arm.getPivotEncoder();
+      freeze = true;
+      }
+      
+      if (freeze && m_arm.getPivotEncoder() < thresh - 2 && ControlMap.gunner.getRawAxis(1) <= 0.1) { //pivot stabilizer
+        m_arm.rotatePivot(0.2);
+      }
+    }
+    else {
+      freeze = false;
       m_arm.rotatePivot(ControlMap.gunner.getRawAxis(1) * MotorSpeeds.pivot_speed);
-
     }
-    else if((isGoingUp() && m_arm.getPivotEncoder() > EncoderConstants.arm_lower) || (!isGoingUp() && m_arm.getPivotEncoder() < EncoderConstants.arm_upper)){
-      m_arm.rotatePivot(ControlMap.gunner.getRawAxis(1) * MotorSpeeds.pivot_speed);
-
-    }
-    else{
-      m_arm.rotatePivot(0);
-    }
-
+    
+    
+    
 
   }
 

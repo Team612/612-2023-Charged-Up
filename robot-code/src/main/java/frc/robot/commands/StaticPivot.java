@@ -22,11 +22,11 @@ public class StaticPivot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_arm.getPivotEncoder() > Constants.EncoderConstants.staticValue + 2) {
-      m_arm.rotatePivot(-1);
-    }
-    else if (m_arm.getPivotEncoder() < Constants.EncoderConstants.staticValue - 2) {
-      m_arm.rotatePivot(1);
+    //if(m_arm.getPivotEncoder() > Constants.EncoderConstants.staticValue - 2) {
+      //m_arm.rotatePivot(-1);
+    //}
+    if (m_arm.getPivotEncoder() < Constants.EncoderConstants.staticValue - 2) {
+      m_arm.rotatePivot(0.2);
     }
   }
 
