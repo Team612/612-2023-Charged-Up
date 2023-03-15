@@ -13,6 +13,7 @@ import frc.robot.subsystems.Grabber;
 public class Grab extends CommandBase {
   private final Grabber m_grabber;
   private int counter;
+  private int start_timer;
  
   /** Creates a new Pivot. */
   public Grab(Grabber grabber) {
@@ -24,27 +25,23 @@ public class Grab extends CommandBase {
   @Override
   public void initialize() {
     counter = 0;
+    start_timer = 0;
     m_grabber.setBooleanGrabber(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    start_timer++;
     m_grabber.grab(-MotorSpeeds.grabber_speed); //sticky grabber is positive for grab.
     System.out.println("*******GRABBING*********");
 
-    if(m_grabber.getCurrent() >= EncoderConstants.grabber_motor_current){
+    if(start_timer >= 10 && m_grabber.getCurrent() >= EncoderConstants.grabber_motor_current){
       counter++;
     }
     else{
       counter = 0;
     }
-    
-    // if(start_timer >= 10 && m_grabber.getCurrent() >= EncoderConstants.grabber_motor_voltage){
-    //   count++;
-    // }
-    // else count = 0;
   }
 
   // Called once the command ends or is interrupted.

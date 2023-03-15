@@ -58,7 +58,6 @@ public class Pivot extends CommandBase {
       if(freeze == false){
         thresh = m_arm.getPivotEncoder();
         freeze = true;
-        System.out.println("value is frozen: " + thresh + "**********");
       }
 
       if(freeze && m_arm.getPivotEncoder() < thresh - 5){
@@ -72,7 +71,6 @@ public class Pivot extends CommandBase {
       freeze = false;
       m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
     }
-    //m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
 
   }
 

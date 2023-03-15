@@ -87,7 +87,7 @@ public final class Constants {
      
      //trajectory constraints
      public static final double kMaxVelocityMetersPerSecond = 1;
-     public static final double maxAccelerationMetersPerSecondSq = 2;
+     public static final double maxAccelerationMetersPerSecondSq = 1;
 
      public static final double kMaxAngularVelocity = Math.PI;
      public static final double kMaxAngularAcceleration = Math.PI;

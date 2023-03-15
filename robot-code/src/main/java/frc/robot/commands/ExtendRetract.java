@@ -16,6 +16,8 @@ public class ExtendRetract extends CommandBase {
   private final Telescope m_scope;
   private int counter;
   private int start_timer;
+  private double thresh;
+  private boolean freeze;
  
   /** Creates a new Pivot. */
   public ExtendRetract(Telescope scope) {
@@ -28,15 +30,19 @@ public class ExtendRetract extends CommandBase {
   public void initialize() {
     counter = 0;
     start_timer = 0;
+    thresh = 0;
+    freeze = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    if(ControlMap.GUNNER_LB.getAsBoolean()){
+    if(ControlMap.GUNNER_RB.getAsBoolean()){ //extend
+      freeze = false;
       m_scope.moveTelescope(MotorSpeeds.tele_arm_speed);
     }
-    else if(ControlMap.GUNNER_RB.getAsBoolean()){
+    else if(ControlMap.GUNNER_LB.getAsBoolean()){ //retract
+      freeze = false;
       m_scope.moveTelescope(-MotorSpeeds.tele_arm_speed);
       start_timer++;
       if (start_timer >= 5 && m_scope.getCurrent() >= ShuffleBoardButtons.teleSpikeThresh.getDouble(0)) { // m_scope.getTeleEncoderRate() >= ShuffleBoardButtons.teleEncoderRateThresh.getDouble(0) || 
@@ -45,7 +51,20 @@ public class ExtendRetract extends CommandBase {
       else counter = 0;
     }
     else{
-      m_scope.moveTelescope(0);
+      if(freeze == false){
+        thresh = m_scope.getTeleEncoder();
+        freeze = true;
+        System.out.println("value is frozen: " + thresh + "**********");
+      }
+
+      if(freeze && m_scope.getTeleEncoder() > thresh + 2){
+        System.out.println("thresh: " + thresh);
+        m_scope.moveTelescope(-0.2);
+      }
+      else if(freeze && m_scope.getTeleEncoder() <= thresh){
+        m_scope.moveTelescope(0);
+      }
+      //else m_scope.moveTelescope(0);
     }
     //m_scope.moveTelescope(-MotorSpeeds.tele_arm_speed); //detract is positive speeds, tele_arm_speed is positive
       

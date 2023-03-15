@@ -115,25 +115,20 @@ public class TrajectoryCreation {
         System.out.println(angle);
 
 
-        if(isBlueAlliance){
-            // Rotation2d displacement = new Rotation2d(Units.degreesToRadians(-180)).minus(angle);
-            // Rotation2d thetaDisplacement = new Rotation2d(Units.degreesToRadians(180)).minus(angle);
+        if(id == 6 || id == 7 || id == 8){
             return PathPlanner.generatePath(
                 new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
                 Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
-                new PathPoint(new Translation2d(x, y), new Rotation2d(), angle), 
-                //new PathPoint(new Translation2d(tagX + 1.8, tagY+(y_translation/2)), new Rotation2d(), angle.plus(thetaDisplacement.div(2))),
-                new PathPoint(new Translation2d(tagX + 1.1, tagY+y_translation-Units.inchesToMeters(5)), new Rotation2d(), new Rotation2d(Units.degreesToRadians(180)))
-                
-                
+                new PathPoint(new Translation2d(x, y), new Rotation2d(), angle),
+                new PathPoint(new Translation2d(tagX + 1.03, tagY+y_translation-Units.inchesToMeters(5)), new Rotation2d(), new Rotation2d(Units.degreesToRadians(180)))
             );
         }
         else{
             return PathPlanner.generatePath(
                 new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
                 Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
-                new PathPoint(new Translation2d(x, y), angle),
-                new PathPoint(new Translation2d(tagX - 1, tagY-y_translation), angle)
+                new PathPoint(new Translation2d(x, y), new Rotation2d(), angle),
+                new PathPoint(new Translation2d(tagX - 1.1, tagY-y_translation-Units.inchesToMeters(5)), new Rotation2d(), new Rotation2d(Units.degreesToRadians(0)))
             );
         }
     }

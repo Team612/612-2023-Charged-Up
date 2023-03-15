@@ -70,25 +70,26 @@ public class RobotContainer {
   private final Release m_release = new Release(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
 
-  // private final SequentialCommandGroup m_midCone = new SequentialCommandGroup(
-  //   new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionConePivot).
-  //   andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionConeTele)));
+  private final SequentialCommandGroup m_midCone = new SequentialCommandGroup(
+    new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionConePivot).
+    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionConeTele)));
   
-  // private final SequentialCommandGroup m_midCube = new SequentialCommandGroup(
-  //   new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionCubePivot).
-  //   andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionCubeTele)));
+  private final SequentialCommandGroup m_midCube = new SequentialCommandGroup(
+    new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionCubePivot).
+    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionCubeTele)));
 
-  // private final SequentialCommandGroup m_highCube = new SequentialCommandGroup(
-  //   new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionCubePivot).
-  //   andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionCubeTele)));
+  private final SequentialCommandGroup m_highCube = new SequentialCommandGroup(
+    new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionCubePivot).
+    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionCubeTele)));
 
-  // private final SequentialCommandGroup m_highCone = new SequentialCommandGroup(
-  //   new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionConePivot).
-  //   andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionConeTele)));
+  private final SequentialCommandGroup m_highCone = new SequentialCommandGroup(
+    new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionConePivot).
+    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionConeTele)));
   
-  // private final SequentialCommandGroup m_lowGeneral = new SequentialCommandGroup(
-  //   new MoveToPosition(m_arm, 0.3, EncoderConstants.LowPositionPivot).
-  //   andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.LowPositionTele)));
+  private final SequentialCommandGroup m_lowGeneral = new SequentialCommandGroup(
+    new ExtendToPosition(m_scope, 0.3, 0).
+    andThen(new MoveToPosition(m_arm, 0.3, EncoderConstants.LowPositionPivot)).
+    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.LowPositionTele)));
   
       
 
@@ -113,6 +114,7 @@ public class RobotContainer {
   public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
 
 
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -127,21 +129,21 @@ public class RobotContainer {
   }
 
   private void configureShuffleBoardBindings(){
-    m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
-    m_chooser.addOption("RollOff", new RollOff(m_drivetrain));
+    //m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
+    //m_chooser.addOption("RollOff", new RollOff(m_drivetrain));
     
-    m_chooser.addOption("Align", new ProxyCommand(() -> new followTag(m_drivetrain, m_Vision.getCamera())));
+    //m_chooser.addOption("Align", new ProxyCommand(() -> new followTag(m_drivetrain, m_Vision.getCamera())));
     
-    m_chooser.addOption("Strafe Right debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeRightMeter(estimator),estimator)));
-    m_chooser.addOption("Strafe Left debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeLeftMeter(estimator),estimator)));
-    m_chooser.addOption("Forward debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter(estimator),estimator)));
-    m_chooser.addOption("Backward debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.BackwardMeter(estimator),estimator)));
+    //m_chooser.addOption("Strafe Right debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeRightMeter(estimator),estimator)));
+    //m_chooser.addOption("Strafe Left debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeLeftMeter(estimator),estimator)));
+    //m_chooser.addOption("Forward debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter(estimator),estimator)));
+    //m_chooser.addOption("Backward debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.BackwardMeter(estimator),estimator)));
     
     m_chooser.addOption("RedRightLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedRightLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
     m_chooser.addOption("RedRightLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedRightLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
     m_chooser.addOption("RedLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedLeftLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
     m_chooser.addOption("RedLeftLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedLeftLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
-    m_chooser.addOption("RedMiddleLeaveAndDoc", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedMiddleLeaveAndDoc", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
+    //m_chooser.addOption("RedMiddleLeaveAndDoc", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedMiddleLeaveAndDoc", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
    
     m_chooser.addOption("BlueRightLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueRightLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
     m_chooser.addOption("BlueRightLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueRightLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
@@ -154,22 +156,21 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
 
-    // m_gunnerController.rightBumper().whileTrue(m_telescopeExtend);
-    // m_gunnerController.leftBumper().whileTrue(m_telescopeDetract);
     m_gunnerController.leftTrigger().whileTrue(m_grab);
     m_gunnerController.rightTrigger().whileTrue(m_release);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(m_defaultdrive);
     m_driverController.x().toggleOnTrue(m_autoBalance);
 
-    // ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));
-    // ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
-    // ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> m_midCone));
-    // ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
-    // ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
-    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(15.5))));
+    ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));
+    ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
+    ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> m_midCone));
+    ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
+    ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
+    
+    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(32))));
     ControlMap.yellow2.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, 0)));
-    ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(-15.5))));
+    ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(-34))));
     
 
 
