@@ -60,7 +60,7 @@ public class Pivot extends CommandBase {
         freeze = true;
       }
 
-      if(freeze && m_arm.getPivotEncoder() < thresh - 5){
+      if(freeze && m_arm.getPivotEncoder() < thresh - 3){
         m_arm.rotatePivot(0.2);
       }
       else if(freeze && m_arm.getPivotEncoder() >= thresh){

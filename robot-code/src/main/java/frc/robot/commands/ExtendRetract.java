@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.ShuffleBoardButtons;
+import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.MotorSpeeds;
 import frc.robot.controls.ControlMap;
 import frc.robot.subsystems.Telescope;
@@ -45,7 +46,7 @@ public class ExtendRetract extends CommandBase {
       freeze = false;
       m_scope.moveTelescope(-MotorSpeeds.tele_arm_speed);
       start_timer++;
-      if (start_timer >= 5 && m_scope.getCurrent() >= ShuffleBoardButtons.teleSpikeThresh.getDouble(0)) { // m_scope.getTeleEncoderRate() >= ShuffleBoardButtons.teleEncoderRateThresh.getDouble(0) || 
+      if (start_timer >= 5 && m_scope.getCurrent() >= EncoderConstants.tele_motor_current) { // m_scope.getTeleEncoderRate() >= ShuffleBoardButtons.teleEncoderRateThresh.getDouble(0) || 
         counter++;
       }
       else counter = 0;
@@ -57,7 +58,7 @@ public class ExtendRetract extends CommandBase {
         System.out.println("value is frozen: " + thresh + "**********");
       }
 
-      if(freeze && m_scope.getTeleEncoder() > thresh + 2){
+      if(freeze && m_scope.getTeleEncoder() > thresh + 1){
         System.out.println("thresh: " + thresh);
         m_scope.moveTelescope(-0.2);
       }

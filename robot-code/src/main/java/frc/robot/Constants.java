@@ -128,21 +128,21 @@ public final class Constants {
    }
  
    public static class EncoderConstants{
-    public static final double LowPositionPivot = 22;
+    public static final double LowPositionPivot = 35;
     public static final double MidPositionCubePivot = 95;
-    public static final double HighPositionCubePivot = 120;
-    public static final double MidPositionConePivot = 118;
+    public static final double HighPositionCubePivot = 141;
+    public static final double MidPositionConePivot = 128;
     public static final double HighPositionConePivot = 140;
     public static final double HumanStationIntakePivot = 60; //tbd
-    public static final double GroundIntakePivot = 20; //tbd
+    public static final double GroundIntakePivot = 35; //tbd
 
-    public static final double LowPositionTele = 36;
+    public static final double LowPositionTele = 58;
     public static final double MidPositionCubeTele = 45;
-    public static final double HighPositionCubeTele = 113;
-    public static final double MidPositionConeTele = 67;
+    public static final double HighPositionCubeTele = 37;
+    public static final double MidPositionConeTele = 91;
     public static final double HighPositionConeTele = 110;
     public static final double HumanStationIntakeTele = 60; //tbd
-    public static final double GroundIntakeTele = 20; //tbd
+    public static final double GroundIntakeTele = 58; //tbd
 
 
     public static int boreEncoderIntake = 1;
@@ -156,7 +156,7 @@ public final class Constants {
      public static double tele_out = 110; // = 84.0;
     public static double tele_extension_rate = 5.0;
     public static double tele_extension_rate_thresh = 1.0;
-    public static double tele_motor_voltage = 5.0;
+    public static double tele_motor_current = 10;
     public static double tele_motor_voltage_thresh = 5.0;
     public static double grabber_extension_rate = 1000.0;
     public static double grabber_extension_rate_thresh = 200.0;

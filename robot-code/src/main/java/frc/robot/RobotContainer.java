@@ -90,6 +90,11 @@ public class RobotContainer {
     new ExtendToPosition(m_scope, 0.3, 0).
     andThen(new MoveToPosition(m_arm, 0.3, EncoderConstants.LowPositionPivot)).
     andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.LowPositionTele)));
+
+  private final SequentialCommandGroup m_defense = new SequentialCommandGroup(
+    (new ExtendToPosition(m_scope, 0.3, 0)).
+    andThen(new MoveToPosition(m_arm, 0.3, 0)));
+  
   
       
 
@@ -165,8 +170,9 @@ public class RobotContainer {
     ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));
     ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
     ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> m_midCone));
-    ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
+    //ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
     ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
+    ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> m_defense));
     
     ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(32))));
     ControlMap.yellow2.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, 0)));
