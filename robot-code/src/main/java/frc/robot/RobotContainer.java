@@ -8,32 +8,30 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Drivetrain.AutoBalance;
 import frc.robot.commands.Drivetrain.DefaultDrive;
+import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.SlowmoDrive;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
-import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.RollOff;
 import frc.robot.commands.Drivetrain.RunOnTheFly;
 import frc.robot.commands.Grab;
 import frc.robot.commands.Pivot;
 import frc.robot.commands.Release;
-import frc.robot.commands.TelescopeDetract;
-import frc.robot.commands.TelescopeExtend;
+import frc.robot.commands.ExtendRetract;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Telescope;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
 import frc.robot.commands.Drivetrain.followTag;
@@ -67,31 +65,30 @@ public class RobotContainer {
 
   private final Pivot m_pivot = new Pivot(m_arm);
 
-  private final TelescopeDetract m_telescopeDetract = new TelescopeDetract(m_scope);
-  private final TelescopeExtend m_telescopeExtend = new TelescopeExtend(m_scope);
+  private final ExtendRetract m_telescope = new ExtendRetract(m_scope);
   private final Grab m_grab = new Grab(m_grabber);
   private final Release m_release = new Release(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
 
-  private final ParallelCommandGroup m_midCone = new ParallelCommandGroup(
-    new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionConePivot).
-    alongWith(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionConeTele)));
+  // private final SequentialCommandGroup m_midCone = new SequentialCommandGroup(
+  //   new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionConePivot).
+  //   andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionConeTele)));
   
-  private final ParallelCommandGroup m_midCube = new ParallelCommandGroup(
-    new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionCubePivot).
-    alongWith(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionCubeTele)));
+  // private final SequentialCommandGroup m_midCube = new SequentialCommandGroup(
+  //   new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionCubePivot).
+  //   andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionCubeTele)));
 
-  private final ParallelCommandGroup m_highCube = new ParallelCommandGroup(
-    new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionCubePivot).
-    alongWith(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionCubeTele)));
+  // private final SequentialCommandGroup m_highCube = new SequentialCommandGroup(
+  //   new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionCubePivot).
+  //   andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionCubeTele)));
 
-  private final ParallelCommandGroup m_highCone = new ParallelCommandGroup(
-    new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionConePivot).
-    alongWith(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionConeTele)));
+  // private final SequentialCommandGroup m_highCone = new SequentialCommandGroup(
+  //   new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionConePivot).
+  //   andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionConeTele)));
   
-  private final ParallelCommandGroup m_lowGeneral = new ParallelCommandGroup(
-    new MoveToPosition(m_arm, 0.3, EncoderConstants.LowPositionPivot).
-    alongWith(new ExtendToPosition(m_scope, 0.3, EncoderConstants.LowPositionTele)));
+  // private final SequentialCommandGroup m_lowGeneral = new SequentialCommandGroup(
+  //   new MoveToPosition(m_arm, 0.3, EncoderConstants.LowPositionPivot).
+  //   andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.LowPositionTele)));
   
       
 
@@ -150,28 +147,29 @@ public class RobotContainer {
     m_chooser.addOption("BlueRightLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueRightLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
     m_chooser.addOption("BlueLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
     m_chooser.addOption("BlueLeftLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
-    m_chooser.addOption("align with tag", new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, 0)));
-    m_chooser.addOption("align with left node", new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(22))));
-    m_chooser.addOption("align with right node", new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(-22))));
-
+  
     SmartDashboard.putData(m_chooser);
     SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
   }
 
   private void configureButtonBindings() {
-    m_gunnerController.leftBumper().whileTrue(m_telescopeExtend);
-    m_gunnerController.rightBumper().whileTrue(m_telescopeDetract);
+
+    // m_gunnerController.rightBumper().whileTrue(m_telescopeExtend);
+    // m_gunnerController.leftBumper().whileTrue(m_telescopeDetract);
     m_gunnerController.leftTrigger().whileTrue(m_grab);
     m_gunnerController.rightTrigger().whileTrue(m_release);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(m_defaultdrive);
     m_driverController.x().toggleOnTrue(m_autoBalance);
 
-    ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));
-    ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
-    ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> m_midCone));
-    ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
-    ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
+    // ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));
+    // ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
+    // ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> m_midCone));
+    // ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
+    // ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
+    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(15.5))));
+    ControlMap.yellow2.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, 0)));
+    ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(-15.5))));
     
 
 
@@ -183,6 +181,7 @@ public class RobotContainer {
   private void configureDefaultCommands(){
     m_drivetrain.setDefaultCommand(m_FieldOrientedDrive);
     m_arm.setDefaultCommand(m_pivot);
+    m_scope.setDefaultCommand(m_telescope);
   }
 
   

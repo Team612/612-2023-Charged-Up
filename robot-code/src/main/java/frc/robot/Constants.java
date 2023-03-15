@@ -86,8 +86,8 @@ public final class Constants {
      );
      
      //trajectory constraints
-     public static final double kMaxVelocityMetersPerSecond = .5;
-     public static final double maxAccelerationMetersPerSecondSq = .25;
+     public static final double kMaxVelocityMetersPerSecond = 1;
+     public static final double maxAccelerationMetersPerSecondSq = 2;
 
      public static final double kMaxAngularVelocity = Math.PI;
      public static final double kMaxAngularAcceleration = Math.PI;
@@ -153,15 +153,15 @@ public final class Constants {
      public static double arm_score_low = 89;
      public static double arm_score_high = 91;
      public static double tele_in; // = -3.0;
-     public static double tele_out; // = 84.0;
+     public static double tele_out = 110; // = 84.0;
     public static double tele_extension_rate = 5.0;
     public static double tele_extension_rate_thresh = 1.0;
     public static double tele_motor_voltage = 5.0;
     public static double tele_motor_voltage_thresh = 5.0;
     public static double grabber_extension_rate = 1000.0;
     public static double grabber_extension_rate_thresh = 200.0;
-    public static double grabber_motor_voltage = 5.0;
-    public static double grabber_motor_voltage_thresh = 5.0;
+    public static double grabber_motor_current = 10.0;
+    public static double grabber_motor_current_thresh = 5.0;
 
     public static double sticky_grabber_thresh = 10;
   

@@ -5,45 +5,44 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.EncoderConstants;
-import frc.robot.Constants.MotorSpeeds;
+import frc.robot.Constants;
 import frc.robot.subsystems.Telescope;
 
-public class TelescopeExtend extends CommandBase {
-  /** Creates a new Telescope. */
-  private final Telescope m_scope;
- 
-  /** Creates a new Pivot. */
-  public TelescopeExtend(Telescope scope) {
-    m_scope = scope;
-    addRequirements(m_scope);
+public class StaticExtend extends CommandBase {
+  /** Creates a new StaticPivot. */
+  private final Telescope m_telescope;
+  private double last_telescope_position;
+  public StaticExtend(Telescope telescope) {
+    m_telescope = telescope;
+    addRequirements(telescope);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    last_telescope_position = m_telescope.getTeleEncoder();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      m_scope.moveTelescope(-MotorSpeeds.tele_arm_speed); //extend is negative speeds, tele_arm_speed is positive
-      System.out.println("Rate: " + m_scope.getTeleEncoderRate());
-      System.out.println("Current: " + m_scope.getCurrent());
+    if(m_telescope.getTeleEncoder() > last_telescope_position - 2){
+      m_telescope.moveTelescope(-0.3);
+    }
+    if(m_telescope.getTeleEncoder() < last_telescope_position + 2){
+      m_telescope.moveTelescope(0.3);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_scope.moveTelescope(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(m_scope.getTeleEncoder() >= EncoderConstants.tele_out){
-    //   return true;
-    // }
     return false;
   }
 }

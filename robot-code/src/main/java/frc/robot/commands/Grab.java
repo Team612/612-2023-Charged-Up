@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.ShuffleBoardButtons;
+import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.MotorSpeeds;
 import frc.robot.subsystems.Grabber;
 
@@ -30,10 +31,10 @@ public class Grab extends CommandBase {
   @Override
   public void execute() {
     
-    m_grabber.grab(MotorSpeeds.grabber_speed); //sticky grabber is positive for grab.
+    m_grabber.grab(-MotorSpeeds.grabber_speed); //sticky grabber is positive for grab.
     System.out.println("*******GRABBING*********");
 
-    if(m_grabber.getCurrent() >= ShuffleBoardButtons.grabberSpikeTresh.getDouble(0)){
+    if(m_grabber.getCurrent() >= EncoderConstants.grabber_motor_current){
       counter++;
     }
     else{

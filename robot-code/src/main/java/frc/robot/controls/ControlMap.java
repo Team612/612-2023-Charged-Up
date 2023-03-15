@@ -22,6 +22,9 @@ public class ControlMap{
     public static JoystickButton red4 = new JoystickButton(gunner_buttons, 4);
     public static JoystickButton red5 = new JoystickButton(gunner_buttons, 5);
     public static JoystickButton red6 = new JoystickButton(gunner_buttons, 6);
+    public static JoystickButton yellow1 = new JoystickButton(driver_buttons, 1);
+    public static JoystickButton yellow2 = new JoystickButton(driver_buttons, 2);
+    public static JoystickButton green1 = new JoystickButton(driver_buttons, 3);
 
     // public static JoystickButton yellow_1 = new JoystickButton(driver_buttons,1);
     // public static JoystickButton yellow_2 = new JoystickButton(driver_buttons,2);
@@ -39,8 +42,8 @@ public class ControlMap{
     // public static JoystickButton GUNNER_B = new JoystickButton(gunner_joystick, 2); //B
     // public static JoystickButton GUNNER_X = new JoystickButton(gunner_joystick, 3); //X
     // public static JoystickButton GUNNER_Y = new JoystickButton(gunner_joystick, 4); //Y
-    // public static JoystickButton GUNNER_LB = new JoystickButton(gunner_joystick, 5); //LB
-    // public static JoystickButton GUNNER_RB = new JoystickButton(gunner_joystick, 6); //RB
+     public static JoystickButton GUNNER_LB = new JoystickButton(gunner_joystick, 5); //LB
+     public static JoystickButton GUNNER_RB = new JoystickButton(gunner_joystick, 6); //RB
     // public static JoystickButton GUNNER_BACK = new JoystickButton(gunner_joystick, 7); 
     // public static JoystickButton GUNNER_START = new JoystickButton(gunner_joystick, 8); 
     // public static JoystickButton GUNNER_LJ_BUTTON = new JoystickButton(gunner_joystick, 9); //

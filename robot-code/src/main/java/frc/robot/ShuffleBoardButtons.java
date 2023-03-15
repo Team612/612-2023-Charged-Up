@@ -24,7 +24,7 @@ public class ShuffleBoardButtons {
     GenericEntry PoseEstimatorX;
     GenericEntry PoseEstimatorY;
     GenericEntry fodState;
-    GenericEntry grabberCurrentGraph;
+    // GenericEntry grabberCurrentGraph;
     GenericEntry telescopeCurrentGraph;
     GenericEntry BoreEncoders;
     GenericEntry pivotEntry;
@@ -40,6 +40,7 @@ public class ShuffleBoardButtons {
     //accessable entires
     public static GenericEntry grabberSpikeTresh;
     public static GenericEntry teleEncoderRateThresh;
+
     public static GenericEntry teleSpikeThresh;
 
     //debugging for arm thresholds
@@ -86,7 +87,7 @@ public class ShuffleBoardButtons {
 
         //graphing entries
         grabberSpikeTresh = m_graphTab.add("GrabberSpikeTresh",0.0).getEntry();
-        grabberCurrentGraph = m_graphTab.add("Grabber Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
+        // grabberCurrentGraph = m_graphTab.add("Grabber Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
         telescopeCurrentGraph = m_graphTab.add("Telescope Current vs Time", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
         telescopeEncoderRate = m_graphTab.add("Telescope Encoder Rate", 0.0).withWidget(BuiltInWidgets.kGraph).getEntry();
         telescopeEntry = m_encoderTab.add("Telescope Encoder", 0.0).getEntry();
@@ -116,7 +117,7 @@ public class ShuffleBoardButtons {
         pivotEntry.setDouble(arm.getPivotEncoder());
         telescopeEntry.setDouble(telescope.getTeleEncoder());
         BoreEncoders.setDouble(grabber.getGrabEncoder());
-        grabberCurrentGraph.setDouble(grabber.getCurrent());
+        // grabberCurrentGraph.setDouble(grabber.getCurrent());
         telescopeCurrentGraph.setDouble(telescope.getCurrent());
         telescopeEncoderRate.setDouble(telescope.getTeleEncoderRate());
         isGrabbing.setBoolean(grabber.getBooleanGrabber());

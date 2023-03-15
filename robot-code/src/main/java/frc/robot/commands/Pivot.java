@@ -11,6 +11,8 @@ import frc.robot.subsystems.Arm;
 
 public class Pivot extends CommandBase {
   private final Arm m_arm;
+  private double thresh;
+  private boolean freeze;
   
  
   /** Creates a new Pivot. */
@@ -22,6 +24,8 @@ public class Pivot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    thresh = 0;
+    freeze = false;
     
   }
 
@@ -50,9 +54,25 @@ public class Pivot extends CommandBase {
     // else{
     //   m_arm.rotatePivot(0);
     // }
-    m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
+    if(ControlMap.gunner_joystick.getRawAxis(1) <= 0.1 && ControlMap.gunner_joystick.getRawAxis(1) >= -0.1){
+      if(freeze == false){
+        thresh = m_arm.getPivotEncoder();
+        freeze = true;
+        System.out.println("value is frozen: " + thresh + "**********");
+      }
 
-
+      if(freeze && m_arm.getPivotEncoder() < thresh - 5){
+        m_arm.rotatePivot(0.2);
+      }
+      else if(freeze && m_arm.getPivotEncoder() >= thresh){
+        m_arm.rotatePivot(0);
+      }
+    }
+    else{
+      freeze = false;
+      m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
+    }
+    //m_arm.rotatePivot(ControlMap.gunner_joystick.getRawAxis(1) * MotorSpeeds.pivot_speed);
 
   }
 
