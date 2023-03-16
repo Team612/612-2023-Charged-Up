@@ -18,19 +18,17 @@ public class RunOnTheFly extends CommandBase {
   private final PoseEstimator poseEstimatorSystem;
   private final boolean resetOdom;
   private final TrajectoryCreation m_traj;
-  private final boolean isBlueAlliance;
   private final double translation;
 
   private CommandBase controllerCommand = Commands.none();
 
   /** Creates a new RunOnTheFly. */
-  public RunOnTheFly(Drivetrain d, PoseEstimator p, boolean resetOdom, boolean isBlueAlliance, TrajectoryCreation traj, Vision v, 
+  public RunOnTheFly(Drivetrain d, PoseEstimator p, boolean resetOdom, TrajectoryCreation traj, Vision v, 
                     double y) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveSystem = d;
     this.poseEstimatorSystem = p;
     this.resetOdom = resetOdom;
-    this.isBlueAlliance = isBlueAlliance;
     this.m_traj = traj;
     this.m_vision = v;
     this.translation = y;
@@ -41,7 +39,7 @@ public class RunOnTheFly extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    PathPlannerTrajectory path = m_traj.onthefly(poseEstimatorSystem, m_vision, isBlueAlliance, translation);
+    PathPlannerTrajectory path = m_traj.onthefly(poseEstimatorSystem, m_vision, translation);
 
     if(resetOdom){
       driveSystem.resetOdometry();

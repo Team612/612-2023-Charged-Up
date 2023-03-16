@@ -174,9 +174,11 @@ public class RobotContainer {
     ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
     ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> m_defense));
     
-    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(32))));
-    ControlMap.yellow2.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, 0)));
-    ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(-34))));
+    // ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(32))));
+    m_driverController.a().toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(22))));
+    // m_driverController.a().toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(0))));
+
+    // ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(-34))));
     
 
 
