@@ -28,9 +28,7 @@ public class Release extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_grabber.grab(2*(ControlMap.gunner_joystick.getRawAxis(3)-0.5) * MotorSpeeds.grabber_speed); //sticky grabber is negative for release
-    
-    System.out.println("*******RELEASING*********");
+    m_grabber.grab(ControlMap.gunner_joystick.getRawAxis(3) * MotorSpeeds.grabber_speed); //sticky grabber is negative for release
   }
 
   // Called once the command ends or is interrupted.

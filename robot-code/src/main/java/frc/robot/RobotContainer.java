@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
 import frc.robot.commands.Drivetrain.followTag;
+import frc.robot.commands.PivotPositions.DefenseMode;
 import frc.robot.commands.PivotPositions.ExtendToPosition;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -71,29 +72,32 @@ public class RobotContainer {
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
 
   private final SequentialCommandGroup m_midCone = new SequentialCommandGroup(
-    new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionConePivot).
-    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionConeTele)));
+    new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionConePivot).
+    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionConeTele)));
   
   private final SequentialCommandGroup m_midCube = new SequentialCommandGroup(
-    new MoveToPosition(m_arm, 0.3, EncoderConstants.MidPositionCubePivot).
-    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.MidPositionCubeTele)));
+    new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionCubePivot).
+    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionCubeTele)));
 
   private final SequentialCommandGroup m_highCube = new SequentialCommandGroup(
-    new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionCubePivot).
-    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionCubeTele)));
+    new MoveToPosition(m_arm, 0.7, EncoderConstants.HighPositionCubePivot).
+    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.HighPositionCubeTele)));
 
-  private final SequentialCommandGroup m_highCone = new SequentialCommandGroup(
-    new MoveToPosition(m_arm, 0.3, EncoderConstants.HighPositionConePivot).
-    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.HighPositionConeTele)));
+  private final SequentialCommandGroup m_humanStation = new SequentialCommandGroup(
+    new MoveToPosition(m_arm, 0.7, EncoderConstants.HumanStationIntakePivot).
+    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.HumanStationIntakeTele)));
   
-  private final SequentialCommandGroup m_lowGeneral = new SequentialCommandGroup(
-    new ExtendToPosition(m_scope, 0.3, 0).
-    andThen(new MoveToPosition(m_arm, 0.3, EncoderConstants.LowPositionPivot)).
-    andThen(new ExtendToPosition(m_scope, 0.3, EncoderConstants.LowPositionTele)));
+    // private final SequentialCommandGroup m_highCone = new SequentialCommandGroup(
+    //   new ExtendToPosition(m_scope, 0.7, 0).
+    //   andThen(new MoveToPosition(m_arm, 0.7, EncoderConstants.HighPositionCubePivot)).
+    //   andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.HighPositionConeTele)));
 
-  private final SequentialCommandGroup m_defense = new SequentialCommandGroup(
-    (new ExtendToPosition(m_scope, 0.3, 0)).
-    andThen(new MoveToPosition(m_arm, 0.3, 0)));
+  private final SequentialCommandGroup m_lowGeneral = new SequentialCommandGroup(
+  new ExtendToPosition(m_scope, 0.7, 0).
+  andThen(new MoveToPosition(m_arm, 0.7, EncoderConstants.LowPositionPivot)).
+  andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.LowPositionTele)));
+
+  private final DefenseMode m_defense = new DefenseMode(m_scope, 0.7); 
   
   
       
@@ -101,12 +105,12 @@ public class RobotContainer {
   
 
 
-  // private final MoveToPosition m_HighPositionCone = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCone.getDouble(0));
-  // private final MoveToPosition m_HighPositionCube = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.highCube.getDouble(0));
-  // private final MoveToPosition m_MidPositionCone = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCone.getDouble(0));
-  // private final MoveToPosition m_MidPositionCube = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCube.getDouble(0));
-  // private final MoveToPosition m_HumanStation = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.humanStation.getDouble(0));
-  // private final MoveToPosition m_GroundIntake = new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.ground.getDouble(0));
+  // private final MoveToPosition m_HighPositionCone = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.highCone.getDouble(0));
+  // private final MoveToPosition m_HighPositionCube = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.highCube.getDouble(0));
+  // private final MoveToPosition m_MidPositionCone = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.midCone.getDouble(0));
+  // private final MoveToPosition m_MidPositionCube = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.midCube.getDouble(0));
+  // private final MoveToPosition m_HumanStation = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.humanStation.getDouble(0));
+  // private final MoveToPosition m_GroundIntake = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.ground.getDouble(0));
 
   //button binded
   // private final MoveToPosition m_LowGeneral = 
@@ -162,7 +166,6 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     m_gunnerController.leftTrigger().whileTrue(m_grab);
-    m_gunnerController.rightTrigger().whileTrue(m_release);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(m_defaultdrive);
     m_driverController.x().toggleOnTrue(m_autoBalance);
@@ -170,6 +173,7 @@ public class RobotContainer {
     ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));
     ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
     ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> m_midCone));
+    ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_humanStation));
     //ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
     ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
     ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> m_defense));
@@ -180,7 +184,7 @@ public class RobotContainer {
     
 
 
-    // ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.3, ShuffleBoardButtons.midCube.getDouble(0))));
+    // ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.midCube.getDouble(0))));
   
   }
 
@@ -189,6 +193,7 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(m_FieldOrientedDrive);
     m_arm.setDefaultCommand(m_pivot);
     m_scope.setDefaultCommand(m_telescope);
+    m_grabber.setDefaultCommand(m_release);
   }
 
   
