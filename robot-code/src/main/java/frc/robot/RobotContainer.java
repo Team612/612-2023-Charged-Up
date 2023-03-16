@@ -30,6 +30,7 @@ import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.led;
 import frc.robot.commands.Drivetrain.DockingSequence;
+import frc.robot.controls.ControlMap;
 import frc.robot.commands.Drivetrain.RollOff;
 import frc.robot.LedCommands.TeleopDefault;
 
@@ -106,7 +107,8 @@ public class RobotContainer {
     m_driverController.back().toggleOnTrue(new FieldOrientedDrive(m_drivetrain));
     
     //will change button later
-    m_driverController.a().toggleOnTrue(new Purple(m_led));
+    ControlMap.red_3.toggleOnTrue(new Purple(m_led));
+    ControlMap.red_3.toggleOnFalse(new Purple(m_led));
     m_driverController.a().toggleOnFalse(new Yellow(m_led));   
   }
 

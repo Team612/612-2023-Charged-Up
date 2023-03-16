@@ -7,10 +7,15 @@ public class ControlMap{
     //driver ports
     private static int DRIVER_PORT = 0;
     private static int GUNNER_PORT = 1;
-    
+    private static int DRIVER_PORT_BUTTONS = 2;
+
     //Controller objects
     public static Joystick driver = new Joystick(DRIVER_PORT);
     public static Joystick gunner = new Joystick(GUNNER_PORT);
+    public static Joystick driver_buttons = new Joystick(DRIVER_PORT_BUTTONS);
+
+    public static JoystickButton red_3 = new JoystickButton(driver_buttons,6);
+
     
    
     public static JoystickButton GUNNER_A = new JoystickButton(gunner, 1); //A
