@@ -3,6 +3,8 @@ package frc.robot.commands.Drivetrain;
 
 import java.util.List;
 
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -102,34 +104,62 @@ public class TrajectoryCreation {
         );
     }
 
-    public PathPlannerTrajectory onthefly(PoseEstimator estimation, Vision vision, boolean isBlueAlliance, double y_translation){
+    public PathPlannerTrajectory onthefly(PoseEstimator estimation, Vision vision, double y_translation){
         Pose2d estimatedPose = estimation.getCurrentPose();
-        System.out.println("**************" + estimatedPose + "********************");        
+
         double x = estimatedPose.getX();
         double y = estimatedPose.getY();
         Rotation2d angle = estimatedPose.getRotation();
-        int id = vision.getCamera().getLatestResult().getBestTarget().getFiducialId();
-        Pose2d tagPose = vision.return_tag_pose(id).toPose2d();
-        double tagX = tagPose.getX();
-        double tagY = tagPose.getY();
-        System.out.println(angle);
+       
+        PhotonPipelineResult result = vision.getCamera().getLatestResult();
+        int id;
+        double tagX = 0;
+        double tagY = 0; 
+
+        if(result.hasTargets()){
+            id = vision.getCamera().getLatestResult().getBestTarget().getFiducialId();
+
+
+            Pose2d tagPose = vision.return_tag_pose(id).toPose2d();
+            tagX = tagPose.getX();
+            tagY = tagPose.getY();
+        }
+        else{
+            id = -1;
+        }
+
+        double offset = Units.inchesToMeters(5);
 
 
         if(id == 6 || id == 7 || id == 8){
+            System.out.println("SEEING BLUE ALLIANCE");
+            
             return PathPlanner.generatePath(
                 new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
                 Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
                 new PathPoint(new Translation2d(x, y), new Rotation2d(), angle),
-                new PathPoint(new Translation2d(tagX + 1.03, tagY+y_translation-Units.inchesToMeters(5)), new Rotation2d(), new Rotation2d(Units.degreesToRadians(180)))
+                new PathPoint(new Translation2d(tagX + Units.inchesToMeters(35), tagY - offset + y_translation), new Rotation2d(), new Rotation2d(Units.degreesToRadians(180)))
             );
         }
-        else{
+        else if(id == 1 || id == 2 || id == 3){
+            System.out.println("SEEING RED ALLIANCE");
             return PathPlanner.generatePath(
                 new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
                 Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
                 new PathPoint(new Translation2d(x, y), new Rotation2d(), angle),
-                new PathPoint(new Translation2d(tagX - 1.1, tagY-y_translation-Units.inchesToMeters(5)), new Rotation2d(), new Rotation2d(Units.degreesToRadians(0)))
+                new PathPoint(new Translation2d(tagX - Units.inchesToMeters(35), tagY + offset -  y_translation), new Rotation2d(), new Rotation2d(Units.degreesToRadians(0)))
             );
         }
+        else {
+            System.out.println("bReh");
+
+            return PathPlanner.generatePath(
+                new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
+                Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
+                new PathPoint(new Translation2d(x, y), new Rotation2d(), angle),
+                new PathPoint(new Translation2d(x + 0.01, y), new Rotation2d(), angle)
+            );
+        }
+
     }
 }
