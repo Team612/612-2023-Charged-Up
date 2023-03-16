@@ -35,7 +35,6 @@ import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
 import frc.robot.commands.Drivetrain.followTag;
-import frc.robot.commands.PivotPositions.DefenseMode;
 import frc.robot.commands.PivotPositions.ExtendToPosition;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -96,8 +95,6 @@ public class RobotContainer {
   new ExtendToPosition(m_scope, 0.7, 0).
   andThen(new MoveToPosition(m_arm, 0.7, EncoderConstants.LowPositionPivot)).
   andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.LowPositionTele)));
-
-  private final DefenseMode m_defense = new DefenseMode(m_scope, 0.7); 
   
   
       
@@ -176,8 +173,6 @@ public class RobotContainer {
     ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_humanStation));
     //ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
     ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
-    ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> m_defense));
-    
     ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(32))));
     ControlMap.yellow2.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, 0)));
     ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, true, m_traj, m_Vision, Units.inchesToMeters(-34))));
