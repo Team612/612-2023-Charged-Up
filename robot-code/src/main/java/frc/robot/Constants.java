@@ -133,7 +133,7 @@ public final class Constants {
     public static final double HighPositionCubePivot = 141;
     public static final double MidPositionConePivot = 128;
     public static final double HighPositionConePivot = 140;
-    public static final double HumanStationIntakePivot = 123;
+    public static final double HumanStationIntakePivot = 114;//123;
     public static final double GroundIntakePivot = 38; //tbd
 
     public static final double LowPositionTele = 88;
