@@ -6,13 +6,11 @@ package frc.robot;
 
 import com.pathplanner.lib.server.PathPlannerServer;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.ShuffleBoardButtons;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.led;
-import frc.robot.subsystems.Drivetrain;
-
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -21,11 +19,10 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private led m_led = new led();
   private RobotContainer m_robotContainer;
   private final ShuffleBoardButtons m_BoardButtons = new ShuffleBoardButtons();
-  private static boolean printed = false;
 
+  UsbCamera driver_cam;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -35,11 +32,16 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    System.out.println("********ROBOT INIT*********");
-    PathPlannerServer.startServer(5811);
+    m_BoardButtons.initButtons();
 
     m_robotContainer = new RobotContainer();
-    m_BoardButtons.initButtons();
+
+
+    // System.out.println("********ROBOT INIT*********");
+    PathPlannerServer.startServer(5811);
+    driver_cam = CameraServer.startAutomaticCapture();
+    driver_cam.setFPS(10);
+
 
   }
 
@@ -52,14 +54,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    m_BoardButtons.updateButtons();
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    if(!printed){
-      System.out.println("********ROBOT PERIODIC*****");
-      printed = true;
-    }
+
     CommandScheduler.getInstance().run();
     m_BoardButtons.updateButtons();
   }
@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // System.out.println(RobotContainer.m_Vision.return_camera_pose_tag(RobotContainer.camera.getLatestResult().getBestTarget().getFiducialId(), RobotContainer.camera.getLatestResult()));
+    m_BoardButtons.updateButtons();
   }
 
   @Override
