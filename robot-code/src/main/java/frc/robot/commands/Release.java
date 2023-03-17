@@ -2,45 +2,44 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Drivetrain;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.Constants.MotorSpeeds;
+import frc.robot.controls.ControlMap;
+import frc.robot.subsystems.Grabber;
 
-public class DriveUp extends CommandBase {
-  /** Creates a new DriveUp. */
-  private final Drivetrain m_drivetrain;
-
-  public DriveUp(Drivetrain drivetrain) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_drivetrain = drivetrain;
-    addRequirements(drivetrain);
+public class Release extends CommandBase {
+  private final Grabber m_grabber;
+ 
+  /** Creates a new Pivot. */
+  public Release(Grabber grabber) {
+    m_grabber = grabber;
+    //start_timer = 0;
+    addRequirements(m_grabber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Constants.DrivetrainConstants.slowmo = 1.0;
-    //m_drivetrain.calibrate();
-    m_drivetrain.driveMecanum(0, 0, 0, 0);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.driveMecanum(0.5, 0.5, 0.5, 0.5);
+    m_grabber.grab(ControlMap.gunner_joystick.getRawAxis(3) * MotorSpeeds.grabber_speed); //sticky grabber is negative for release
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.driveMecanum(0, 0, 0, 0);
+    m_grabber.grab(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_drivetrain.getPitch()) >= 10;
+    return false;
   }
 }

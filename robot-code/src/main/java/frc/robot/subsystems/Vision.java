@@ -13,7 +13,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
-
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -27,7 +26,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.Constants;
 import frc.robot.Constants;
-
 public class Vision extends SubsystemBase {
   private static AprilTagFieldLayout aprilTagFieldLayout;
   private static Transform3d robotToCam;
@@ -107,7 +105,9 @@ public class Vision extends SubsystemBase {
     resetRobotPose();
 
     aprilTagFieldLayout = new AprilTagFieldLayout(atList, 16.4592, 8.2296);
-    robotToCam = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d());
+    // robotToCam = new Transform3d(new Translation3d(Units.inchesToMeters(1), Units.inchesToMeters(ShuffleBoardButtons.transformationYTune.getDouble(0)), 
+    //              Units.inchesToMeters(0)), new Rotation3d(0,0,0));
+    robotToCam = new Transform3d();
     
     m_PoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP, this.camera,
         robotToCam);
