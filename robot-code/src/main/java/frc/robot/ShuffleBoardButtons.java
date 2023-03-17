@@ -75,7 +75,7 @@ public class ShuffleBoardButtons {
         ground = m_debugTab.add("ground", 0.0).getEntry();
 
         //smartdashboard entries
-
+        
         fodState = m_driverTab.add("FOD state?", false).getEntry();
         isGrabbing = m_driverTab.add("isGrabbing", false).getEntry();
         isReleasing = m_driverTab.add("isReleasing", false).getEntry();

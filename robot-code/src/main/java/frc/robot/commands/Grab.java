@@ -34,8 +34,6 @@ public class Grab extends CommandBase {
   public void execute() {
     start_timer++;
     m_grabber.grab(-MotorSpeeds.grabber_speed); //sticky grabber is positive for grab.
-    System.out.println("*******GRABBING*********");
-
     if(start_timer >= 10 && m_grabber.getCurrent() >= EncoderConstants.grabber_motor_current){
       counter++;
     }

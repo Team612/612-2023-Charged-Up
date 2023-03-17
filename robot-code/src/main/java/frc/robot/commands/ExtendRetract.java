@@ -18,7 +18,7 @@ public class ExtendRetract extends CommandBase {
   private int counter;
   private int start_timer;
   private double thresh;
-  private boolean freeze;
+  public static boolean freeze;
  
   /** Creates a new Pivot. */
   public ExtendRetract(Telescope scope) {
@@ -39,10 +39,12 @@ public class ExtendRetract extends CommandBase {
   @Override
   public void execute(){
     if(ControlMap.GUNNER_RB.getAsBoolean()){ //extend
+      // System.out.println("extend");
       freeze = false;
       m_scope.moveTelescope(MotorSpeeds.tele_arm_speed);
     }
     else if(ControlMap.GUNNER_LB.getAsBoolean()){ //retract
+      // System.out.println("retract");
       freeze = false;
       m_scope.moveTelescope(-MotorSpeeds.tele_arm_speed);
       start_timer++;
@@ -52,14 +54,18 @@ public class ExtendRetract extends CommandBase {
       else counter = 0;
     }
     else{
+      // System.out.println("idle: " + freeze);
+
       if(freeze == false){
         thresh = m_scope.getTeleEncoder();
         freeze = true;
-        System.out.println("value is frozen: " + thresh + "**********");
+        // System.out.println("sniffle start");
+
       }
 
       if(freeze && m_scope.getTeleEncoder() > thresh + 1){
-        System.out.println("thresh: " + thresh);
+        // System.out.println("sniffling");
+
         m_scope.moveTelescope(-0.2);
       }
       else if(freeze && m_scope.getTeleEncoder() <= thresh){
