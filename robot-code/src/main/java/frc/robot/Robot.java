@@ -23,7 +23,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private final ShuffleBoardButtons m_BoardButtons = new ShuffleBoardButtons();
 
-  UsbCamera driver_cam;
+  UsbCamera driver_cam1;
+  UsbCamera driver_cam2;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -40,8 +41,11 @@ public class Robot extends TimedRobot {
 
     // System.out.println("********ROBOT INIT*********");
     PathPlannerServer.startServer(5811);
-    driver_cam = CameraServer.startAutomaticCapture();
-    driver_cam.setFPS(10);
+    driver_cam1 = CameraServer.startAutomaticCapture();
+    driver_cam1.setFPS(10);
+    driver_cam2 = CameraServer.startAutomaticCapture();
+    driver_cam2.setFPS(10);
+
 
 
   }
