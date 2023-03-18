@@ -157,7 +157,6 @@ public class Vision extends SubsystemBase {
 
   // self calculations
   public Pose3d return_camera_pose_tag(int id, PhotonPipelineResult results) {
-    System.out.println("works");
     Optional<Pose3d> pose_of_tag = aprilTagFieldLayout.getTagPose(id);
     Pose3d tag_pose = pose_of_tag.get();
     Transform3d cameraTransform = results.getBestTarget().getBestCameraToTarget();

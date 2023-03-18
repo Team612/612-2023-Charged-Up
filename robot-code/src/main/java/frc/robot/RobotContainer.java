@@ -35,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
 import frc.robot.commands.Drivetrain.followTag;
+import frc.robot.commands.PivotPositions.DefenseMode;
 import frc.robot.commands.PivotPositions.ExtendToPosition;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -47,10 +48,8 @@ import frc.robot.controls.ControlMap;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
-  //subsystem declarations 
+  //Drive subsystems declarations 
   private final Drivetrain m_drivetrain = Drivetrain.getInstance();
-
-
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
   private final FieldOrientedDrive m_FieldOrientedDrive = new FieldOrientedDrive(m_drivetrain);
 
@@ -59,17 +58,19 @@ public class RobotContainer {
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  //Subsystems
   private final Arm m_arm = Arm.getInstance();
   private final Telescope m_scope = Telescope.getInstance();
   private final Grabber m_grabber = Grabber.getInstance();
 
+  //Commands
   private final Pivot m_pivot = new Pivot(m_arm);
-
   private final ExtendRetract m_telescope = new ExtendRetract(m_scope);
   private final Grab m_grab = new Grab(m_grabber);
   private final Release m_release = new Release(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
-
+  
+  //gunner outtakes/defense mode
   private final SequentialCommandGroup m_midCone = new SequentialCommandGroup(
     new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionConePivot).
     andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionConeTele)));
@@ -96,23 +97,7 @@ public class RobotContainer {
   andThen(new MoveToPosition(m_arm, 0.7, EncoderConstants.LowPositionPivot)).
   andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.LowPositionTele)));
   
-  
-      
-
-  
-
-
-  // private final MoveToPosition m_HighPositionCone = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.highCone.getDouble(0));
-  // private final MoveToPosition m_HighPositionCube = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.highCube.getDouble(0));
-  // private final MoveToPosition m_MidPositionCone = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.midCone.getDouble(0));
-  // private final MoveToPosition m_MidPositionCube = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.midCube.getDouble(0));
-  // private final MoveToPosition m_HumanStation = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.humanStation.getDouble(0));
-  // private final MoveToPosition m_GroundIntake = new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.ground.getDouble(0));
-
-  //button binded
-  // private final MoveToPosition m_LowGeneral = 
-
-
+  private final DefenseMode m_DefenseMode = new DefenseMode(m_scope, 0.7);
   
   public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
@@ -165,7 +150,7 @@ public class RobotContainer {
     m_gunnerController.leftTrigger().whileTrue(m_grab);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(m_defaultdrive);
-    m_driverController.x().toggleOnTrue(m_autoBalance);
+    ControlMap.red2.toggleOnTrue(new ProxyCommand(() -> m_autoBalance));
 
     ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));
     ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
@@ -174,13 +159,15 @@ public class RobotContainer {
     //ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
     ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
 
-    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(22 + 4)))); //robot oriented right cone
+    ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(22 + 4)))); //robot oriented right cone
     ControlMap.yellow2.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, 0))); //april tag alignment
+    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(-22 - 4)))); 
+
     // ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(-34))));
     
 
 
-    // ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> new MoveToPosition(m_arm, 0.7, ShuffleBoardButtons.midCube.getDouble(0))));
+    ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> m_DefenseMode));
   
   }
 

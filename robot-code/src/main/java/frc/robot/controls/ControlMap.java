@@ -25,13 +25,14 @@ public class ControlMap{
     public static JoystickButton yellow1 = new JoystickButton(driver_buttons, 1);
     public static JoystickButton yellow2 = new JoystickButton(driver_buttons, 2);
     public static JoystickButton green1 = new JoystickButton(driver_buttons, 3);
+    
+    public static JoystickButton red1 = new JoystickButton(driver_buttons,6);
+    public static JoystickButton red2 = new JoystickButton(driver_buttons,5);
+    public static JoystickButton red3 = new JoystickButton(driver_buttons,4);
 
     // public static JoystickButton yellow_1 = new JoystickButton(driver_buttons,1);
     // public static JoystickButton yellow_2 = new JoystickButton(driver_buttons,2);
     // public static JoystickButton green_1 = new JoystickButton(driver_buttons,3);
-    // public static JoystickButton red_1 = new JoystickButton(driver_buttons,4);
-    // public static JoystickButton red_2 = new JoystickButton(driver_buttons,5);
-    // public static JoystickButton red_3 = new JoystickButton(driver_buttons,6);
     
 
 

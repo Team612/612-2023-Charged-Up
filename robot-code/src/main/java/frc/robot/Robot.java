@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
     // System.out.println("********ROBOT INIT*********");
     PathPlannerServer.startServer(5811);
     driver_cam = CameraServer.startAutomaticCapture();
-    driver_cam.setFPS(20);
+    driver_cam.setFPS(10);
 
 
   }
