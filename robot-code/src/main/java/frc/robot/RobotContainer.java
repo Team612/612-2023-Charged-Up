@@ -120,7 +120,7 @@ public class RobotContainer {
   }
 
   private void configureShuffleBoardBindings(){
-    //m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
+    m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
     //m_chooser.addOption("RollOff", new RollOff(m_drivetrain));
     
     //m_chooser.addOption("Align", new ProxyCommand(() -> new followTag(m_drivetrain, m_Vision.getCamera())));
