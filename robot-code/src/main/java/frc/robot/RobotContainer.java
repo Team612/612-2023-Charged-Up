@@ -151,7 +151,7 @@ public class RobotContainer {
     m_gunnerController.leftTrigger().whileTrue(m_grab);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(m_defaultdrive);
-    m_driverController.x().toggleOnTrue(m_autoBalance);
+    ControlMap.red2.toggleOnTrue(new ProxyCommand(() -> m_autoBalance));
 
     ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));
     ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
