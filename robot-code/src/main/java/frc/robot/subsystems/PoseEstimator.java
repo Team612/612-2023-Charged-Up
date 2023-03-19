@@ -52,7 +52,7 @@ public class PoseEstimator extends SubsystemBase {
       Constants.DrivetrainConstants.kDriveKinematics, 
       m_drivetrain.getNavxAngle(), 
       m_drivetrain.getMecanumDriveWheelPositions(), 
-      new Pose2d(0,0, new Rotation2d(Math.PI)),
+      new Pose2d(0,0, new Rotation2d(0)),
       stateStdDevs,
       visionMeasurementStdDevs
     );
@@ -113,10 +113,6 @@ public class PoseEstimator extends SubsystemBase {
 
   public void setCurrentPose(Pose2d newPose) {
     m_DrivePoseEstimator.resetPosition(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions(), new Pose2d());
-  }
-
-  public void resetFieldPosition() {
-    setCurrentPose(new Pose2d());
   }
 
 }

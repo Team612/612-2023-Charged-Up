@@ -15,7 +15,7 @@ public class MidPlatform extends CommandBase {
   public MidPlatform(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     addRequirements(drivetrain);
-    // Use addRequirements() here to declare subsystem d  ependencies.
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +28,7 @@ public class MidPlatform extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.driveMecanum(0.5, 0.5, 0.5, 0.5);
+    m_drivetrain.driveMecanum(-0.5, -0.5, -0.5, -0.5);
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +40,6 @@ public class MidPlatform extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_drivetrain.getEncoderPosition() - initialPos >= 1.25;
+    return Math.abs(m_drivetrain.getEncoderPosition() - initialPos) >= 1.25;
   }
 }
