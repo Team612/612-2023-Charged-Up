@@ -35,7 +35,7 @@ public class AutoBalance extends CommandBase {
     } else {
       m_drivetrain.driveMecanum(0, 0, 0, 0);
     }
-    speed = m_drivetrain.getPitch() / 130;
+    speed = m_drivetrain.getPitch() / 150;
   }
 
   // Called once the command ends or is interrupted.
