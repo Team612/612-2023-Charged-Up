@@ -15,7 +15,7 @@ public class MidPlatform extends CommandBase {
   public MidPlatform(Drivetrain drivetrain) {
     m_drivetrain = drivetrain;
     addRequirements(drivetrain);
-    // Use addRequirements() here to declare subsystem dependencies.
+    // Use addRequirements() here to declare subsystem d  ependencies.
   }
 
   // Called when the command is initially scheduled.
