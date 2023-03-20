@@ -28,9 +28,9 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_drivetrain.getPitch() >= offbalancepositivehalf) {
+    if (m_drivetrain.getPitch() <= offbalancepositivehalf) {
       m_drivetrain.driveMecanum(speed, speed, speed, speed);
-    } else if (m_drivetrain.getPitch() <= -offbalancepositivehalf) {
+    } else if (m_drivetrain.getPitch() >= -offbalancepositivehalf) {
       m_drivetrain.driveMecanum(speed, speed, speed, speed);
     } else {
       m_drivetrain.driveMecanum(0, 0, 0, 0);

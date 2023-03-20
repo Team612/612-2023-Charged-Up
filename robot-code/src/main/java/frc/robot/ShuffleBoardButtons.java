@@ -35,6 +35,8 @@ public class ShuffleBoardButtons {
 
     GenericEntry pivotBLS;
     GenericEntry telescopeLimitSwitch;
+
+    public static GenericEntry toggleAlliance;
     
 
     //accessable entires
@@ -97,8 +99,7 @@ public class ShuffleBoardButtons {
         pivotBLS = m_limitSwitchTab.add("pivotLimitSwitchState", false).getEntry();
 
         telescopeLimitSwitch = m_limitSwitchTab.add("telescopeLimitSwitch", false).getEntry();
-
-
+        toggleAlliance = m_driverTab.add("Is Blue Alliance?",false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     }
 
     public void updateButtons(){

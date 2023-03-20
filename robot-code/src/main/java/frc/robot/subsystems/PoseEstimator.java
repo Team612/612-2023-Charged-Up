@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.ShuffleBoardButtons;
 
 
 public class PoseEstimator extends SubsystemBase {
@@ -41,10 +42,13 @@ public class PoseEstimator extends SubsystemBase {
 
   static PoseEstimator estimator = null;
 
+  private boolean once;
+
   public PoseEstimator() {
     m_drivetrain = Drivetrain.getInstance();
     m_Vision = Vision.getVisionInstance();
     m_field = new Field2d();
+    once = true;
     SmartDashboard.putData("Field", m_field);
 
 
@@ -67,10 +71,14 @@ public class PoseEstimator extends SubsystemBase {
     return estimator;
   }
 
+
   @Override
   public void periodic() {
     m_DrivePoseEstimator.update(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions());
-
+    if(ShuffleBoardButtons.toggleAlliance.getBoolean(true) && once == true){
+      setCurrentPose(new Pose2d(0,0,new Rotation2d(Math.PI)));
+      once = false;
+    }
     if(m_PhotonPoseEstimator != null){
       m_PhotonPoseEstimator.update().ifPresent(estimatedRobotPose -> {
       var estimatedPose = estimatedRobotPose.estimatedPose;
