@@ -99,7 +99,7 @@ public class ShuffleBoardButtons {
         pivotBLS = m_limitSwitchTab.add("pivotLimitSwitchState", false).getEntry();
 
         telescopeLimitSwitch = m_limitSwitchTab.add("telescopeLimitSwitch", false).getEntry();
-        toggleAlliance = m_driverTab.add("Is Blue Alliance?",false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+        toggleAlliance = m_driverTab.add("Is Red Alliance?",false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     }
 
     public void updateButtons(){

@@ -14,6 +14,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,27 +44,29 @@ public class PoseEstimator extends SubsystemBase {
 
   static PoseEstimator estimator = null;
 
-  private boolean once;
+  Alliance allianceColor;
+  Pose2d initPose2d;
 
   public PoseEstimator() {
     m_drivetrain = Drivetrain.getInstance();
     m_Vision = Vision.getVisionInstance();
     m_field = new Field2d();
-    once = true;
     SmartDashboard.putData("Field", m_field);
-
+    allianceColor = DriverStation.getAlliance();
+    
+    if(allianceColor.equals(Alliance.Blue)) initPose2d = new Pose2d(0,0,new Rotation2d(Math.PI));
+    else initPose2d = new Pose2d(0,0, new Rotation2d());
 
     m_DrivePoseEstimator = new MecanumDrivePoseEstimator(
       Constants.DrivetrainConstants.kDriveKinematics, 
       m_drivetrain.getNavxAngle(), 
       m_drivetrain.getMecanumDriveWheelPositions(), 
-      new Pose2d(0,0, new Rotation2d(0)),
+      initPose2d,
       stateStdDevs,
       visionMeasurementStdDevs
     );
     m_PhotonPoseEstimator = m_Vision.getVisionPose();
   }
-
 
   public static PoseEstimator getPoseEstimatorInstance() {
     if (estimator == null) {
@@ -75,10 +79,7 @@ public class PoseEstimator extends SubsystemBase {
   @Override
   public void periodic() {
     m_DrivePoseEstimator.update(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions());
-    if(ShuffleBoardButtons.toggleAlliance.getBoolean(true) && once == true){
-      setCurrentPose(new Pose2d(0,0,new Rotation2d(Math.PI)));
-      once = false;
-    }
+
     if(m_PhotonPoseEstimator != null){
       m_PhotonPoseEstimator.update().ifPresent(estimatedRobotPose -> {
       var estimatedPose = estimatedRobotPose.estimatedPose;
