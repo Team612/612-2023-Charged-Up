@@ -5,12 +5,15 @@
 package frc.robot.LedCommands;
 import frc.robot.subsystems.led;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.subsystems.Vision;
+import edu.wpi.first.math.util.Units;
 public class TeleopDefault extends CommandBase {
   private led m_led;
+  private Vision m_vision;
   /** Creates a new TeleopDefault. */
-  public TeleopDefault(led l) {
+  public TeleopDefault(led l, Vision v) {
     m_led = l;
+    m_vision = v;
     addRequirements(m_led);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -18,12 +21,23 @@ public class TeleopDefault extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_led.SixTwelveTheme();
+    //m_led.setLed(255,0,0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (m_vision.getCamera().getLatestResult().hasTargets() && Math.abs(m_vision.getTagPose().getX()) <= Units.inchesToMeters(10) && Math.abs(m_vision.getTagPose().getY()) <= Units.inchesToMeters(5)){
+      m_led.setLed(0, 255, 0);
+    }
+    else if(m_vision.getCamera().getLatestResult().hasTargets() && !(Math.abs(m_vision.getTagPose().getY()) <= Units.inchesToMeters(5)) && !(Math.abs(m_vision.getTagPose().getX()) <= Units.inchesToMeters(10))){
+      m_led.setLed(255, 0, 0);
+    }
+    else{
+      m_led.ChantillyTheme();
+    }
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override

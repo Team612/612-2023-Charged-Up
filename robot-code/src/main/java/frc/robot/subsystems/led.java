@@ -32,6 +32,13 @@ public class led extends SubsystemBase {
     m_led.setData(m_ledBuffer);
       }
 
+  public void setLed(int r, int g, int b){
+    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, r, g, b);
+    }
+    m_led.setData(m_ledBuffer);
+  }
+
   public void yellow(){
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
       m_ledBuffer.setRGB(i, 255, 255, 0);

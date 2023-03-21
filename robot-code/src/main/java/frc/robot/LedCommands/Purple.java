@@ -5,10 +5,13 @@
 package frc.robot.LedCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.led;
 
 public class Purple extends CommandBase {
   private led m_led;
+  private RobotContainer m_container;
   private int counter;
   /** Creates a new PurpleYellow. */
   public Purple(led led) {

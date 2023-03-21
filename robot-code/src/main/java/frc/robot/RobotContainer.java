@@ -72,13 +72,15 @@ public class RobotContainer {
   private final Arm m_arm = Arm.getInstance();
   private final Telescope m_scope = Telescope.getInstance();
   private final Grabber m_grabber = Grabber.getInstance();
+  public final Vision m_Vision = Vision.getVisionInstance();
+  
 
   //Commands
   private final Pivot m_pivot = new Pivot(m_arm);
   private final ExtendRetract m_telescope = new ExtendRetract(m_scope);
   private final Grab m_grab = new Grab(m_grabber);
   private final Release m_release = new Release(m_grabber);
-  private final TeleopDefault m_teleopDefault = new TeleopDefault(m_led);
+  private final TeleopDefault m_teleopDefault = new TeleopDefault(m_led, m_Vision);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
   
   //gunner outtakes/defense mode
@@ -110,7 +112,7 @@ public class RobotContainer {
   
   private final DefenseMode m_DefenseMode = new DefenseMode(m_scope, 0.7);
   
-  public final Vision m_Vision = Vision.getVisionInstance();
+  
   //public final Vision m_Vision = new Vision(camera);
 
   public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
