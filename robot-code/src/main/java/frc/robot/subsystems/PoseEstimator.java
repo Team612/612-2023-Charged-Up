@@ -20,8 +20,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.ShuffleBoardButtons;
-
 
 public class PoseEstimator extends SubsystemBase {
   /** Creates a new PoseEstimator. */
@@ -44,6 +42,8 @@ public class PoseEstimator extends SubsystemBase {
 
   static PoseEstimator estimator = null;
 
+  private boolean isBlueAlliance = false;
+
   Alliance allianceColor;
   Pose2d initPose2d;
 
@@ -54,8 +54,15 @@ public class PoseEstimator extends SubsystemBase {
     SmartDashboard.putData("Field", m_field);
     allianceColor = DriverStation.getAlliance();
     
-    if(allianceColor.equals(Alliance.Blue)) initPose2d = new Pose2d(0,0,new Rotation2d(Math.PI));
-    else initPose2d = new Pose2d(0,0, new Rotation2d());
+    if(allianceColor.equals(Alliance.Blue)) {
+      initPose2d = new Pose2d(0,0,new Rotation2d(Math.PI));
+      isBlueAlliance = true;
+    }
+
+    else{
+       initPose2d = new Pose2d(0,0, new Rotation2d());
+       isBlueAlliance = false;
+    }
 
     m_DrivePoseEstimator = new MecanumDrivePoseEstimator(
       Constants.DrivetrainConstants.kDriveKinematics, 
@@ -114,6 +121,10 @@ public class PoseEstimator extends SubsystemBase {
       });
     }
     m_field.setRobotPose(getCurrentPose());
+  }
+
+  public boolean getAlliance(){
+    return isBlueAlliance;
   }
 
   public Pose2d getCurrentPose() {
