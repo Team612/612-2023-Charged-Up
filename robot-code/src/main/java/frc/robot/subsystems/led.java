@@ -95,7 +95,6 @@ public class led extends SubsystemBase {
         m_ledBuffer.setRGB(i,0,0,0);
         }
       }
-      m_led.setData(m_ledBuffer);
     }
     if (timer.get() >= 2){
       timer.reset();
