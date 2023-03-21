@@ -57,23 +57,9 @@ public class Arm extends SubsystemBase {
     return pivot.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen).isPressed();
   }
 
-  public boolean detectMovement(){
-    if (Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) <= 0.2) {
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
-
-  
-
-
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run  
-
     if (getPivotBottomLimitSwitchState()) {
       pivot.getEncoder().setPosition(0);
     }

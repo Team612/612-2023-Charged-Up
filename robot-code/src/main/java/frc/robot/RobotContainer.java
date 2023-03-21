@@ -138,6 +138,20 @@ public class RobotContainer {
     configureButtonBindings();
     configureShuffleBoardBindings();
     configureDefaultCommands();
+    configureOverrideCommands();
+  }
+
+  private void configureOverrideCommands() {
+    m_midCone.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    m_midCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    m_highCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    m_humanStation.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    m_lowGeneral.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    // m_midCone.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
+    // m_midCube.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
+    // m_highCube.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
+    // m_humanStation.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
+    // m_lowGeneral.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
   }
 
   private void configureShuffleBoardBindings(){
