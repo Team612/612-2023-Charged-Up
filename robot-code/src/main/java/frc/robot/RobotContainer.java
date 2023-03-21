@@ -70,12 +70,12 @@ public class RobotContainer {
     PhotonPipelineResult result = camera.getLatestResult();
     if(result.hasTargets()){
       // System.out.println(result.getBestTarget().getFiducialId());
-      System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()));
+      //System.out.println(m_Vision.return_camera_pose_tag(camera.getLatestResult().getBestTarget().getFiducialId(), camera.getLatestResult()));
     }
     else{
-      System.out.println("********************************No targets*****************************************");
+      //System.out.println("********************************No targets*****************************************");
     }
-    m_drivetrain.driveMecanum(m_driverController.getY(), m_driverController.getX(), m_driverController.getZ());
+    m_drivetrain.FieldOrientedDrive(m_driverController.getX(), m_driverController.getY(), m_driverController.getZ());
   }
 
   private void configureShuffleBoardBindings(){
