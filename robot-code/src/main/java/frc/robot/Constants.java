@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathConstraints;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -104,7 +106,7 @@ public final class Constants {
      public static final Alliance blueAlliance = Alliance.Blue;
      public static final Alliance redAlliance = Alliance.Red;
      
-     
+     public static final PathConstraints constraint = new PathConstraints(kMaxVelocityMetersPerSecond, maxAccelerationMetersPerSecondSq);
 
   }
 
