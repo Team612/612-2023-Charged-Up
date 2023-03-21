@@ -73,33 +73,37 @@ public class RobotContainer {
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
   
   //gunner outtakes/defense mode
-  private final SequentialCommandGroup m_midCone = new SequentialCommandGroup(
+  private final Command m_midCone = new SequentialCommandGroup(
     new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionConePivot).
-    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionConeTele)));
+    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionConeTele))).
+    until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1 || ControlMap.GUNNER_RB.getAsBoolean() || ControlMap.GUNNER_LB.getAsBoolean());
   
-  private final SequentialCommandGroup m_midCube = new SequentialCommandGroup(
+  private final Command m_midCube = new SequentialCommandGroup(
     new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionCubePivot).
-    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionCubeTele)));
+    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionCubeTele))).
+    until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1 || ControlMap.GUNNER_RB.getAsBoolean() || ControlMap.GUNNER_LB.getAsBoolean());
 
-  private final SequentialCommandGroup m_highCube = new SequentialCommandGroup(
+  private final Command m_highCube = new SequentialCommandGroup(
     new MoveToPosition(m_arm, 0.7, EncoderConstants.HighPositionCubePivot).
-    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.HighPositionCubeTele)));
-
-  private final SequentialCommandGroup m_humanStation = new SequentialCommandGroup(
+    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.HighPositionCubeTele))).
+    until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1 || ControlMap.GUNNER_RB.getAsBoolean() || ControlMap.GUNNER_LB.getAsBoolean());
+    
+  private final Command m_humanStation = new SequentialCommandGroup(
     new MoveToPosition(m_arm, 0.7, EncoderConstants.HumanStationIntakePivot).
-    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.HumanStationIntakeTele)));
-  
+    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.HumanStationIntakeTele))).
+    until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1 || ControlMap.GUNNER_RB.getAsBoolean() || ControlMap.GUNNER_LB.getAsBoolean());
+      
     // private final SequentialCommandGroup m_highCone = new SequentialCommandGroup(
     //   new ExtendToPosition(m_scope, 0.7, 0).
     //   andThen(new MoveToPosition(m_arm, 0.7, EncoderConstants.HighPositionCubePivot)).
     //   andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.HighPositionConeTele)));
 
-  private final SequentialCommandGroup m_lowGeneral = new SequentialCommandGroup(
-  new ExtendToPosition(m_scope, 0.7, 0).
-  andThen(new MoveToPosition(m_arm, 0.7, EncoderConstants.LowPositionPivot)).
-  andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.LowPositionTele)));
-
-  
+  private final Command m_lowGeneral = new SequentialCommandGroup(
+    new ExtendToPosition(m_scope, 0.7, 0).
+    andThen(new MoveToPosition(m_arm, 0.7, EncoderConstants.LowPositionPivot)).
+    andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.LowPositionTele))).
+    until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1 || ControlMap.GUNNER_RB.getAsBoolean() || ControlMap.GUNNER_LB.getAsBoolean());
+    
   private final DefenseMode m_DefenseMode = new DefenseMode(m_scope, 0.7);
   
   public final Vision m_Vision = Vision.getVisionInstance();
@@ -142,11 +146,11 @@ public class RobotContainer {
   }
 
   private void configureOverrideCommands() {
-    m_midCone.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    m_midCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    m_highCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    m_humanStation.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    m_lowGeneral.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    // m_midCone.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    // m_midCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    // m_highCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    // m_humanStation.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    // m_lowGeneral.withInterruptBehavior(m_pivot.getInterruptionBehavior());
     // m_midCone.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
     // m_midCube.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
     // m_highCube.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
