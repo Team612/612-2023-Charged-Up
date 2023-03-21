@@ -22,7 +22,6 @@ import frc.robot.commands.Drivetrain.SlowmoDrive;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
-import frc.robot.commands.Drivetrain.RollOff;
 import frc.robot.commands.Drivetrain.RunOnTheFly;
 import frc.robot.commands.Grab;
 import frc.robot.commands.Pivot;
@@ -50,9 +49,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
   //Drive subsystems declarations 
+  public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
   private final Drivetrain m_drivetrain = Drivetrain.getInstance();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
-  private final FieldOrientedDrive m_FieldOrientedDrive = new FieldOrientedDrive(m_drivetrain);
+  private final FieldOrientedDrive m_FieldOrientedDrive = new FieldOrientedDrive(m_drivetrain, estimator);
 
  // Trajectories
   private final FollowTrajectory m_follower = new FollowTrajectory();
@@ -99,7 +99,7 @@ public class RobotContainer {
   public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
 
-  public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
+  
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -138,9 +138,9 @@ public class RobotContainer {
     ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_humanStation));
     ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
 
-    ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(22 + 4)))); //robot oriented right cone
+    ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(22.5 + 4)))); //robot oriented right cone
     ControlMap.yellow2.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, 0))); //april tag alignment
-    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(-22 - 4)))); 
+    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(-22.5 - 4)))); 
     ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> m_DefenseMode));
   }
 

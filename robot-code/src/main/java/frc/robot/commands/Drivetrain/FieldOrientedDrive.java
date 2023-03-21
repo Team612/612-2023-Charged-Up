@@ -7,13 +7,16 @@ package frc.robot.commands.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.controls.ControlMap;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.PoseEstimator;
 
 public class FieldOrientedDrive extends CommandBase {
   /** Creates a new FieldOrientedDrive. */
   Drivetrain m_drivetrain;
-  public FieldOrientedDrive(Drivetrain drivetrain) {
+  PoseEstimator estimator;
+  public FieldOrientedDrive(Drivetrain drivetrain, PoseEstimator e) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
+    estimator = e;
     addRequirements(drivetrain);
   }
 
@@ -27,7 +30,7 @@ public class FieldOrientedDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.FieldOrientedDrive(-ControlMap.driver_joystick.getRawAxis(1), ControlMap.driver_joystick.getRawAxis(0), ControlMap.driver_joystick.getRawAxis(4));
+    m_drivetrain.FieldOrientedDrive(-ControlMap.driver_joystick.getRawAxis(1), ControlMap.driver_joystick.getRawAxis(0), ControlMap.driver_joystick.getRawAxis(4), estimator);
 
   }
 

@@ -20,7 +20,10 @@ import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,6 +49,8 @@ public class Drivetrain extends SubsystemBase {
   private Rotation2d navxAngleOffset;  
  
   MecanumDriveOdometry m_odometry;
+  
+  Alliance allianceColor;
 
   private Vision m_vision;
 
@@ -84,7 +89,8 @@ public class Drivetrain extends SubsystemBase {
     navxAngleOffset = new Rotation2d();
     m_odometry = new MecanumDriveOdometry(Constants.DrivetrainConstants.kDriveKinematics, navx.getRotation2d(), getMecanumDriveWheelPositions());
     drivetrain = new MecanumDrive(spark_fl, spark_bl, spark_fr, spark_br);
-    
+    allianceColor = DriverStation.getAlliance();
+
     resetOdometry();
     resetEncoders();
     navx.reset();
@@ -126,11 +132,22 @@ public class Drivetrain extends SubsystemBase {
 
   //Field Oriented Drive
 
-  public void FieldOrientedDrive(double x, double y, double zRotation){
+  public void FieldOrientedDrive(double x, double y, double zRotation, PoseEstimator estimator){
     if(Math.abs(x) < DEADZONE) x = 0;
     if(Math.abs(y) < DEADZONE) y = 0;
     if(Math.abs(zRotation) < DEADZONE) zRotation = 0;
-    drivetrain.driveCartesian(x, y, zRotation, getNavxAngle().unaryMinus().minus(navxAngleOffset.unaryMinus()));
+    if(allianceColor == Alliance.Blue){
+      Rotation2d currentRotation = estimator.getCurrentPose().getRotation();
+      Rotation2d difference = new Rotation2d(Units.degreesToRadians(360)).minus(currentRotation);
+      drivetrain.driveCartesian(x, y, zRotation, currentRotation.plus(difference));
+    }
+
+    if(allianceColor == Alliance.Red){
+      Rotation2d currentRotation = estimator.getCurrentPose().getRotation();
+      Rotation2d difference = new Rotation2d(Units.degreesToRadians(180)).minus(currentRotation);
+      drivetrain.driveCartesian(x, y, zRotation, currentRotation.plus(difference));
+    }
+    //drivetrain.driveCartesian(x, y, zRotation, getNavxAngle().unaryMinus().minus(navxAngleOffset.unaryMinus()));
 
   }
   
