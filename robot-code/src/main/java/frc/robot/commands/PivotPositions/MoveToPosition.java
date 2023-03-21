@@ -49,6 +49,6 @@ public class MoveToPosition extends CommandBase {
   @Override
   public boolean isFinished() {
     if(m_arm.getPivotEncoder() >= m_pivot_position - m_pivot_threshold &&  m_arm.getPivotEncoder() <= m_pivot_position + m_pivot_threshold) return true;
-    return false;
+    return m_arm.detectMovement();
   }
 }
