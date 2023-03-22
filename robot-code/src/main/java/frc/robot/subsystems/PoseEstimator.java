@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class PoseEstimator extends SubsystemBase {
   /** Creates a new PoseEstimator. */
@@ -45,36 +46,7 @@ public class PoseEstimator extends SubsystemBase {
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
   static PoseEstimator estimator = null;
-
-  private boolean isBlueAlliance = false;
-
   
-  private OriginPosition originPosition = OriginPosition.kBlueAllianceWallRightSide;
-
-  public void setAlliance(Alliance alliance) {
-    boolean allianceChanged = false;
-    switch (alliance) {
-      case Blue:
-        allianceChanged = (originPosition == OriginPosition.kRedAllianceWallRightSide);
-        originPosition = OriginPosition.kBlueAllianceWallRightSide;
-        break;
-      case Red:
-        allianceChanged = (originPosition == OriginPosition.kBlueAllianceWallRightSide);
-        originPosition = OriginPosition.kRedAllianceWallRightSide;
-        break;
-      default:
-        // No valid alliance data. Nothing we can do about it
-    }
-
-    if (allianceChanged) {
-      // The alliance changed, which changes the coordinate system.
-      // Since a tag was seen, and the tags are all relative to the coordinate system,
-      // the estimated pose
-      // needs to be transformed to the new coordinate system.
-      var newPose = flipAlliance(getCurrentPose());
-      m_DrivePoseEstimator.resetPosition(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions(), newPose);
-    }
-  }
 
   public PoseEstimator() {
     m_drivetrain = Drivetrain.getInstance();
@@ -101,9 +73,17 @@ public class PoseEstimator extends SubsystemBase {
     return estimator;
   }
 
+  private boolean once = true;
+
 
   @Override
   public void periodic() {
+
+    if(Robot.initAllianceColor == Alliance.Blue && once){
+      setCurrentPose(new Pose2d(0,0,new Rotation2d(Units.degreesToRadians(180))));
+      once = false;
+    }
+
     m_DrivePoseEstimator.update(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions());
     if(m_PhotonPoseEstimator != null){
       m_PhotonPoseEstimator.update().ifPresent(estimatedRobotPose -> {
@@ -142,22 +122,12 @@ public class PoseEstimator extends SubsystemBase {
   }
 
 
-  private Pose2d flipAlliance(Pose2d poseToFlip) {
-    return poseToFlip.relativeTo(new Pose2d(
-        new Translation2d(FIELD_LENGTH_METERS, FIELD_WIDTH_METERS),
-        new Rotation2d(Math.PI)));
-  }
-
-  public boolean getAlliance(){
-    return isBlueAlliance;
-  }
-
   public Pose2d getCurrentPose() {
     return m_DrivePoseEstimator.getEstimatedPosition();
   }
 
   public void setCurrentPose(Pose2d newPose) {
-    m_DrivePoseEstimator.resetPosition(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions(), new Pose2d());
+    m_DrivePoseEstimator.resetPosition(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions(), newPose);
   }
 
 }

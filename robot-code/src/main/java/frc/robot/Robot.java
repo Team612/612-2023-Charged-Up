@@ -27,16 +27,15 @@ public class Robot extends TimedRobot {
 
   UsbCamera driver_cam;
 
-  private void checkDriverStationUpdate() {
-    // https://www.chiefdelphi.com/t/getalliance-always-returning-red/425782/27
-    Alliance currentAlliance = DriverStation.getAlliance();
+  //Driverstation always sends out a red alliance which is weird so we wait until something is different
+  public static Alliance initAllianceColor = Alliance.Invalid;
 
+  private void checkDSUpdate() {
+    Alliance currentAlliance = DriverStation.getAlliance();
     // If we have data, and have a new alliance from last time
     if (DriverStation.isDSAttached() && currentAlliance != Constants.DrivetrainConstants.alliance) {
-      m_robotContainer.onAllianceChanged(currentAlliance);
-      Constants.DrivetrainConstants.alliance = currentAlliance;
-      System.out.println("THERE HAS BEEN A DRIVER STATION UPDATE");
-      System.out.println(Constants.DrivetrainConstants.alliance);
+      initAllianceColor = currentAlliance;
+      
     }
   }
 
@@ -45,9 +44,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_BoardButtons.initButtons();
-
+    checkDSUpdate();
     m_robotContainer = new RobotContainer();
-    checkDriverStationUpdate();
 
     // System.out.println("********ROBOT INIT*********");
     PathPlannerServer.startServer(5811);
@@ -67,7 +65,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    checkDriverStationUpdate();
+    checkDSUpdate();
     m_BoardButtons.updateButtons();
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
@@ -86,7 +84,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    checkDriverStationUpdate();
+    checkDSUpdate();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -109,7 +107,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    checkDriverStationUpdate();
 
   }
 

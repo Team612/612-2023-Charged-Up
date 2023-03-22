@@ -159,7 +159,4 @@ public class RobotContainer {
     return m_chooser.getSelected();
   }
 
-  public void onAllianceChanged(Alliance currentAlliance) {
-    estimator.setAlliance(currentAlliance);
-  }
 }

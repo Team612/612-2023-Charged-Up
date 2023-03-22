@@ -135,7 +135,6 @@ public class ShuffleBoardButtons {
         
         telescopeLimitSwitch.setBoolean(telescope.getLimitSwitch());
 
-        isBlueAlliance.setBoolean(poseEstimator.getAlliance());
     }
     
 }
