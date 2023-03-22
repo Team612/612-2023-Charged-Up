@@ -138,7 +138,7 @@ public class TrajectoryCreation {
                 new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
                 Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
                 new PathPoint(new Translation2d(x, y), new Rotation2d(), angle),
-                new PathPoint(new Translation2d(tagX + Units.inchesToMeters(35), tagY - offset + y_translation), new Rotation2d(), new Rotation2d(Units.degreesToRadians(180)))
+                new PathPoint(new Translation2d(tagX + Units.inchesToMeters(32), tagY - offset + y_translation), new Rotation2d(), new Rotation2d(Units.degreesToRadians(180)))
             );
         }
         else if(id == 1 || id == 2 || id == 3){
