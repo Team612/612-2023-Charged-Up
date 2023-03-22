@@ -9,6 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.EncoderConstants;
@@ -38,6 +39,7 @@ import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
 import frc.robot.commands.Drivetrain.followTag;
 import frc.robot.commands.PivotPositions.DefenseMode;
 import frc.robot.commands.PivotPositions.ExtendToPosition;
+import frc.robot.commands.ReleaseAuto;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -67,9 +69,10 @@ public class RobotContainer {
 
   //Commands
   private final Pivot m_pivot = new Pivot(m_arm);
-  private final ExtendRetract m_telescope = new ExtendRetract(m_scope);
+  private final ExtendRetract m_telescope = new ExtendRetract(m_scope, m_arm);
   private final Grab m_grab = new Grab(m_grabber);
   private final Release m_release = new Release(m_grabber);
+  private final ReleaseAuto m_releaseauto = new ReleaseAuto(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
   
   //gunner outtakes/defense mode
@@ -92,6 +95,7 @@ public class RobotContainer {
     new MoveToPosition(m_arm, 0.7, EncoderConstants.HumanStationIntakePivot).
     andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.HumanStationIntakeTele))).
     until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1 || ControlMap.GUNNER_RB.getAsBoolean() || ControlMap.GUNNER_LB.getAsBoolean());
+
       
     // private final SequentialCommandGroup m_highCone = new SequentialCommandGroup(
     //   new ExtendToPosition(m_scope, 0.7, 0).
@@ -104,8 +108,21 @@ public class RobotContainer {
     andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.LowPositionTele))).
     until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1 || ControlMap.GUNNER_RB.getAsBoolean() || ControlMap.GUNNER_LB.getAsBoolean());
     
-  private final DefenseMode m_DefenseMode = new DefenseMode(m_scope, 0.7);
+  private final DefenseMode m_DefenseMode = new DefenseMode(m_scope, 0.7); //write override here
+  private final ParallelCommandGroup m_stow = new ParallelCommandGroup(new DefenseMode(m_scope, 0.5).alongWith(new MoveToPosition(m_arm, 0.3, 0)));
   
+  private final Command m_autoScore = new SequentialCommandGroup(
+    (new SequentialCommandGroup(new DefenseMode(m_scope, 0.1)
+    .andThen(new Grab(m_grabber))))
+  .andThen(
+    new ParallelCommandGroup(new SequentialCommandGroup(
+      new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionConePivot).
+      andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionConeTele)))
+    .alongWith(new Grab(m_grabber))))
+  .andThen(new MoveToPosition(m_arm, 0.3, 100))
+  .andThen(m_releaseauto))
+  .andThen(m_stow);
+
   public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
 
@@ -142,21 +159,21 @@ public class RobotContainer {
     configureButtonBindings();
     configureShuffleBoardBindings();
     configureDefaultCommands();
-    configureOverrideCommands();
+    //configureOverrideCommands();
   }
 
-  private void configureOverrideCommands() {
-    // m_midCone.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    // m_midCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    // m_highCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    // m_humanStation.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    // m_lowGeneral.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    // m_midCone.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
-    // m_midCube.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
-    // m_highCube.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
-    // m_humanStation.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
-    // m_lowGeneral.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
-  }
+  /*private void configureOverrideCommands() {
+    m_midCone.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    m_midCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    m_highCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    m_humanStation.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    m_lowGeneral.withInterruptBehavior(m_pivot.getInterruptionBehavior());
+    m_midCone.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
+    m_midCube.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
+    m_highCube.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
+    m_humanStation.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
+    m_lowGeneral.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
+  }*/
 
   private void configureShuffleBoardBindings(){
     m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
@@ -186,6 +203,7 @@ public class RobotContainer {
     m_chooser.addOption("Blue Bottom Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueBottomLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
     // m_chooser.addOption("BlueLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
     m_chooser.addOption("Blue Top Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
+    m_chooser.addOption("Auto Score Cone", m_autoScore);
   
     SmartDashboard.putData(m_chooser);
     SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
@@ -205,9 +223,9 @@ public class RobotContainer {
     //ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
     ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
 
-    ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(22 + 4)))); //robot oriented right cone
+    ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(28.5)))); //robot oriented right cone
     ControlMap.yellow2.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, 0))); //april tag alignment
-    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(-22 - 4)))); 
+    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(-22.5 -6)))); 
 
     // ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(-34))));
     
