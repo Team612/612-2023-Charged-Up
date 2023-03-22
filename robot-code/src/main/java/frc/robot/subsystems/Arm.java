@@ -8,9 +8,12 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import com.revrobotics.SparkMaxLimitSwitch;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.SparkPorts;
+import frc.robot.controls.ControlMap;
 
 public class Arm extends SubsystemBase {
   private static final double DEADZONE = 0.1;
@@ -54,14 +57,9 @@ public class Arm extends SubsystemBase {
     return pivot.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen).isPressed();
   }
 
-  
-
-
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run  
-
     if (getPivotBottomLimitSwitchState()) {
       pivot.getEncoder().setPosition(0);
     }

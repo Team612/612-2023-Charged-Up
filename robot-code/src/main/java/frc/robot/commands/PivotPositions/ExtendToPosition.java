@@ -51,4 +51,5 @@ public class ExtendToPosition extends CommandBase {
     if(m_Telescope.getTeleEncoder() >= m_telescope_position - m_threshold &&  m_Telescope.getTeleEncoder() <= m_telescope_position + m_threshold) return true;
     return false;
   }
+
 }
