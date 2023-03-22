@@ -4,8 +4,10 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.PathConstraints;
+import java.lang.reflect.Proxy;
+
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -36,7 +38,6 @@ import frc.robot.subsystems.Telescope;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import frc.robot.commands.Drivetrain.FieldOrientedDrive;
 import frc.robot.commands.Drivetrain.FollowTrajectoryPathPlanner;
-import frc.robot.commands.Drivetrain.followTag;
 import frc.robot.commands.PivotPositions.DefenseMode;
 import frc.robot.commands.PivotPositions.ExtendToPosition;
 import frc.robot.commands.ReleaseAuto;
@@ -128,31 +129,42 @@ public class RobotContainer {
 
   public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
 
-  // private final SequentialCommandGroup m_RedRightLeave_doc = new SequentialCommandGroup(
-  //   new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedRightLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)
-  //   .andThen(new DockingSequence(m_drivetrain))
-  // );
-
-  // private final SequentialCommandGroup m_RedLeftLeave_doc = new SequentialCommandGroup(
-  //   new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedLeftLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)
-  //   .andThen(new DockingSequence(m_drivetrain))
-  // );
-
-  // private final SequentialCommandGroup m_BlueLeftLeave_doc = new SequentialCommandGroup(
-  //   new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)
-  //   .andThen(new DockingSequence(m_drivetrain))
-  // );
-
-  // private final SequentialCommandGroup m_BlueRightLeave_doc = new SequentialCommandGroup(
-  //   new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueRightLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)
-  //   .andThen(new DockingSequence(m_drivetrain))
-  // );
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_gunnerController =
       new CommandXboxController(OperatorConstants.kGunnerControllerPort);
+
+  
+  private final SequentialCommandGroup m_RedMiddleLeaveAndDock = new SequentialCommandGroup(
+    new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedMiddleLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
+    .andThen(new DockingSequence(m_drivetrain))
+  );
+
+  private final SequentialCommandGroup m_BlueMiddleLeaveAndDock = new SequentialCommandGroup(
+    new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueMiddleLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
+    .andThen(new DockingSequence(m_drivetrain))
+  );
+
+  private final SequentialCommandGroup m_RedTopLeaveAndDock = new SequentialCommandGroup(
+    new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedTopLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
+    .andThen(new DockingSequence(m_drivetrain))
+  );
+
+  private final SequentialCommandGroup m_BlueTopLeaveAndDock = new SequentialCommandGroup(
+    new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
+    .andThen(new DockingSequence(m_drivetrain))
+  );
+
+  private final SequentialCommandGroup m_RedBottomLeaveAndDock = new SequentialCommandGroup(
+    new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedBottomLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
+    .andThen(new DockingSequence(m_drivetrain))
+  );
+
+  private final SequentialCommandGroup m_BlueBottomLeaveAndDock = new SequentialCommandGroup(
+    new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueBottomLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
+    .andThen(new DockingSequence(m_drivetrain))
+  );
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -177,33 +189,17 @@ public class RobotContainer {
 
   private void configureShuffleBoardBindings(){
     m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
-    //m_chooser.addOption("RollOff", new RollOff(m_drivetrain));
-    
-    //m_chooser.addOption("Align", new ProxyCommand(() -> new followTag(m_drivetrain, m_Vision.getCamera())));
-    
-    //m_chooser.addOption("Strafe Right debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeRightMeter(estimator),estimator)));
-    //m_chooser.addOption("Strafe Left debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.StrafeLeftMeter(estimator),estimator)));
-    //m_chooser.addOption("Forward debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.ForwardMeter(estimator),estimator)));
-    //m_chooser.addOption("Backward debug", new ProxyCommand(() -> m_follower.generateTrajectory(m_drivetrain, m_traj.BackwardMeter(estimator),estimator)));
-  
-    // m_chooser.addOption("RedRightLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedRightLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
-    m_chooser.addOption("Red Bottom Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedBottomLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
-    // m_chooser.addOption("RedLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedLeftLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
-    m_chooser.addOption("Red Top Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedTopLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
+    m_chooser.addOption("Red Bottom Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedBottomLeave", Constants.DrivetrainConstants.constraint, true, false)));
+    m_chooser.addOption("Red Top Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedTopLeave", Constants.DrivetrainConstants.constraint, true, false)));
+    m_chooser.addOption("Blue Bottom Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueBottomLeave", Constants.DrivetrainConstants.constraint, true, true)));
+    m_chooser.addOption("Blue Top Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeave", Constants.DrivetrainConstants.constraint, true, true)));
+    m_chooser.addOption("Red Middle Leave and Dock", new ProxyCommand(() -> m_RedMiddleLeaveAndDock));
+    m_chooser.addOption("Blue Middle Leave and Dock", new ProxyCommand(() -> m_BlueMiddleLeaveAndDock));
+    // m_chooser.addOption("Red Top Leave And Dock", new ProxyCommand(() -> m_RedTopLeaveAndDock));
+    // m_chooser.addOption("Blue Top Leave And Dock", new ProxyCommand(() -> m_BlueTopLeaveAndDock));
+    // m_chooser.addOption("Red Bottom Leave And Dock", new ProxyCommand(() -> m_RedBottomLeaveAndDock));
+    // m_chooser.addOption("Blue Bottom Leave and Dock", new ProxyCommand(() -> m_BlueBottomLeaveAndDock));
 
-
-    // m_chooser.addOption("RedRightLeaveAndDock", new ProxyCommand(() -> m_RedRightLeave_doc));
-    // m_chooser.addOption("RedLeftLeaveAndDock", new ProxyCommand(() -> m_RedLeftLeave_doc));
-    // m_chooser.addOption("BlueRightLeaveAndDock", new ProxyCommand(() -> m_BlueRightLeave_doc));
-    // m_chooser.addOption("BlueLeftLeaveAndDock", new ProxyCommand(() -> m_BlueLeftLeave_doc));
-
-    //m_chooser.addOption("RedMiddleLeaveAndDoc", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedMiddleLeaveAndDoc", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, false)));
-   
-    // m_chooser.addOption("BlueRightLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueRightLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
-    m_chooser.addOption("Blue Bottom Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueBottomLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
-    // m_chooser.addOption("BlueLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
-    m_chooser.addOption("Blue Top Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
-    m_chooser.addOption("Auto Score Cone", m_autoScore);
   
     SmartDashboard.putData(m_chooser);
     SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
@@ -220,7 +216,6 @@ public class RobotContainer {
     ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
     ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> m_midCone));
     ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_humanStation));
-    //ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_highCone));
     ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
 
     ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(28.5)))); //robot oriented right cone
@@ -232,7 +227,6 @@ public class RobotContainer {
 
 
     ControlMap.red6.toggleOnTrue(new ProxyCommand(() -> m_DefenseMode));
-  
   }
 
 
@@ -247,4 +241,5 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
   }
+
 }

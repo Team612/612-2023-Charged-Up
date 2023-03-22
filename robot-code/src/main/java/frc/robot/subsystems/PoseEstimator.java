@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
@@ -12,13 +15,16 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-
+import frc.robot.Robot;
 
 public class PoseEstimator extends SubsystemBase {
   /** Creates a new PoseEstimator. */
@@ -40,6 +46,7 @@ public class PoseEstimator extends SubsystemBase {
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
   static PoseEstimator estimator = null;
+  
 
   public PoseEstimator() {
     m_drivetrain = Drivetrain.getInstance();
@@ -52,13 +59,12 @@ public class PoseEstimator extends SubsystemBase {
       Constants.DrivetrainConstants.kDriveKinematics, 
       m_drivetrain.getNavxAngle(), 
       m_drivetrain.getMecanumDriveWheelPositions(), 
-      new Pose2d(0,0, new Rotation2d(Math.PI)),
+      new Pose2d(),
       stateStdDevs,
       visionMeasurementStdDevs
     );
     m_PhotonPoseEstimator = m_Vision.getVisionPose();
   }
-
 
   public static PoseEstimator getPoseEstimatorInstance() {
     if (estimator == null) {
@@ -67,10 +73,18 @@ public class PoseEstimator extends SubsystemBase {
     return estimator;
   }
 
+  private boolean once = true;
+
+
   @Override
   public void periodic() {
-    m_DrivePoseEstimator.update(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions());
 
+    if(Robot.initAllianceColor == Alliance.Blue && once){
+      setCurrentPose(new Pose2d(0,0,new Rotation2d(Units.degreesToRadians(180))));
+      once = false;
+    }
+
+    m_DrivePoseEstimator.update(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions());
     if(m_PhotonPoseEstimator != null){
       m_PhotonPoseEstimator.update().ifPresent(estimatedRobotPose -> {
       var estimatedPose = estimatedRobotPose.estimatedPose;
@@ -107,16 +121,13 @@ public class PoseEstimator extends SubsystemBase {
     m_field.setRobotPose(getCurrentPose());
   }
 
+
   public Pose2d getCurrentPose() {
     return m_DrivePoseEstimator.getEstimatedPosition();
   }
 
   public void setCurrentPose(Pose2d newPose) {
-    m_DrivePoseEstimator.resetPosition(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions(), new Pose2d());
-  }
-
-  public void resetFieldPosition() {
-    setCurrentPose(new Pose2d());
+    m_DrivePoseEstimator.resetPosition(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions(), newPose);
   }
 
 }

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathConstraints;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -23,6 +25,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
  */
 public final class Constants {
   public static class DrivetrainConstants{
+
+    public static Alliance alliance = Alliance.Invalid;
+
+
      //Spark constants
      public final static int SPARK_FL = 2;
      public final static int SPARK_FR = 1;
@@ -104,7 +110,7 @@ public final class Constants {
      public static final Alliance blueAlliance = Alliance.Blue;
      public static final Alliance redAlliance = Alliance.Red;
      
-     
+     public static final PathConstraints constraint = new PathConstraints(kMaxVelocityMetersPerSecond, maxAccelerationMetersPerSecondSq);
 
   }
 
