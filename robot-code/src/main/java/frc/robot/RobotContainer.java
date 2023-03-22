@@ -101,7 +101,7 @@ public class RobotContainer {
   public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
 
-  public final PoseEstimator estimator;// = PoseEstimator.getPoseEstimatorInstance();
+  public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -145,7 +145,6 @@ public class RobotContainer {
     configureButtonBindings();
     configureShuffleBoardBindings();
     configureDefaultCommands();
-    estimator = PoseEstimator.getPoseEstimatorInstance();
   }
 
   private void configureShuffleBoardBindings(){
