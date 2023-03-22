@@ -112,17 +112,17 @@ public class RobotContainer {
   private final DefenseMode m_DefenseMode = new DefenseMode(m_scope, 0.7); //write override here
   private final ParallelCommandGroup m_stow = new ParallelCommandGroup(new DefenseMode(m_scope, 0.5).alongWith(new MoveToPosition(m_arm, 0.3, 0)));
   
-  private final Command m_autoScore = new SequentialCommandGroup(
-    (new SequentialCommandGroup(new DefenseMode(m_scope, 0.1)
-    .andThen(new Grab(m_grabber))))
-  .andThen(
-    new ParallelCommandGroup(new SequentialCommandGroup(
-      new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionConePivot).
-      andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionConeTele)))
-    .alongWith(new Grab(m_grabber))))
-  .andThen(new MoveToPosition(m_arm, 0.3, 100))
-  .andThen(m_releaseauto))
-  .andThen(m_stow);
+  // private final Command m_autoScore = new SequentialCommandGroup(
+  //   (new SequentialCommandGroup(new DefenseMode(m_scope, 0.1)
+  //   .andThen(new Grab(m_grabber))))
+  // .andThen(
+  //   new ParallelCommandGroup(new SequentialCommandGroup(
+  //     new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionConePivot).
+  //     andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionConeTele)))
+  //   .alongWith(new Grab(m_grabber))))
+  // .andThen(new MoveToPosition(m_arm, 0.3, 100))
+  // .andThen(m_releaseauto))
+  // .andThen(m_stow);
 
   public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
