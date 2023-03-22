@@ -155,10 +155,10 @@ public class RobotContainer {
     m_chooser.addOption("Blue Top Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeave", Constants.DrivetrainConstants.constraint, true, true)));
     m_chooser.addOption("Red Middle Leave and Dock", new ProxyCommand(() -> m_RedMiddleLeaveAndDock));
     m_chooser.addOption("Blue Middle Leave and Dock", new ProxyCommand(() -> m_BlueMiddleLeaveAndDock));
-    m_chooser.addOption("Red Top Leave And Dock", m_RedTopLeaveAndDock);
-    m_chooser.addOption("Blue Top Leave And Dock", m_BlueTopLeaveAndDock);
-    m_chooser.addOption("Red Bottom Leave And Dock", m_RedBottomLeaveAndDock);
-    m_chooser.addOption("Blue Bottom Leave and Dock", m_BlueBottomLeaveAndDock);
+    // m_chooser.addOption("Red Top Leave And Dock", new ProxyCommand(() -> m_RedTopLeaveAndDock));
+    // m_chooser.addOption("Blue Top Leave And Dock", new ProxyCommand(() -> m_BlueTopLeaveAndDock));
+    // m_chooser.addOption("Red Bottom Leave And Dock", new ProxyCommand(() -> m_RedBottomLeaveAndDock));
+    // m_chooser.addOption("Blue Bottom Leave and Dock", new ProxyCommand(() -> m_BlueBottomLeaveAndDock));
 
   
     SmartDashboard.putData(m_chooser);
