@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
@@ -12,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -44,31 +48,46 @@ public class PoseEstimator extends SubsystemBase {
 
   private boolean isBlueAlliance = false;
 
-  Alliance allianceColor;
-  Pose2d initPose2d;
+  
+  private OriginPosition originPosition = OriginPosition.kBlueAllianceWallRightSide;
+
+  public void setAlliance(Alliance alliance) {
+    boolean allianceChanged = false;
+    switch (alliance) {
+      case Blue:
+        allianceChanged = (originPosition == OriginPosition.kRedAllianceWallRightSide);
+        originPosition = OriginPosition.kBlueAllianceWallRightSide;
+        break;
+      case Red:
+        allianceChanged = (originPosition == OriginPosition.kBlueAllianceWallRightSide);
+        originPosition = OriginPosition.kRedAllianceWallRightSide;
+        break;
+      default:
+        // No valid alliance data. Nothing we can do about it
+    }
+
+    if (allianceChanged) {
+      // The alliance changed, which changes the coordinate system.
+      // Since a tag was seen, and the tags are all relative to the coordinate system,
+      // the estimated pose
+      // needs to be transformed to the new coordinate system.
+      var newPose = flipAlliance(getCurrentPose());
+      m_DrivePoseEstimator.resetPosition(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions(), newPose);
+    }
+  }
 
   public PoseEstimator() {
     m_drivetrain = Drivetrain.getInstance();
     m_Vision = Vision.getVisionInstance();
     m_field = new Field2d();
     SmartDashboard.putData("Field", m_field);
-    allianceColor = DriverStation.getAlliance();
-    
-    if(allianceColor.equals(Alliance.Blue)) {
-      initPose2d = new Pose2d(0,0,new Rotation2d(Math.PI));
-      isBlueAlliance = true;
-    }
 
-    else{
-       initPose2d = new Pose2d(0,0, new Rotation2d());
-       isBlueAlliance = false;
-    }
 
     m_DrivePoseEstimator = new MecanumDrivePoseEstimator(
       Constants.DrivetrainConstants.kDriveKinematics, 
       m_drivetrain.getNavxAngle(), 
       m_drivetrain.getMecanumDriveWheelPositions(), 
-      initPose2d,
+      new Pose2d(),
       stateStdDevs,
       visionMeasurementStdDevs
     );
@@ -86,7 +105,6 @@ public class PoseEstimator extends SubsystemBase {
   @Override
   public void periodic() {
     m_DrivePoseEstimator.update(m_drivetrain.getNavxAngle(), m_drivetrain.getMecanumDriveWheelPositions());
-
     if(m_PhotonPoseEstimator != null){
       m_PhotonPoseEstimator.update().ifPresent(estimatedRobotPose -> {
       var estimatedPose = estimatedRobotPose.estimatedPose;
@@ -121,6 +139,13 @@ public class PoseEstimator extends SubsystemBase {
       });
     }
     m_field.setRobotPose(getCurrentPose());
+  }
+
+
+  private Pose2d flipAlliance(Pose2d poseToFlip) {
+    return poseToFlip.relativeTo(new Pose2d(
+        new Translation2d(FIELD_LENGTH_METERS, FIELD_WIDTH_METERS),
+        new Rotation2d(Math.PI)));
   }
 
   public boolean getAlliance(){

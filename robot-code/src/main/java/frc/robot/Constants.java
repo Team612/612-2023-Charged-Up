@@ -23,6 +23,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
  */
 public final class Constants {
   public static class DrivetrainConstants{
+
+    public static Alliance alliance = Alliance.Invalid;
+
+
      //Spark constants
      public final static int SPARK_FL = 2;
      public final static int SPARK_FR = 1;

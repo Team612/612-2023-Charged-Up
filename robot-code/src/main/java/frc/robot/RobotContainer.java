@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -99,7 +100,7 @@ public class RobotContainer {
   public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
 
-  public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
+  public final PoseEstimator estimator;// = PoseEstimator.getPoseEstimatorInstance();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -112,6 +113,7 @@ public class RobotContainer {
     configureButtonBindings();
     configureShuffleBoardBindings();
     configureDefaultCommands();
+    estimator = PoseEstimator.getPoseEstimatorInstance();
   }
 
   private void configureShuffleBoardBindings(){
@@ -155,5 +157,9 @@ public class RobotContainer {
   
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
+  }
+
+  public void onAllianceChanged(Alliance currentAlliance) {
+    estimator.setAlliance(currentAlliance);
   }
 }
