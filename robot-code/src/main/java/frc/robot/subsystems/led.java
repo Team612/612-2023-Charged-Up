@@ -12,6 +12,8 @@ public class led extends SubsystemBase {
   private AddressableLED m_led;
   private AddressableLEDBuffer m_ledBuffer;
   private Timer timer;
+  static led LEDInstance = null;
+
   /** Creates a new led. */
   public led() {
     m_led = new AddressableLED(0);
@@ -108,6 +110,12 @@ public class led extends SubsystemBase {
     }
 
     m_led.setData(m_ledBuffer);
+  }
+  public static led getLEDInstance() {
+    if (LEDInstance == null) {
+      LEDInstance = new led();
+    }
+    return LEDInstance;
   }
   //ends here
 

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.LedCommands.TeleopDefault;
 import frc.robot.commands.Drivetrain.AutoBalance;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.DockingSequence;
@@ -25,6 +26,7 @@ import frc.robot.commands.Drivetrain.SlowmoDrive;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.led;
 import frc.robot.commands.Drivetrain.RollOff;
 import frc.robot.commands.Drivetrain.RunOnTheFly;
 import frc.robot.commands.Grab;
@@ -67,6 +69,9 @@ public class RobotContainer {
   private final Arm m_arm = Arm.getInstance();
   private final Telescope m_scope = Telescope.getInstance();
   private final Grabber m_grabber = Grabber.getInstance();
+  private final led m_Led = led.getLEDInstance();
+  public final Vision m_Vision = Vision.getVisionInstance();
+
 
   //Commands
   private final Pivot m_pivot = new Pivot(m_arm);
@@ -76,6 +81,8 @@ public class RobotContainer {
   private final ReleaseAuto m_releaseauto = new ReleaseAuto(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
   
+  private final TeleopDefault m_TeleopDefault = new TeleopDefault(m_Led, m_Vision);
+
   //gunner outtakes/defense mode
   private final Command m_midCone = new SequentialCommandGroup(
     new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionConePivot).
@@ -124,7 +131,6 @@ public class RobotContainer {
   // .andThen(m_releaseauto))
   // .andThen(m_stow);
 
-  public final Vision m_Vision = Vision.getVisionInstance();
   //public final Vision m_Vision = new Vision(camera);
 
   public final PoseEstimator estimator = PoseEstimator.getPoseEstimatorInstance();
@@ -235,6 +241,8 @@ public class RobotContainer {
     m_arm.setDefaultCommand(m_pivot);
     m_scope.setDefaultCommand(m_telescope);
     m_grabber.setDefaultCommand(m_release);
+    m_Led.setDefaultCommand(m_TeleopDefault.ignoringDisable(true));
+
   }
 
   
