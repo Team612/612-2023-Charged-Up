@@ -58,6 +58,7 @@ public class DefenseMode extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished(){
+    System.out.println("*****************" + m_scope.getLimitSwitch());
     if(m_scope.getLimitSwitch()) return true; // || isSpike()) return true;
     return false;
   }

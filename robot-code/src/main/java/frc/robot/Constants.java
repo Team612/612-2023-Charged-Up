@@ -168,6 +168,8 @@ public final class Constants {
     public static double grabber_motor_current = 10.0;
 
     public static double sticky_grabber_thresh = 10;
+
+    public static double boop_thresh = 20;
   
    }
 

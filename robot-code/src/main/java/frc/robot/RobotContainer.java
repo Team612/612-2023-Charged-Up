@@ -120,6 +120,13 @@ public class RobotContainer {
   private final DefenseMode m_DefenseMode = new DefenseMode(m_scope, 0.7); //write override here
   private final ParallelCommandGroup m_stow = new ParallelCommandGroup(new DefenseMode(m_scope, 0.5).alongWith(new MoveToPosition(m_arm, 0.3, 0)));
   
+  private final SequentialCommandGroup boop = new SequentialCommandGroup(
+    new DefenseMode(m_scope, 0.4)
+    .andThen(new MoveToPosition(m_arm, 0.3, EncoderConstants.boop_thresh))
+    .andThen(new DefenseMode(m_scope, 0.7))
+    .andThen(new MoveToPosition(m_arm, 0.3, 0))
+  );
+
   // private final Command m_autoScore = new SequentialCommandGroup(
   //   (new SequentialCommandGroup(new DefenseMode(m_scope, 0.1)
   //   .andThen(new Grab(m_grabber))))
@@ -144,34 +151,36 @@ public class RobotContainer {
 
   
   private final SequentialCommandGroup m_RedMiddleLeaveAndDock = new SequentialCommandGroup(
+    // boop.andthen(
     new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedMiddleLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
     .andThen(new DockingSequence(m_drivetrain))
   );
 
   private final SequentialCommandGroup m_BlueMiddleLeaveAndDock = new SequentialCommandGroup(
+    // boop.andthen(
     new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueMiddleLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
     .andThen(new DockingSequence(m_drivetrain))
   );
 
-  private final SequentialCommandGroup m_RedTopLeaveAndDock = new SequentialCommandGroup(
-    new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedTopLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
-    .andThen(new DockingSequence(m_drivetrain))
-  );
+  // private final SequentialCommandGroup m_RedTopScoreAndLeave = new SequentialCommandGroup(
+  //   boop
+  //   .andThen(new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedTopLeave", Constants.DrivetrainConstants.constraint, true, false))
+  // );
 
-  private final SequentialCommandGroup m_BlueTopLeaveAndDock = new SequentialCommandGroup(
-    new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
-    .andThen(new DockingSequence(m_drivetrain))
-  );
+  // private final SequentialCommandGroup m_RedBottomScoreAndLeave = new SequentialCommandGroup(
+  //   boop
+  //   .andThen(new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedBottomLeave", Constants.DrivetrainConstants.constraint, true, false))
+  // );
 
-  private final SequentialCommandGroup m_RedBottomLeaveAndDock = new SequentialCommandGroup(
-    new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedBottomLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
-    .andThen(new DockingSequence(m_drivetrain))
-  );
+  // private final SequentialCommandGroup m_BlueTopScoreAndLeave = new SequentialCommandGroup(
+  //   boop
+  //   .andThen(new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeave", Constants.DrivetrainConstants.constraint, true, false))
+  // );
 
-  private final SequentialCommandGroup m_BlueBottomLeaveAndDock = new SequentialCommandGroup(
-    new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueBottomLeaveAndDock", Constants.DrivetrainConstants.constraint, true, false)
-    .andThen(new DockingSequence(m_drivetrain))
-  );
+  // private final SequentialCommandGroup m_BlueBottomScoreAndLeave = new SequentialCommandGroup(
+  //   boop
+  //   .andThen(new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueBottomLeave", Constants.DrivetrainConstants.constraint, true, false))
+  // );
 
   public RobotContainer() {
     // Configure the trigger bindings
@@ -202,6 +211,7 @@ public class RobotContainer {
     m_chooser.addOption("Blue Top Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeave", Constants.DrivetrainConstants.constraint, true, true)));
     m_chooser.addOption("Red Middle Leave and Dock", new ProxyCommand(() -> m_RedMiddleLeaveAndDock));
     m_chooser.addOption("Blue Middle Leave and Dock", new ProxyCommand(() -> m_BlueMiddleLeaveAndDock));
+    m_chooser.addOption("boop", boop);
     // m_chooser.addOption("Red Top Leave And Dock", new ProxyCommand(() -> m_RedTopLeaveAndDock));
     // m_chooser.addOption("Blue Top Leave And Dock", new ProxyCommand(() -> m_BlueTopLeaveAndDock));
     // m_chooser.addOption("Red Bottom Leave And Dock", new ProxyCommand(() -> m_RedBottomLeaveAndDock));
