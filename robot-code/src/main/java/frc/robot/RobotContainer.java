@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.lang.reflect.Proxy;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -245,6 +246,12 @@ public class RobotContainer {
 
   }
 
+  // public void TeleopHeading(){
+  //   Rotation2d finalHeading = new Rotation2d(Units.degreesToRadians(-180));
+  //   Rotation2d currentHeading = estimator.getCurrentPose().getRotation();
+  //   Rotation2d deltaHeading = finalHeading.minus(currentHeading);
+  //   m_drivetrain.setNavxAngleOffset(deltaHeading.plus(new Rotation2d(Units.degreesToRadians(180))));
+  // }
   
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
