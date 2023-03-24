@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.LedCommands.Purple;
 import frc.robot.LedCommands.TeleopDefault;
+import frc.robot.LedCommands.Yellow;
 import frc.robot.commands.Drivetrain.AutoBalance;
 import frc.robot.commands.Drivetrain.Boop;
 import frc.robot.commands.Drivetrain.DefaultDrive;
@@ -217,6 +219,8 @@ public class RobotContainer {
     m_gunnerController.leftTrigger().whileTrue(m_grab);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(m_defaultdrive);
+    m_gunnerController.y().whileTrue(new Yellow(m_Led));
+    m_gunnerController.x().whileTrue(new Purple(m_Led));
     ControlMap.red2.toggleOnTrue(new ProxyCommand(() -> m_autoBalance));
 
     ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));

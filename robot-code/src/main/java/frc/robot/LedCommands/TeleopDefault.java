@@ -5,8 +5,10 @@
 package frc.robot.LedCommands;
 import frc.robot.subsystems.led;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 public class TeleopDefault extends CommandBase {
   private led m_led;
   private Vision m_vision;
@@ -31,6 +33,8 @@ public class TeleopDefault extends CommandBase {
       m_led.setLed(0, 255, 0);
       // System.out.println("*******PRINTIIIIIIING****************");
     }else{
+      if(Robot.initAllianceColor == Alliance.Blue) m_led.setLed(0, 0, 255);
+      else if(Robot.initAllianceColor == Alliance.Red) m_led.setLed(255, 0, 0);
       m_led.ChantillyTheme();
     }
 
