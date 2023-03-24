@@ -19,6 +19,7 @@ import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.LedCommands.TeleopDefault;
 import frc.robot.commands.Drivetrain.AutoBalance;
+import frc.robot.commands.Drivetrain.Boop;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.FollowTrajectory;
@@ -118,26 +119,26 @@ public class RobotContainer {
     until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1 || ControlMap.GUNNER_RB.getAsBoolean() || ControlMap.GUNNER_LB.getAsBoolean());
     
   private final DefenseMode m_DefenseMode = new DefenseMode(m_scope, 0.7); //write override here
-  private final ParallelCommandGroup m_stow = new ParallelCommandGroup(new DefenseMode(m_scope, 0.5).alongWith(new MoveToPosition(m_arm, 0.3, 0)));
   
-  private final SequentialCommandGroup boop = new SequentialCommandGroup(
-    new DefenseMode(m_scope, 0.4)
-    .andThen(new MoveToPosition(m_arm, 0.3, EncoderConstants.boop_thresh))
-    .andThen(new DefenseMode(m_scope, 0.7))
-    .andThen(new MoveToPosition(m_arm, 0.3, 0))
-  );
+  private final ParallelCommandGroup m_stow = new ParallelCommandGroup(new DefenseMode(m_scope, 0.5).alongWith(new MoveToPosition(m_arm, 0.3, 0)));
+ 
+  // private final Command m_boop = new SequentialCommandGroup(
+  //   new DefenseMode(m_scope,0.5)
+  //   .andThen(new MoveToPosition(m_arm, 0.6, 20))
+  //   .andThen(new DefenseMode(m_scope,0.5))
+  //   .andThen(new MoveToPosition(m_arm, 0.6, 0))
+  // );
 
-  // private final Command m_autoScore = new SequentialCommandGroup(
-  //   (new SequentialCommandGroup(new DefenseMode(m_scope, 0.1)
-  //   .andThen(new Grab(m_grabber))))
-  // .andThen(
-  //   new ParallelCommandGroup(new SequentialCommandGroup(
-  //     new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionConePivot).
-  //     andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionConeTele)))
-  //   .alongWith(new Grab(m_grabber))))
-  // .andThen(new MoveToPosition(m_arm, 0.3, 100))
-  // .andThen(m_releaseauto))
-  // .andThen(m_stow);
+  private final Command m_autoScore = new SequentialCommandGroup(new DefenseMode(m_scope, 0.1)
+    .andThen(new Grab(m_grabber)))
+    .andThen(
+      new ParallelCommandGroup(new SequentialCommandGroup(
+        new MoveToPosition(m_arm, 0.7, EncoderConstants.MidPositionConePivot)
+          .andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.MidPositionConeTele)))
+      .alongWith(new Grab(m_grabber))))
+  .andThen(new MoveToPosition(m_arm, 0.3, 100))
+  .andThen(m_releaseauto)
+  .andThen(m_stow);
 
   //public final Vision m_Vision = new Vision(camera);
 
@@ -187,31 +188,20 @@ public class RobotContainer {
     configureButtonBindings();
     configureShuffleBoardBindings();
     configureDefaultCommands();
-    //configureOverrideCommands();
   }
 
-  /*private void configureOverrideCommands() {
-    m_midCone.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    m_midCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    m_highCube.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    m_humanStation.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    m_lowGeneral.withInterruptBehavior(m_pivot.getInterruptionBehavior());
-    m_midCone.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
-    m_midCube.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
-    m_highCube.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
-    m_humanStation.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
-    m_lowGeneral.until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1);
-  }*/
 
   private void configureShuffleBoardBindings(){
     m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
-    m_chooser.addOption("Red Bottom Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedBottomLeave", Constants.DrivetrainConstants.constraint, true, false)));
-    m_chooser.addOption("Red Top Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedTopLeave", Constants.DrivetrainConstants.constraint, true, false)));
-    m_chooser.addOption("Blue Bottom Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueBottomLeave", Constants.DrivetrainConstants.constraint, true, true)));
-    m_chooser.addOption("Blue Top Leave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeave", Constants.DrivetrainConstants.constraint, true, true)));
+    m_chooser.addOption("Red Bottom Leave", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedBottomLeave", Constants.DrivetrainConstants.constraint, true, false)))));
+    m_chooser.addOption("Red Top Leave", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedTopLeave", Constants.DrivetrainConstants.constraint, true, false)))));
+   
+    m_chooser.addOption("Blue Bottom Leave", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueBottomLeave", Constants.DrivetrainConstants.constraint, true, true)))));
+    
+    m_chooser.addOption("Blue Top Leave", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeave", Constants.DrivetrainConstants.constraint, true, true)))));
     m_chooser.addOption("Red Middle Leave and Dock", new ProxyCommand(() -> m_RedMiddleLeaveAndDock));
     m_chooser.addOption("Blue Middle Leave and Dock", new ProxyCommand(() -> m_BlueMiddleLeaveAndDock));
-    m_chooser.addOption("boop", boop);
+    m_chooser.addOption("auto score cone", m_autoScore);
     // m_chooser.addOption("Red Top Leave And Dock", new ProxyCommand(() -> m_RedTopLeaveAndDock));
     // m_chooser.addOption("Blue Top Leave And Dock", new ProxyCommand(() -> m_BlueTopLeaveAndDock));
     // m_chooser.addOption("Red Bottom Leave And Dock", new ProxyCommand(() -> m_RedBottomLeaveAndDock));

@@ -19,6 +19,7 @@ public class DefenseMode extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     m_scope = scope;
     m_speed = speed;
+    addRequirements(scope);
   }
 
   // Called when the command is initially scheduled.
