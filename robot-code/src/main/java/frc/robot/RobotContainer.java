@@ -246,12 +246,16 @@ public class RobotContainer {
 
   }
 
-  // public void TeleopHeading(){
-  //   Rotation2d finalHeading = new Rotation2d(Units.degreesToRadians(-180));
-  //   Rotation2d currentHeading = estimator.getCurrentPose().getRotation();
-  //   Rotation2d deltaHeading = finalHeading.minus(currentHeading);
-  //   m_drivetrain.setNavxAngleOffset(deltaHeading.plus(new Rotation2d(Units.degreesToRadians(180))));
-  // }
+  public void TeleopHeading(){
+    Rotation2d finalHeading = new Rotation2d(Units.degreesToRadians(-180));
+    Rotation2d currentHeading = estimator.getCurrentPose().getRotation();
+    Rotation2d deltaHeading = finalHeading.minus(currentHeading);
+    if(Robot.initAllianceColor == Alliance.Blue){
+    m_drivetrain.setNavxAngleOffset(deltaHeading.plus(new Rotation2d(Units.degreesToRadians(180))));}
+    
+    if(Robot.initAllianceColor == Alliance.Red){
+      m_drivetrain.setNavxAngleOffset(deltaHeading.plus(new Rotation2d(Units.degreesToRadians(0))));}
+  }
   
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();

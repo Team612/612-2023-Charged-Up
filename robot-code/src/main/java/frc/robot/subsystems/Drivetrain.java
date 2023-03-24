@@ -131,7 +131,7 @@ public class Drivetrain extends SubsystemBase {
     if(Math.abs(y) < DEADZONE) y = 0;
     if(Math.abs(zRotation) < DEADZONE) zRotation = 0;
     drivetrain.driveCartesian(x, y, zRotation, getNavxAngle().unaryMinus().minus(navxAngleOffset.unaryMinus()));
-    System.out.println("******************************************" + navxAngleOffset + "**************************************");
+    // System.out.println("******************************************" + navxAngleOffset + "**************************************");
   }
   
   //For setting individual speeds to each motor
