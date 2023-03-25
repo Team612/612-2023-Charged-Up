@@ -35,6 +35,10 @@ public class ShuffleBoardButtons {
 
     GenericEntry pivotBLS;
     GenericEntry telescopeLimitSwitch;
+
+    GenericEntry isBlueAlliance;
+
+    public static GenericEntry toggleAlliance;
     
 
     //accessable entires
@@ -52,12 +56,15 @@ public class ShuffleBoardButtons {
     public static GenericEntry humanStation; //telescope debug 
     public static GenericEntry ground;
 
+    
+
     public void initButtons(){
         m_driverTab = Shuffleboard.getTab("DriverTab");
         m_encoderTab = Shuffleboard.getTab("Encoder");
         m_graphTab = Shuffleboard.getTab("Graphs");
         m_debugTab = Shuffleboard.getTab("Debug Tab");
         m_limitSwitchTab = Shuffleboard.getTab("Limit Switch Tab");
+        
 
         //debug entries
 
@@ -65,7 +72,9 @@ public class ShuffleBoardButtons {
         PoseEstimatorAngle = m_debugTab.add("PoseEstimator Angle", 0.0).getEntry();
         PoseEstimatorX = m_debugTab.add("PoseEstimator X", 0.0).getEntry();
         PoseEstimatorY = m_debugTab.add("PoseEstimator Y", 0.0).getEntry();
-        
+        isBlueAlliance = m_debugTab.add("isBlueAlliance", false).getEntry();
+
+
         lowGeneral = m_debugTab.add("low General", 0.0).getEntry();
         midCube = m_debugTab.add("midCube", 0.0).getEntry();
         highCube = m_debugTab.add("highCube", 0.0).getEntry();
@@ -97,13 +106,14 @@ public class ShuffleBoardButtons {
         pivotBLS = m_limitSwitchTab.add("pivotLimitSwitchState", false).getEntry();
 
         telescopeLimitSwitch = m_limitSwitchTab.add("telescopeLimitSwitch", false).getEntry();
-
-
+        toggleAlliance = m_driverTab.add("Is Red Alliance?",false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     }
 
     public void updateButtons(){
         Drivetrain drivetrain = Drivetrain.getInstance();
-        Pose2d estimator = PoseEstimator.getPoseEstimatorInstance().getCurrentPose();
+        PoseEstimator poseEstimator = PoseEstimator.getPoseEstimatorInstance();
+        Pose2d estimator = poseEstimator.getCurrentPose();
+
         Grabber grabber = Grabber.getInstance();
         Telescope telescope = Telescope.getInstance();
         Arm arm = Arm.getInstance();
@@ -124,6 +134,7 @@ public class ShuffleBoardButtons {
         pivotBLS.setBoolean(arm.getPivotBottomLimitSwitchState());
         
         telescopeLimitSwitch.setBoolean(telescope.getLimitSwitch());
+
     }
     
 }

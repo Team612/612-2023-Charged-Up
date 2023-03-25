@@ -10,19 +10,22 @@ import frc.robot.ShuffleBoardButtons;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.MotorSpeeds;
 import frc.robot.controls.ControlMap;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Telescope;
 
 public class ExtendRetract extends CommandBase {
   /** Creates a new Telescope. */
   private final Telescope m_scope;
+  private final Arm m_arm;
   private int counter;
   private int start_timer;
   private double thresh;
   public static boolean freeze;
  
   /** Creates a new Pivot. */
-  public ExtendRetract(Telescope scope) {
+  public ExtendRetract(Telescope scope, Arm arm) {
     m_scope = scope;
+    m_arm = arm;
     addRequirements(m_scope);
   }
 
@@ -39,12 +42,10 @@ public class ExtendRetract extends CommandBase {
   @Override
   public void execute(){
     if(ControlMap.GUNNER_RB.getAsBoolean()){ //extend
-      // System.out.println("extend");
       freeze = false;
       m_scope.moveTelescope(MotorSpeeds.tele_arm_speed);
     }
     else if(ControlMap.GUNNER_LB.getAsBoolean()){ //retract
-      // System.out.println("retract");
       freeze = false;
       m_scope.moveTelescope(-MotorSpeeds.tele_arm_speed);
       start_timer++;
@@ -54,17 +55,13 @@ public class ExtendRetract extends CommandBase {
       else counter = 0;
     }
     else{
-      // System.out.println("idle: " + freeze);
-
       if(freeze == false){
         thresh = m_scope.getTeleEncoder();
         freeze = true;
-        // System.out.println("sniffle start");
-
       }
 
-      if(freeze && m_scope.getTeleEncoder() > thresh + 1){
-        // System.out.println("sniffling");
+      if(freeze && (m_arm.getPivotEncoder() <= 20 && m_scope.getTeleEncoder() > thresh + 1) || (m_arm.getPivotEncoder() > 20 && m_scope.getTeleEncoder() > thresh + 3)){
+        System.out.println("sniffling");
 
         m_scope.moveTelescope(-0.2);
       }
@@ -89,7 +86,6 @@ public class ExtendRetract extends CommandBase {
   public boolean isFinished(){
     if (counter >= 3) {
       m_scope.resetEncoder();
-      System.out.println("tele encoder reset*******************");
       return true;
     }
    return false;

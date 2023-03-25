@@ -19,6 +19,7 @@ public class DefenseMode extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     m_scope = scope;
     m_speed = speed;
+    addRequirements(scope);
   }
 
   // Called when the command is initially scheduled.
@@ -58,7 +59,8 @@ public class DefenseMode extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished(){
-    if(m_scope.getLimitSwitch() || isSpike()) return true;
+    System.out.println("*****************" + m_scope.getLimitSwitch());
+    if(m_scope.getLimitSwitch()) return true; // || isSpike()) return true;
     return false;
   }
 }
