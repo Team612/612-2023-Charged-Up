@@ -194,7 +194,7 @@ public class RobotContainer {
 
 
   private void configureShuffleBoardBindings(){
-    m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
+    // m_chooser.addOption("Auto-Balance", new DockingSequence(m_drivetrain));
     m_chooser.addOption("Red Bottom Leave", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedBottomLeave", Constants.DrivetrainConstants.constraint, true, false)))));
     m_chooser.addOption("Red Top Leave", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedTopLeave", Constants.DrivetrainConstants.constraint, true, false)))));
    
