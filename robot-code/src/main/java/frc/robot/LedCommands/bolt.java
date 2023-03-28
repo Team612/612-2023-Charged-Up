@@ -6,23 +6,37 @@ package frc.robot.LedCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.led;
-public class YellowSparkles extends CommandBase {
+public class bolt extends CommandBase {
+  private int counter;
   private led m_led;
-  /** Creates a new YellowSparkles. */
-  public YellowSparkles(led l) {
+  /** Creates a new bolt. */
+  public bolt(led l) {
     m_led = l;
+    addRequirements(m_led);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_led.SparklePhase1();
+    counter = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    counter++;
+    if (counter < 6) {
+    m_led.setLedSpecific(counter,255,0,0);
+    }
+    else {
+      if (counter == m_led.getLength()){
+        counter = 0;
+      }
+      m_led.setLedSpecific(counter-6, 0, 0, 0);
+      m_led.setLedSpecific(counter, 255, 0, 0);
+    } //temp colors
+  }
 
   // Called once the command ends or is interrupted.
   @Override

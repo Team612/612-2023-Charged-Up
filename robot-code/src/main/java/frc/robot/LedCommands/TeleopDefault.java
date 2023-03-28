@@ -6,6 +6,7 @@ package frc.robot.LedCommands;
 import frc.robot.subsystems.led;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.PoseEstimator;
 import edu.wpi.first.math.util.Units;
 public class TeleopDefault extends CommandBase {
   private led m_led;
@@ -27,15 +28,14 @@ public class TeleopDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_vision.getCamera().getLatestResult().hasTargets() && Math.abs(m_vision.getTagPose().getX()) <= Units.inchesToMeters(10) && Math.abs(m_vision.getTagPose().getY()) <= Units.inchesToMeters(5)){
+    if (m_vision.getCamera().getLatestResult().hasTargets() && Math.abs(m_vision.getTagPose().getX()) <= Units.inchesToMeters(10)){
       m_led.setLed(0, 255, 0);
+      System.out.println("***************IN RANGE*******************");
     }
-    else if(m_vision.getCamera().getLatestResult().hasTargets() && !(Math.abs(m_vision.getTagPose().getY()) <= Units.inchesToMeters(5)) && !(Math.abs(m_vision.getTagPose().getX()) <= Units.inchesToMeters(10))){
+    else if(m_vision.getCamera().getLatestResult().hasTargets() && !(Math.abs(m_vision.getTagPose().getX()) <= Units.inchesToMeters(10))){
       m_led.setLed(255, 0, 0);
     }
-    else{
-      m_led.ChantillyTheme();
-    }
+
 
   }
 

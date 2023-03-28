@@ -39,6 +39,11 @@ public class led extends SubsystemBase {
     m_led.setData(m_ledBuffer);
   }
 
+  public void setLedSpecific(int i, int r, int g, int b) {
+    m_ledBuffer.setRGB(i,r,g,b);
+    m_led.setData(m_ledBuffer);
+  }
+
   public void yellow(){
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
       m_ledBuffer.setRGB(i, 255, 255, 0);
@@ -79,37 +84,7 @@ public class led extends SubsystemBase {
   }
   
   //yellow sparkle
-  public void SparklePhase1(){
-    timer.start();
-    if (timer.get() <= 1){
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      if(i % 2 == 0){
-        m_ledBuffer.setRGB(i,255,255,0);
-        
-       }
-       else {
-        m_ledBuffer.setRGB(i,0,0,0);
-       }
-    }
-  }
-    
-     if (timer.get() >= 1){
-      for (var i = 0; i < m_ledBuffer.getLength(); i++){
-        if (i % 2 == 1) {
-          m_ledBuffer.setRGB(i,255,255,0);
-        }
-        else {
-        m_ledBuffer.setRGB(i,0,0,0);
-        }
-      }
-    }
-    if (timer.get() >= 2){
-      timer.reset();
-    }
-
-    m_led.setData(m_ledBuffer);
-  }
-  //ends here
+  
 
   
 
