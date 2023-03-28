@@ -32,7 +32,7 @@ public class DefaultDrive extends CommandBase {
   @Override
   public void execute() {
     // m_drivetrain.FieldOrientedDrive(-ControlMap.driver.getRawAxis(1), ControlMap.driver.getRawAxis(0), ControlMap.driver.getRawAxis(4));
-    m_drivetrain.RobotOrientedDrive(-ControlMap.driver_joystick.getRawAxis(1) * DrivetrainConstants.slowmo, ControlMap.driver_joystick.getRawAxis(0) * DrivetrainConstants.slowmo, ControlMap.driver_joystick.getRawAxis(4) * DrivetrainConstants.slowmo);
+    m_drivetrain.RobotOrientedDrive(-ControlMap.driver_joystick.getRawAxis(1), ControlMap.driver_joystick.getRawAxis(0), ControlMap.driver_joystick.getRawAxis(4));
     //m_drivetrain.driveMecanum(0.5, -0.5, -0.5, 0.5);
   }
 

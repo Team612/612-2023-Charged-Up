@@ -201,8 +201,10 @@ public class RobotContainer {
     m_chooser.addOption("Blue Bottom Leave", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueBottomLeave", Constants.DrivetrainConstants.constraint, true, true)))));
     
     m_chooser.addOption("Blue Top Leave", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueTopLeave", Constants.DrivetrainConstants.constraint, true, true)))));
-    m_chooser.addOption("Red Middle Leave and Dock", new ProxyCommand(() -> m_RedMiddleLeaveAndDock));
-    m_chooser.addOption("Blue Middle Leave and Dock", new ProxyCommand(() -> m_BlueMiddleLeaveAndDock));
+   
+    m_chooser.addOption("Red Middle Leave and Dock", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> m_RedMiddleLeaveAndDock))));
+    m_chooser.addOption("Blue Middle Leave and Dock", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> m_BlueMiddleLeaveAndDock))));
+    
     m_chooser.addOption("auto score cone", m_autoScore);
     // m_chooser.addOption("Red Top Leave And Dock", new ProxyCommand(() -> m_RedTopLeaveAndDock));
     // m_chooser.addOption("Blue Top Leave And Dock", new ProxyCommand(() -> m_BlueTopLeaveAndDock));
@@ -211,7 +213,7 @@ public class RobotContainer {
 
   
     SmartDashboard.putData(m_chooser);
-    SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
+    // SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
   }
 
   private void configureButtonBindings() {
