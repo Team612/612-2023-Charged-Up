@@ -154,7 +154,7 @@ public class RobotContainer {
     m_chooser.addOption("BlueLeftLeaveAndDock", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeaveAndDock", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
     m_chooser.addOption("BlueLeftLeave", new ProxyCommand(() -> new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "BlueLeftLeave", new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq), true, true)));
   
-    m_chooser.addOption("YellowSparkles", new YellowSparkles(m_led));
+
     SmartDashboard.putData(m_chooser);
     SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
   }
@@ -162,6 +162,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     m_gunnerController.leftTrigger().whileTrue(m_grab);
+    m_gunnerController.y().whileTrue(new Yellow(m_led));
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(m_defaultdrive);
     m_driverController.x().toggleOnTrue(m_autoBalance);
