@@ -6,12 +6,16 @@ package frc.robot.commands.PivotPositions;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 
 public class MoveToPosition extends CommandBase {
   /** Creates a new HighPositionCone. */
   private Arm m_arm;
   private double m_speed;
   private double m_pivot_position;
+  private TrapezoidProfile m_profile;
   private final double m_pivot_threshold;
 
   public MoveToPosition(Arm arm, double speed, double pivot_position) {
@@ -31,11 +35,12 @@ public class MoveToPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_arm.getPivotEncoder() >= m_pivot_position) {
-      m_arm.rotatePivot(-m_speed);
-    } else if (m_arm.getPivotEncoder() <= m_pivot_position) {
-      m_arm.rotatePivot(m_speed);
-    }
+    // if (m_arm.getPivotEncoder() >= m_pivot_position) {
+    //   m_arm.rotatePivot(-m_speed);
+    // } else if (m_arm.getPivotEncoder() <= m_pivot_position) {
+    //   m_arm.rotatePivot(m_speed);
+    // }
+    m_arm.rotatePID(m_pivot_position);
   }
 
   // Called once the command ends or is interrupted.

@@ -5,44 +5,31 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Grabber;
-import frc.robot.controls.ControlMap;
+
 public class ReleaseAuto extends CommandBase {
-  /** Creates a new releaseTeleop. */
-  private Grabber m_grabber;
-  private int counter;
-  public ReleaseAuto(Grabber g) {
-    m_grabber = g;
+  /** Creates a new ReleaseAuto. */
+  private final Grabber m_grabber;
+  public ReleaseAuto(Grabber grabber) {
+    m_grabber = grabber;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    counter = 0;
-    m_grabber.grab(0);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_grabber.grab(0.2);
-    counter++;
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_grabber.grab(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(counter >= 10) {
-      return true;
-    }
     return false;
   }
 }

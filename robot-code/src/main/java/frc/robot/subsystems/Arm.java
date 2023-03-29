@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import com.revrobotics.SparkMaxLimitSwitch;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.EncoderConstants;
@@ -19,8 +20,7 @@ public class Arm extends SubsystemBase {
   private static final double DEADZONE = 0.1;
   private CANSparkMax pivot;
   static Arm instance = null;
-
-
+  private PIDController m_pid = new PIDController(0, 0, 0);
   
   /** Creates a new Arm. */
   public Arm() {
@@ -33,6 +33,10 @@ public class Arm extends SubsystemBase {
     
     if(Math.abs(rotate) < DEADZONE) rotate = 0;
     pivot.set(rotate);
+  }
+
+  public void rotatePID(double target) {
+    pivot.set(m_pid.calculate(getPivotEncoder(), target));
   }
 
   public double getPivotEncoder() {
