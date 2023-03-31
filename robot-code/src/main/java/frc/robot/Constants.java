@@ -134,21 +134,19 @@ public final class Constants {
    }
  
    public static class EncoderConstants{
-    public static final double LowPositionPivot = 38;
-    public static final double MidPositionCubePivot = 95;
-    public static final double HighPositionCubePivot = 141;
+    public static final double LowPositionPivot = 50;  //43
+    public static final double MidPositionCubePivot = 95; 
+    public static final double HighPositionCubePivot = 141; //124
     public static final double MidPositionConePivot = 128;
     public static final double HighPositionConePivot = 140;
-    public static final double HumanStationIntakePivot = 114;//123;
-    public static final double GroundIntakePivot = 38; //tbd
+    public static final double HumanStationIntakePivot = 120;//114;
 
-    public static final double LowPositionTele = 88;
+    public static final double LowPositionTele = 116; //87
     public static final double MidPositionCubeTele = 45;
-    public static final double HighPositionCubeTele = 37;
+    public static final double HighPositionCubeTele = 44; //37
     public static final double MidPositionConeTele = 91;
     public static final double HighPositionConeTele = 110;
     public static final double HumanStationIntakeTele = 0;
-    public static final double GroundIntakeTele = 88; //tbd
 
 
     public static int boreEncoderIntake = 1;
