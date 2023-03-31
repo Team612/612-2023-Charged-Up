@@ -5,8 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.ShuffleBoardButtons;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.MotorSpeeds;
 import frc.robot.controls.ControlMap;
@@ -26,7 +24,7 @@ public class ExtendRetract extends CommandBase {
   public ExtendRetract(Telescope scope, Arm arm) {
     m_scope = scope;
     m_arm = arm;
-    addRequirements(m_scope);
+    addRequirements(scope, arm);
   }
 
   // Called when the command is initially scheduled.
@@ -61,7 +59,7 @@ public class ExtendRetract extends CommandBase {
       }
 
       if(freeze && (m_arm.getPivotEncoder() <= 20 && m_scope.getTeleEncoder() > thresh + 1) || (m_arm.getPivotEncoder() > 20 && m_scope.getTeleEncoder() > thresh + 3)){
-        System.out.println("sniffling");
+        // System.out.println("sniffling");
 
         m_scope.moveTelescope(-0.2);
       }

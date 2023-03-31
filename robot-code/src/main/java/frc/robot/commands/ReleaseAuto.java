@@ -5,15 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.Grabber;
-import frc.robot.controls.ControlMap;
 public class ReleaseAuto extends CommandBase {
   /** Creates a new releaseTeleop. */
   private Grabber m_grabber;
   private int counter;
   public ReleaseAuto(Grabber g) {
     m_grabber = g;
+    addRequirements(g);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

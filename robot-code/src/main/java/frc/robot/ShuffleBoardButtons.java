@@ -18,6 +18,7 @@ public class ShuffleBoardButtons {
     ShuffleboardTab m_graphTab;
     ShuffleboardTab m_debugTab;
     ShuffleboardTab m_limitSwitchTab;
+    ShuffleboardTab m_smShuffleboardTab;
     
     GenericEntry NavxAngle;
     GenericEntry PoseEstimatorAngle;
@@ -38,9 +39,6 @@ public class ShuffleBoardButtons {
 
     GenericEntry isBlueAlliance;
 
-    public static GenericEntry toggleAlliance;
-    
-
     //accessable entires
     public static GenericEntry grabberSpikeTresh;
     public static GenericEntry teleEncoderRateThresh;
@@ -56,6 +54,8 @@ public class ShuffleBoardButtons {
     public static GenericEntry humanStation; //telescope debug 
     public static GenericEntry ground;
 
+    public static GenericEntry toggleMittens;
+
     
 
     public void initButtons(){
@@ -64,7 +64,7 @@ public class ShuffleBoardButtons {
         m_graphTab = Shuffleboard.getTab("Graphs");
         m_debugTab = Shuffleboard.getTab("Debug Tab");
         m_limitSwitchTab = Shuffleboard.getTab("Limit Switch Tab");
-        
+        m_smShuffleboardTab = Shuffleboard.getTab("SmartDashboard");
 
         //debug entries
 
@@ -106,7 +106,8 @@ public class ShuffleBoardButtons {
         pivotBLS = m_limitSwitchTab.add("pivotLimitSwitchState", false).getEntry();
 
         telescopeLimitSwitch = m_limitSwitchTab.add("telescopeLimitSwitch", false).getEntry();
-        toggleAlliance = m_driverTab.add("Is Red Alliance?",false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+
+        // toggleMittens = m_smShuffleboardTab.add("isMittens?", true).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     }
 
     public void updateButtons(){

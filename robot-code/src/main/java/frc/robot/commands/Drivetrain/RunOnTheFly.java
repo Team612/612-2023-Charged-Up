@@ -23,17 +23,17 @@ public class RunOnTheFly extends CommandBase {
   private CommandBase controllerCommand = Commands.none();
 
   /** Creates a new RunOnTheFly. */
-  public RunOnTheFly(Drivetrain d, PoseEstimator p, boolean resetOdom, TrajectoryCreation traj, Vision v, 
+  public RunOnTheFly(Drivetrain d, PoseEstimator p, boolean r, TrajectoryCreation traj, Vision v, 
                     double y) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.driveSystem = d;
-    this.poseEstimatorSystem = p;
-    this.resetOdom = resetOdom;
-    this.m_traj = traj;
-    this.m_vision = v;
-    this.translation = y;
+    driveSystem = d;
+    poseEstimatorSystem = p;
+    resetOdom = r;
+    m_traj = traj;
+    m_vision = v;
+    translation = y;
 
-    addRequirements(this.driveSystem, this.m_vision);
+    addRequirements(d,p,v);
   }
 
   // Called when the command is initially scheduled.

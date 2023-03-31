@@ -134,7 +134,10 @@ public final class Constants {
    }
  
    public static class EncoderConstants{
-    public static final double LowPositionPivot = 50;  //43
+    public static final double MittensLowPositionPivot = 50;  //43
+    public static final double RhinoLowPositionPivot = 43;  //43
+
+
     public static final double MidPositionCubePivot = 95; 
     public static final double HighPositionCubePivot = 141; //124
     public static final double MidPositionConePivot = 128;

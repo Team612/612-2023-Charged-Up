@@ -16,7 +16,7 @@ public class Release extends CommandBase {
   public Release(Grabber grabber) {
     m_grabber = grabber;
     //start_timer = 0;
-    addRequirements(m_grabber);
+    addRequirements(grabber);
   }
 
   // Called when the command is initially scheduled.
