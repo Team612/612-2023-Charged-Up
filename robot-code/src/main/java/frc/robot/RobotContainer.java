@@ -74,7 +74,7 @@ public class RobotContainer {
 
 
   //Commands
-  // private final Pivot m_pivot = new Pivot(m_arm);
+  private final Pivot m_pivot = new Pivot(m_arm);
   private final ExtendRetract m_telescope = new ExtendRetract(m_scope, m_arm);
   private final Grab m_grab = new Grab(m_grabber);
   private final Release m_release = new Release(m_grabber);
@@ -239,7 +239,7 @@ public class RobotContainer {
 
   private void configureDefaultCommands(){
     m_drivetrain.setDefaultCommand(m_FieldOrientedDrive);
-    m_arm.setDefaultCommand(new Pivot(m_arm));
+    m_arm.setDefaultCommand(m_pivot);
     m_scope.setDefaultCommand(m_telescope);
     m_grabber.setDefaultCommand(m_release);
     m_Led.setDefaultCommand(m_TeleopDefault.ignoringDisable(true));

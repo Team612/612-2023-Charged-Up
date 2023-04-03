@@ -27,7 +27,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private final ShuffleBoardButtons m_BoardButtons = new ShuffleBoardButtons();
 
-  UsbCamera driver_cam;
+  UsbCamera driver_cam_1;
+  UsbCamera driver_cam_2;
 
   //Driverstation always sends out a red alliance which is weird so we wait until something is different
   public static Alliance initAllianceColor = Alliance.Invalid;
@@ -51,8 +52,11 @@ public class Robot extends TimedRobot {
 
     // System.out.println("********ROBOT INIT*********");
     PathPlannerServer.startServer(5811);
-    driver_cam = CameraServer.startAutomaticCapture();
-    driver_cam.setFPS(10);
+    driver_cam_1 = CameraServer.startAutomaticCapture();
+    driver_cam_1.setFPS(10);
+    driver_cam_2 = CameraServer.startAutomaticCapture();
+    driver_cam_2.setFPS(10);
+
 
 
   }
