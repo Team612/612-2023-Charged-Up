@@ -24,7 +24,7 @@ public class ExtendRetract extends CommandBase {
   public ExtendRetract(Telescope scope, Arm arm) {
     m_scope = scope;
     m_arm = arm;
-    addRequirements(scope);
+    addRequirements(scope); //using arm for encoders, but not mutating arm
   }
 
   // Called when the command is initially scheduled.

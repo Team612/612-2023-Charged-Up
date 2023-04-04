@@ -33,7 +33,7 @@ public class RunOnTheFly extends CommandBase {
     m_vision = v;
     translation = y;
 
-    addRequirements(d);
+    addRequirements(d, v, p);
   }
 
   // Called when the command is initially scheduled.
