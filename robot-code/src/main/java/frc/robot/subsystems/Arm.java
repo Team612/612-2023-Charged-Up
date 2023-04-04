@@ -64,4 +64,9 @@ public class Arm extends SubsystemBase {
       pivot.getEncoder().setPosition(0);
     }
   }
+
+public double whichArm(boolean isMittens) {
+    if(isMittens) return EncoderConstants.MittensLowPositionPivot;
+    return EncoderConstants.RhinoLowPositionPivot;
+}
 }

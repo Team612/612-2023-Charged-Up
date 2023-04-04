@@ -16,7 +16,7 @@ public class TeleopDefault extends CommandBase {
   public TeleopDefault(led l, Vision v) {
     m_led = l;
     m_vision = v;
-    addRequirements(m_led);
+    addRequirements(l);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

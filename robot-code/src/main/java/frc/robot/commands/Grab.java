@@ -18,7 +18,7 @@ public class Grab extends CommandBase {
   /** Creates a new Pivot. */
   public Grab(Grabber grabber) {
     m_grabber = grabber;
-    addRequirements(m_grabber);
+    addRequirements(grabber);
   }
 
   // Called when the command is initially scheduled.

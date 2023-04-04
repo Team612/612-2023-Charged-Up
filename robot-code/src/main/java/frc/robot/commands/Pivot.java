@@ -18,7 +18,7 @@ public class Pivot extends CommandBase {
   /** Creates a new Pivot. */
   public Pivot(Arm arm) {
     m_arm = arm;
-    addRequirements(m_arm);
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.

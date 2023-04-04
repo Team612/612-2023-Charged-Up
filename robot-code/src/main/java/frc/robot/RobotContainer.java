@@ -24,14 +24,11 @@ import frc.robot.commands.Drivetrain.AutoBalance;
 import frc.robot.commands.Drivetrain.Boop;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.DockingSequence;
-import frc.robot.commands.Drivetrain.FollowTrajectory;
 import frc.robot.commands.Drivetrain.SetForward;
-import frc.robot.commands.Drivetrain.SlowmoDrive;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.led;
-import frc.robot.commands.Drivetrain.RollOff;
 import frc.robot.commands.Drivetrain.RunOnTheFly;
 import frc.robot.commands.Grab;
 import frc.robot.commands.Pivot;
@@ -65,7 +62,6 @@ public class RobotContainer {
   private final FieldOrientedDrive m_FieldOrientedDrive = new FieldOrientedDrive(m_drivetrain);
 
  // Trajectories
-  private final FollowTrajectory m_follower = new FollowTrajectory();
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -116,7 +112,7 @@ public class RobotContainer {
 
   private final Command m_lowGeneral = new SequentialCommandGroup(
     new ExtendToPosition(m_scope, 0.7, 0).
-    andThen(new MoveToPosition(m_arm, 0.7, EncoderConstants.LowPositionPivot)).
+    andThen(new MoveToPosition(m_arm, 0.7,  m_arm.whichArm(SmartDashboard.getBoolean("Mittens Toggle", true)))).
     andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.LowPositionTele))).
     until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1 || ControlMap.GUNNER_RB.getAsBoolean() || ControlMap.GUNNER_LB.getAsBoolean());
     
@@ -124,12 +120,6 @@ public class RobotContainer {
   
   private final ParallelCommandGroup m_stow = new ParallelCommandGroup(new DefenseMode(m_scope, 0.5).alongWith(new MoveToPosition(m_arm, 0.3, 0)));
  
-  // private final Command m_boop = new SequentialCommandGroup(
-  //   new DefenseMode(m_scope,0.5)
-  //   .andThen(new MoveToPosition(m_arm, 0.6, 20))
-  //   .andThen(new DefenseMode(m_scope,0.5))
-  //   .andThen(new MoveToPosition(m_arm, 0.6, 0))
-  // );
 
   private final Command m_autoScore = new SequentialCommandGroup(new DefenseMode(m_scope, 0.1)
     .andThen(new Grab(m_grabber)))
@@ -213,7 +203,7 @@ public class RobotContainer {
 
   
     SmartDashboard.putData(m_chooser);
-    // SmartDashboard.putData("Slowmo (Toggle)", new SlowmoDrive(m_drivetrain));
+    SmartDashboard.putBoolean("Mittens Toggle", true);
   }
 
   private void configureButtonBindings() {
@@ -229,11 +219,15 @@ public class RobotContainer {
     ControlMap.blue2.toggleOnTrue(new ProxyCommand(() -> m_highCube));
     ControlMap.red4.toggleOnTrue(new ProxyCommand(() -> m_midCone));
     ControlMap.red5.toggleOnTrue(new ProxyCommand(() -> m_humanStation));
-    ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> m_lowGeneral));
+    ControlMap.green2.toggleOnTrue(new ProxyCommand(() -> new SequentialCommandGroup(
+      new ExtendToPosition(m_scope, 0.7, 0).
+      andThen(new MoveToPosition(m_arm, 0.7,  m_arm.whichArm(SmartDashboard.getBoolean("Mittens Toggle", true)))).
+      andThen(new ExtendToPosition(m_scope, 0.7, EncoderConstants.LowPositionTele))).
+      until(() -> Math.abs(ControlMap.gunner_joystick.getRawAxis(1)) >= 0.1 || ControlMap.GUNNER_RB.getAsBoolean() || ControlMap.GUNNER_LB.getAsBoolean())));
 
     ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(28.5)))); //robot oriented right cone
     ControlMap.yellow2.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, 0))); //april tag alignment
-    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(-22.5 -6)))); 
+    ControlMap.yellow1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(-28.5)))); 
 
     // ControlMap.green1.toggleOnTrue(new ProxyCommand(() -> new RunOnTheFly(m_drivetrain, estimator, true, m_traj, m_Vision, Units.inchesToMeters(-34))));
     
