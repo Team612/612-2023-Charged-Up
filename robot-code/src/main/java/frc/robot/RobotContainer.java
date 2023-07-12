@@ -33,6 +33,7 @@ import frc.robot.commands.Drivetrain.RunOnTheFly;
 import frc.robot.commands.Grab;
 import frc.robot.commands.Pivot;
 import frc.robot.commands.Release;
+import frc.robot.commands.Disco;
 import frc.robot.commands.ExtendRetract;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Grabber;
@@ -196,6 +197,7 @@ public class RobotContainer {
     m_chooser.addOption("Blue Middle Leave and Dock", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> m_BlueMiddleLeaveAndDock))));
     
     m_chooser.addOption("auto score cone", m_autoScore);
+    m_chooser.addOption("Disco Mode", new Disco(m_Led));
     // m_chooser.addOption("Red Top Leave And Dock", new ProxyCommand(() -> m_RedTopLeaveAndDock));
     // m_chooser.addOption("Blue Top Leave And Dock", new ProxyCommand(() -> m_BlueTopLeaveAndDock));
     // m_chooser.addOption("Red Bottom Leave And Dock", new ProxyCommand(() -> m_RedBottomLeaveAndDock));
@@ -211,6 +213,7 @@ public class RobotContainer {
     m_gunnerController.leftTrigger().whileTrue(m_grab);
     m_driverController.y().whileTrue(new SetForward(m_drivetrain));
     m_driverController.back().toggleOnTrue(m_defaultdrive);
+    //x,y,a,b
     m_gunnerController.y().whileTrue(new Yellow(m_Led));
     m_gunnerController.x().whileTrue(new Purple(m_Led));
     ControlMap.red2.toggleOnTrue(new ProxyCommand(() -> m_autoBalance));
