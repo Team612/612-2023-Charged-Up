@@ -3,9 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import frc.robot.LedCommands.Green;
 import java.lang.reflect.Proxy;
-
+import frc.robot.commands.Drivetrain.BackwardDockingSequence;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -18,9 +18,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.EncoderConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.LedCommands.Purple;
+import frc.robot.LedCommands.Random;
+import frc.robot.LedCommands.Red;
 import frc.robot.LedCommands.TeleopDefault;
 import frc.robot.LedCommands.Yellow;
 import frc.robot.commands.Drivetrain.AutoBalance;
+import frc.robot.commands.Drivetrain.BackwardAutoBalance;
 import frc.robot.commands.Drivetrain.Boop;
 import frc.robot.commands.Drivetrain.DefaultDrive;
 import frc.robot.commands.Drivetrain.DockingSequence;
@@ -81,7 +84,7 @@ public class RobotContainer {
   private final Release m_release = new Release(m_grabber);
   private final ReleaseAuto m_releaseauto = new ReleaseAuto(m_grabber);
   private final AutoBalance m_autoBalance = new AutoBalance(m_drivetrain);
-  
+  private final BackwardDockingSequence m_backwardDockingSequence = new BackwardDockingSequence(m_drivetrain);
   private final TeleopDefault m_TeleopDefault = new TeleopDefault(m_Led, m_Vision);
 
   //gunner outtakes/defense mode
@@ -156,6 +159,8 @@ public class RobotContainer {
     .andThen(new DockingSequence(m_drivetrain))
   );
 
+  
+
   // private final SequentialCommandGroup m_RedTopScoreAndLeave = new SequentialCommandGroup(
   //   boop
   //   .andThen(new FollowTrajectoryPathPlanner(m_drivetrain, estimator, "RedTopLeave", Constants.DrivetrainConstants.constraint, true, false))
@@ -195,6 +200,8 @@ public class RobotContainer {
    
     m_chooser.addOption("Red Middle Leave and Dock", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> m_RedMiddleLeaveAndDock))));
     m_chooser.addOption("Blue Middle Leave and Dock", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(new ProxyCommand(() -> m_BlueMiddleLeaveAndDock))));
+    m_chooser.addOption("Backward Middle Leave and Dock", new SequentialCommandGroup(new Boop(m_scope, m_arm).andThen(m_backwardDockingSequence)));
+    
     
     m_chooser.addOption("auto score cone", m_autoScore);
     m_chooser.addOption("Disco Mode", new Disco(m_Led));
@@ -216,6 +223,8 @@ public class RobotContainer {
     //x,y,a,b
     m_gunnerController.y().whileTrue(new Yellow(m_Led));
     m_gunnerController.x().whileTrue(new Purple(m_Led));
+    m_gunnerController.a().whileTrue(new Random(m_Led));
+    m_gunnerController.b().whileTrue(new Red(m_Led));
     ControlMap.red2.toggleOnTrue(new ProxyCommand(() -> m_autoBalance));
 
     ControlMap.blue1.toggleOnTrue(new ProxyCommand(() -> m_midCube));

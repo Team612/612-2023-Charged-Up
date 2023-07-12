@@ -142,7 +142,7 @@ public class TrajectoryCreation {
             );
         }
         else if(id == 1 || id == 2 || id == 3){
-            System.out.println("SEEING RED ALLIANCE");
+            System.out.println("SEEING RED ALLIA%NCE");
             return PathPlanner.generatePath(
                 new PathConstraints(Constants.DrivetrainConstants.kMaxVelocityMetersPerSecond, 
                 Constants.DrivetrainConstants.maxAccelerationMetersPerSecondSq),
