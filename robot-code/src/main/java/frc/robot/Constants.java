@@ -81,6 +81,8 @@ public final class Constants {
      public static final double kPFrontRightVel = 4.875;
      public static final double kPRearRightVel = 4.875;
 
+     
+
  
      //Converting chassis velocity into individual wheel velocities
      public static final MecanumDriveKinematics kDriveKinematics =
@@ -90,6 +92,7 @@ public final class Constants {
              new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
              new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
      );
+
      
      //trajectory constraints
      public static final double kMaxVelocityMetersPerSecond = 1;
@@ -114,6 +117,13 @@ public final class Constants {
 
   }
 
+  public static class SwerveConstants {
+    public static final double SwerveMaxSpeed = 5.0;//5 meters a second
+    public final double[] fl_distance = {0.0,0.0};
+    public final double[] fr_distance = {0.0,0.0};
+    public final double[] bl_distance = {0.0,0.0};
+    public final double[] br_distance = {0.0,0.0};
+  }
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static int kGunnerControllerPort = 1;

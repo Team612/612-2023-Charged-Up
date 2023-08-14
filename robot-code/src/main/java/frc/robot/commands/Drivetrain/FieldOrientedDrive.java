@@ -7,34 +7,36 @@ package frc.robot.commands.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.controls.ControlMap;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Swerve;
 
 public class FieldOrientedDrive extends CommandBase {
   /** Creates a new FieldOrientedDrive. */
-  Drivetrain m_drivetrain;
-  public FieldOrientedDrive(Drivetrain drivetrain) {
+  Swerve m_swerve;
+  public FieldOrientedDrive(Swerve swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drivetrain = drivetrain;
-    addRequirements(drivetrain);
+    m_swerve = swerve;
+    addRequirements(swerve);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.driveMecanum(0, 0, 0, 0);
-    m_drivetrain.setFodState(true);
+    m_swerve.drive(0, 0, 0);
+    //m_drivetrain.setFodState(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.FieldOrientedDrive(-ControlMap.driver_joystick.getRawAxis(1), ControlMap.driver_joystick.getRawAxis(0), ControlMap.driver_joystick.getRawAxis(4));
+    //m_drivetrain.FieldOrientedDrive(-ControlMap.driver_joystick.getRawAxis(1), ControlMap.driver_joystick.getRawAxis(0), ControlMap.driver_joystick.getRawAxis(4));
+    m_swerve.drive(-ControlMap.driver_joystick.getRawAxis(1), ControlMap.driver_joystick.getRawAxis(0), ControlMap.driver_joystick.getRawAxis(4));
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.driveMecanum(0, 0, 0, 0);
+    m_swerve.drive(0, 0, 0);
   }
 
   // Returns true when the command should end.

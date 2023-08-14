@@ -27,6 +27,7 @@ import frc.robot.commands.Drivetrain.DockingSequence;
 import frc.robot.commands.Drivetrain.SetForward;
 import frc.robot.commands.Drivetrain.TrajectoryCreation;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.led;
 import frc.robot.commands.Drivetrain.RunOnTheFly;
@@ -59,13 +60,15 @@ public class RobotContainer {
   //Drive subsystems declarations 
   private final Drivetrain m_drivetrain = Drivetrain.getInstance();
   private final DefaultDrive m_defaultdrive = new DefaultDrive(m_drivetrain);
-  private final FieldOrientedDrive m_FieldOrientedDrive = new FieldOrientedDrive(m_drivetrain);
+
 
  // Trajectories
   private final TrajectoryCreation m_traj = new TrajectoryCreation();
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   //Subsystems
+  private final Swerve m_swerve = Swerve.getInstance();
+  private final FieldOrientedDrive m_FieldOrientedDrive = new FieldOrientedDrive(m_swerve);
   private final Arm m_arm = Arm.getInstance();
   private final Telescope m_scope = Telescope.getInstance();
   private final Grabber m_grabber = Grabber.getInstance();
@@ -238,7 +241,8 @@ public class RobotContainer {
 
 
   private void configureDefaultCommands(){
-    m_drivetrain.setDefaultCommand(m_FieldOrientedDrive);
+    //m_drivetrain.setDefaultCommand(m_FieldOrientedDrive);
+    m_swerve.setDefaultCommand(m_FieldOrientedDrive);
     m_arm.setDefaultCommand(m_pivot);
     m_scope.setDefaultCommand(m_telescope);
     m_grabber.setDefaultCommand(m_release);
