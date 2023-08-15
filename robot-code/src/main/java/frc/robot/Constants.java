@@ -34,6 +34,11 @@ public final class Constants {
      public final static int SPARK_FR = 1;
      public final static int SPARK_BL = 4;
      public final static int SPARK_BR = 3;
+     //TEMP VALUES
+     public final static int SPARK_ANGLE_FL = 5;
+     public final static int SPARK_ANGLE_FR = 6;
+     public final static int SPARK_ANGLE_BL = 7;
+     public final static int SPARK_ANGLE_BR = 8;
     //multipler for slowmo
     public static double slowmo = 1;
      //wheel diameter
