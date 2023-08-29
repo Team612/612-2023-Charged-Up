@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import com.ctre.phoenixpro.hardware.CANcoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import com.revrobotics.SparkMaxPIDController;
@@ -20,14 +21,16 @@ public class SwerveModule {
     private CANSparkMax angle_motor;
     private SparkMaxPIDController angle_controller;
     private SparkMaxPIDController drive_controller;
+    private CANcoder angle_encoder;
     private int moduleNumber;
     private double velocity;
     //private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(null,null , null);  //used to calculate speeds with desire velocity and acceleration
 
-    public SwerveModule(int mn, int port_motor,int port_angle, MotorType t){
+    public SwerveModule(int mn, int port_motor,int port_angle, int port_encoder, MotorType t){
         moduleNumber = mn;
         drive_motor = new CANSparkMax(port_motor, t);
         angle_motor = new CANSparkMax(port_angle, t);
+        angle_encoder = new CANcoder(port_encoder);
 
         //creates PID controllers
         angle_controller = angle_motor.getPIDController();
@@ -59,7 +62,7 @@ public class SwerveModule {
         //write pid stuff for this later
     }
 
-    public void setAngle(SwerveModuleState state){
+    public void setAngle(SwerveModuleState state){ //switch to canENcoders bc neo ones arent accurate (42:1)
         Rotation2d angle = state.angle;
         angle_controller.setReference(angle.getDegrees(), ControlType.kPosition); //we're moving based off angular position, hence the control type
      } 
